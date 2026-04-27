@@ -42,8 +42,12 @@ class CategoryItemsListViewModelTest {
 
         val state = viewModel.uiState.value
         assertTrue(state is CategoryItemsListUIEvents.Success)
-        assertEquals(emptyList<ProductListModel>(), (state as CategoryItemsListUIEvents.Success).data)
+        val success = state as CategoryItemsListUIEvents.Success
+        assertEquals(emptyList<ProductListModel>(), success.data)
+        assertEquals(false, success.hasMore)
         assertEquals(5, repository.requestedCategory)
+        assertEquals(CategoryItemsListViewModel.PAGE_SIZE, repository.requestedLimit)
+        assertEquals(0, repository.requestedSkip)
     }
 
     @Test
@@ -62,6 +66,8 @@ class CategoryItemsListViewModelTest {
         private val result: ResultWrapper<List<ProductListModel>>,
     ) : ProductRepository {
         var requestedCategory: Int? = null
+        var requestedLimit: Int? = null
+        var requestedSkip: Int? = null
 
         override suspend fun getProducts(
             category: Int?,
@@ -69,6 +75,8 @@ class CategoryItemsListViewModelTest {
             skip: Int?,
         ): ResultWrapper<List<ProductListModel>> {
             requestedCategory = category
+            requestedLimit = limit
+            requestedSkip = skip
             return result
         }
     }

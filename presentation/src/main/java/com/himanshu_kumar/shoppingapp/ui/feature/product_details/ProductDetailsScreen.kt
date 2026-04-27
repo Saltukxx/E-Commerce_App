@@ -75,8 +75,8 @@ fun ProductDetailsScreen(
     val uiState = viewModel.state.collectAsState()
     val loading = remember { mutableStateOf(false) }
     val context = LocalContext.current
-    LaunchedEffect(product.categoryId) {
-        viewModel.getSimilarProducts(product.categoryId)
+    LaunchedEffect(product.categoryId, product.id) {
+        viewModel.getSimilarProducts(product.categoryId, product.id)
     }
     LaunchedEffect(product.id, viewModel.userId) {
         if (viewModel.userId != 0) {

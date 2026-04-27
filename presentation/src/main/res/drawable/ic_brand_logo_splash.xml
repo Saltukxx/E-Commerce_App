@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_brand_logo"
+    android:insetLeft="@dimen/brand_logo_splash_inset"
+    android:insetTop="@dimen/brand_logo_splash_inset"
+    android:insetRight="@dimen/brand_logo_splash_inset"
+    android:insetBottom="@dimen/brand_logo_splash_inset" />

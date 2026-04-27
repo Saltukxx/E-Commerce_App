@@ -8,4 +8,14 @@
     <color name="white">#FFFFFFFF</color>
     <color name="button_color">#0A1628</color>
     <color name="orange_color">#2D4A6E</color>
+    <color name="splash_background">#FFFFFFFF</color>
+
+    <!-- Home category row: light tints, stable rotation by id -->
+    <color name="category_tile_0">#FFE8EEF4</color>
+    <color name="category_tile_1">#FFDBE4EE</color>
+    <color name="category_tile_2">#FFD0DCE8</color>
+    <color name="category_tile_3">#FFF0F3F6</color>
+    <color name="category_tile_4">#FFE2EBF2</color>
+    <color name="category_tile_5">#FFD6E0EA</color>
+    <color name="category_tile_on">#FF0A1628</color>
 </resources>

@@ -71,9 +71,13 @@ class ProductDetailsViewModel(
         }
     }
 
-    fun getSimilarProducts(categoryId: Int) {
+    fun getSimilarProducts(categoryId: Int, excludeProductId: Int) {
         viewModelScope.launch {
-            _similarProducts.value = getProducts(categoryId)
+            _similarProducts.value = getProducts(
+                category = categoryId,
+                limit = SIMILAR_PAGE_LIMIT,
+                skip = 0,
+            ).filter { it.id != excludeProductId }
         }
     }
 
@@ -116,13 +120,21 @@ class ProductDetailsViewModel(
         }
     }
 
-    private suspend fun getProducts(category: Int?): List<ProductListModel> {
-        getProductUseCase.execute(category).let { result ->
+    private suspend fun getProducts(
+        category: Int?,
+        limit: Int? = null,
+        skip: Int? = null,
+    ): List<ProductListModel> {
+        getProductUseCase.execute(category, limit, skip).let { result ->
             when (result) {
                 is ResultWrapper.Success -> return result.value
                 is ResultWrapper.Failure -> return emptyList()
             }
         }
+    }
+
+    private companion object {
+        const val SIMILAR_PAGE_LIMIT = 24
     }
 }
 

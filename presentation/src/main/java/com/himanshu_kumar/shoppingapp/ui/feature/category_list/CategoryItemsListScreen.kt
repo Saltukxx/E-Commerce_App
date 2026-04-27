@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -79,6 +83,7 @@ fun CategoryItemsListScreen(
             }
         }
         is CategoryItemsListUIEvents.Success -> {
+            val listState = rememberLazyListState()
             val resolvedTitle = listTitle
                 ?: state.data.firstOrNull()?.category?.name
                 ?: stringResource(R.string.category_fallback)
@@ -87,6 +92,28 @@ fun CategoryItemsListScreen(
                 else state.data.filter {
                     it.title.contains(searchQuery, ignoreCase = true)
                 }
+            }
+            LaunchedEffect(searchQuery, listState, state.hasMore, state.isLoadingMore) {
+                if (searchQuery.isNotBlank()) return@LaunchedEffect
+                snapshotFlow {
+                    val layout = listState.layoutInfo
+                    val total = layout.totalItemsCount
+                    if (total == 0) return@snapshotFlow false
+                    val lastVisible = layout.visibleItemsInfo.lastOrNull()?.index ?: -1
+                    val threshold = if (total > 3) total - 3 else total - 1
+                    lastVisible >= threshold
+                }
+                    .distinctUntilChanged()
+                    .filter { it }
+                    .collect {
+                        val cur = viewModel.uiState.value
+                        if (cur is CategoryItemsListUIEvents.Success &&
+                            cur.hasMore &&
+                            !cur.isLoadingMore
+                        ) {
+                            viewModel.loadNextPage()
+                        }
+                    }
             }
             Column(
                 modifier = Modifier
@@ -134,7 +161,8 @@ fun CategoryItemsListScreen(
                     }
                 } else {
                     LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        state = listState,
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         items(filtered, key = { it.id }) { item ->
                             ProductListCard(
@@ -143,6 +171,33 @@ fun CategoryItemsListScreen(
                                     navController.navigate(ProductDetails(UiProductModel.fromProduct(item)))
                                 }
                             )
+                        }
+                        if (searchQuery.isBlank()) {
+                            item(key = "pagination_footer") {
+                                when {
+                                    state.isLoadingMore -> {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp),
+                                            contentAlignment = Alignment.Center,
+                                        ) {
+                                            CircularProgressIndicator()
+                                        }
+                                    }
+                                    state.loadMoreError != null -> {
+                                        Text(
+                                            text = state.loadMoreError,
+                                            color = Color.Red,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp)
+                                                .clickable { viewModel.loadNextPage() },
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,12 +37,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
@@ -68,7 +73,17 @@ import com.himanshu_kumar.shoppingapp.ui.components.CompactProductCard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 import org.koin.androidx.compose.koinViewModel
+import kotlin.math.abs
 import kotlin.math.absoluteValue
+
+/** Height of the top/mid [BannerSection] pager slides (network-style wide banners). */
+private val HomeBannerImageHeight = 114.dp
+
+/**
+ * Embraco static hero only: 240dp (1.5× 160dp). Top/mid [BannerSection] carousels use
+ * [HomeBannerImageHeight] and are not scaled with this.
+ */
+private val EmbracoPromoBannerHeight = 240.dp
 
 @Composable
 fun HomeScreen(navController: NavController, viewModel: HomeViewModel = koinViewModel()) {
@@ -103,6 +118,17 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = koinView
                     navController.currentBackStackEntry?.savedStateHandle?.apply {
                         set(CategoryNavArgs.CATEGORY_ID, ALL_PRODUCTS_CATEGORY_ID)
                         set(CategoryNavArgs.CATEGORY_LIST_TITLE, allCatalogTitle)
+                    }
+                    navController.navigate(CategoryItemsScreen)
+                },
+                onViewAllCategory = { categoryId, listTitle ->
+                    navController.currentBackStackEntry?.savedStateHandle?.apply {
+                        set(CategoryNavArgs.CATEGORY_ID, categoryId)
+                        if (listTitle != null) {
+                            set(CategoryNavArgs.CATEGORY_LIST_TITLE, listTitle)
+                        } else {
+                            remove<String>(CategoryNavArgs.CATEGORY_LIST_TITLE)
+                        }
                     }
                     navController.navigate(CategoryItemsScreen)
                 },
@@ -202,13 +228,16 @@ fun HomeContent(
     onCartClicked: () -> Unit,
     onCategoryClicked: (Int) -> Unit,
     onViewAllCatalog: () -> Unit,
+    onViewAllCategory: (Int, String?) -> Unit = { _, _ -> },
 ) {
     val searchQuery = remember { mutableStateOf("") }
-    val (featured, popularProducts, categories) = when (val s = uiState) {
-        is HomeScreenUIEvents.Success ->
-            Triple(s.featured, s.popularProducts, s.categories)
-        else -> Triple(emptyList(), emptyList(), emptyList())
-    }
+    val success = uiState as? HomeScreenUIEvents.Success
+    val featured = success?.featured ?: emptyList()
+    val popularProducts = success?.popularProducts ?: emptyList()
+    val categories = success?.categories ?: emptyList()
+    val categoryPreviews = success?.categoryPreviews ?: emptyList()
+    val embracoCategory = success?.embracoCategory
+    val embracoProducts = success?.embracoProducts ?: emptyList()
     val isLoading = uiState is HomeScreenUIEvents.Loading
     val errorMessages = (uiState as? HomeScreenUIEvents.Error)?.message
 
@@ -233,9 +262,37 @@ fun HomeContent(
             categories.filter { it.name.contains(searchQuery.value, ignoreCase = true) }
         }
     }
+    val categoryPreviewsFiltered = remember(categoryPreviews, searchQuery.value) {
+        if (searchQuery.value.isBlank()) {
+            categoryPreviews
+        } else {
+            categoryPreviews
+                .map { p ->
+                    p.copy(
+                        products = p.products.filter {
+                            it.title.contains(searchQuery.value, ignoreCase = true)
+                        },
+                    )
+                }
+                .filter { it.products.isNotEmpty() }
+        }
+    }
+    val embracoFiltered = remember(embracoProducts, searchQuery.value) {
+        if (searchQuery.value.isBlank()) {
+            embracoProducts
+        } else {
+            embracoProducts.filter { it.title.contains(searchQuery.value, ignoreCase = true) }
+        }
+    }
     val showBanner =
         !isLoading &&
-            (categoriesFiltered.isNotEmpty() || featuredFiltered.isNotEmpty() || popularFiltered.isNotEmpty())
+            (
+                categoriesFiltered.isNotEmpty() ||
+                    featuredFiltered.isNotEmpty() ||
+                    popularFiltered.isNotEmpty() ||
+                    categoryPreviewsFiltered.any { it.products.isNotEmpty() } ||
+                    embracoFiltered.isNotEmpty()
+                )
 
     LazyColumn {
         item(key = "header") {
@@ -266,7 +323,7 @@ fun HomeContent(
         }
         if (showBanner) {
             item(key = "banner") {
-                BannerSection()
+                BannerSection(instanceKey = "top")
                 Spacer(Modifier.size(16.dp))
             }
         }
@@ -281,13 +338,6 @@ fun HomeContent(
                 Spacer(Modifier.size(16.dp))
             }
         }
-        if (categoriesFiltered.isNotEmpty()) {
-            item(key = "categories") {
-                CategorySection(categoriesFiltered) {
-                    onCategoryClicked(it)
-                }
-            }
-        }
         if (popularFiltered.isNotEmpty()) {
             item(key = "popular") {
                 HomeProductRecommendedRow(
@@ -296,6 +346,50 @@ fun HomeContent(
                     onClick = onProductClick,
                     onViewAll = onViewAllCatalog,
                 )
+                Spacer(Modifier.size(16.dp))
+            }
+        }
+        if (showBanner) {
+            item(key = "banner2") {
+                BannerSection(instanceKey = "mid")
+                Spacer(Modifier.size(16.dp))
+            }
+        }
+        if (categoriesFiltered.isNotEmpty()) {
+            item(key = "categories") {
+                CategorySection(categoriesFiltered) {
+                    onCategoryClicked(it)
+                }
+                Spacer(Modifier.size(16.dp))
+            }
+        }
+        items(
+            items = categoryPreviewsFiltered.filter { it.products.isNotEmpty() },
+            key = { it.category.id },
+        ) { preview ->
+            HomeProductRow(
+                products = preview.products,
+                title = preview.category.name,
+                onClick = onProductClick,
+                onViewAll = {
+                    onViewAllCategory(
+                        preview.category.id,
+                        preview.category.name,
+                    )
+                },
+            )
+            Spacer(Modifier.size(16.dp))
+        }
+        if (embracoCategory != null && embracoFiltered.isNotEmpty()) {
+            item(key = "embraco") {
+                EmbracoPromoSection(
+                    category = embracoCategory,
+                    products = embracoFiltered,
+                    onProductClick = onProductClick,
+                    onViewAll = {
+                        onViewAllCategory(embracoCategory.id, embracoCategory.name)
+                    },
+                )
             }
         }
     }
@@ -303,21 +397,26 @@ fun HomeContent(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun BannerSection() {
+fun BannerSection(
+    instanceKey: String,
+    bannerDrawableIds: List<Int> = listOf(
+        R.drawable.banner1,
+        R.drawable.banner2,
+        R.drawable.banner3,
+    ),
+) {
     val pagerState = rememberPagerState(initialPage = 0)
-    val bannerImages = listOf(
-        painterResource(R.drawable.banner1),
-        painterResource(R.drawable.banner3),
-        painterResource(R.drawable.banner2),
-    )
+    val bannerImages = bannerDrawableIds.map { painterResource(it) }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(instanceKey) {
         while (true) {
             yield()
             delay(3200)
-            pagerState.animateScrollToPage(
-                page = (pagerState.currentPage + 1) % (pagerState.pageCount),
-            )
+            if (pagerState.pageCount > 0) {
+                pagerState.animateScrollToPage(
+                    page = (pagerState.currentPage + 1) % pagerState.pageCount,
+                )
+            }
         }
     }
     Column {
@@ -326,7 +425,7 @@ fun BannerSection() {
             state = pagerState,
             contentPadding = PaddingValues(horizontal = 16.dp),
             modifier = Modifier
-                .height(114.dp)
+                .height(HomeBannerImageHeight)
                 .fillMaxWidth(),
         ) { page ->
             Card(
@@ -368,13 +467,43 @@ fun BannerSection() {
 }
 
 @Composable
+private fun EmbracoPromoSection(
+    category: CategoriesListModel,
+    products: List<ProductListModel>,
+    onProductClick: (ProductListModel) -> Unit,
+    onViewAll: () -> Unit,
+) {
+    Column {
+        Card(
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .height(EmbracoPromoBannerHeight),
+        ) {
+            Image(
+                painter = painterResource(R.drawable.embraco_home_promo),
+                contentDescription = category.name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+            )
+        }
+        Spacer(Modifier.size(12.dp))
+        HomeProductRow(
+            products = products,
+            title = category.name,
+            onClick = onProductClick,
+            onViewAll = onViewAll,
+        )
+    }
+}
+
+@Composable
 fun CategorySection(
     categories: List<CategoriesListModel>,
     onClick: (Int) -> Unit,
 ) {
-    Column(
-        modifier = Modifier.height(100.dp),
-    ) {
+    Column {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -389,13 +518,16 @@ fun CategorySection(
             )
         }
 
+        val tilePalette = rememberCategoryTilePalette()
+
         LazyRow(
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             items(categories, key = { it.id }) { category ->
                 CategoryItem(
                     category = category,
+                    tilePalette = tilePalette,
                     onClick = { onClick(category.id) },
                 )
             }
@@ -404,50 +536,46 @@ fun CategorySection(
 }
 
 @Composable
+private fun rememberCategoryTilePalette(): List<Color> {
+    val c0 = colorResource(R.color.category_tile_0)
+    val c1 = colorResource(R.color.category_tile_1)
+    val c2 = colorResource(R.color.category_tile_2)
+    val c3 = colorResource(R.color.category_tile_3)
+    val c4 = colorResource(R.color.category_tile_4)
+    val c5 = colorResource(R.color.category_tile_5)
+    return remember(c0, c1, c2, c3, c4, c5) {
+        listOf(c0, c1, c2, c3, c4, c5)
+    }
+}
+
+@Composable
 fun CategoryItem(
     category: CategoriesListModel,
+    tilePalette: List<Color>,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val imageModel = remember(category.image) {
-        if (category.image.isBlank()) {
-            null
-        } else {
-            ImageRequest.Builder(context)
-                .data(category.image)
-                .size(128, 128)
-                .crossfade(false)
-                .build()
-        }
-    }
-    Column(
+    val tint = tilePalette[abs(category.id) % tilePalette.size]
+    val labelColor = colorResource(R.color.category_tile_on)
+    Box(
         modifier = modifier
+            .defaultMinSize(minWidth = 148.dp, minHeight = 72.dp)
+            .semantics { contentDescription = category.name }
             .clip(RoundedCornerShape(14.dp))
-            .background(Color.LightGray.copy(alpha = 0.3f))
+            .background(tint)
             .clickable { onClick() }
-            .padding(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        contentAlignment = Alignment.Center,
     ) {
-        if (imageModel != null) {
-            AsyncImage(
-                model = imageModel,
-                contentDescription = null,
-                modifier = Modifier.size(65.dp),
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .size(65.dp)
-                    .background(Color.LightGray.copy(alpha = 0.25f)),
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = category.name,
-            style = MaterialTheme.typography.labelMedium,
-            maxLines = 1,
+            style = MaterialTheme.typography.labelLarge.copy(
+                fontWeight = FontWeight.SemiBold,
+            ),
+            color = labelColor,
+            textAlign = TextAlign.Center,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

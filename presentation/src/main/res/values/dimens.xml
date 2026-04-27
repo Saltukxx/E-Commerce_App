@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Inset inside the system splash icon circle: increase if edges still clip. -->
+    <dimen name="brand_logo_splash_inset">16dp</dimen>
+    <!-- Inset for adaptive icon foreground (approx. 66% safe zone on the 108dp canvas). -->
+    <dimen name="brand_logo_adaptive_inset">20dp</dimen>
+</resources>

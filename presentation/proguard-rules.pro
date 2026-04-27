@@ -1,21 +1,43 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Keep line numbers for stack traces
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Koin
+-keep class org.koin.** { *; }
+-dontwarn org.koin.**
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Ktor (client logging -> SLF4J; no impl on Android)
+-dontwarn org.slf4j.impl.StaticLoggerBinder
+-dontwarn org.slf4j.**
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Ktor
+-keep class io.ktor.** { *; }
+-dontwarn io.ktor.**
+-keepclassmembers class io.ktor.client.** { *; }
+
+# kotlinx-serialization
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.**
+-keepclassmembers @kotlinx.serialization.Serializable class * {
+    *** Companion;
+}
+-keep @kotlinx.serialization.Serializable class * { *; }
+-keepclassmembers @kotlinx.serialization.SerialName class * { *; }
+
+# Coroutines
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+
+# Coil
+-keep public class * implements coil.ImageLoaderFactory
+-keep public class * implements coil.decode.Decoder
+-keep public class * implements coil.fetch.Fetcher
+-keep public class * implements coil.map.Mapper
+-dontwarn coil.**
+
+# Android / Compose
+-keep public class * extends java.lang.Throwable
+-keep class androidx.startup.InitializationProvider { *; }
+
+# Parcelize (used in app)
+-keep @kotlinx.parcelize.Parcelize class * { *; }

@@ -9,6 +9,8 @@
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
+# Module outputs (e.g. :baselineprofile/build, :macrobenchmark/build)
+**/build/
 /captures
 .externalNativeBuild
 .cxx
