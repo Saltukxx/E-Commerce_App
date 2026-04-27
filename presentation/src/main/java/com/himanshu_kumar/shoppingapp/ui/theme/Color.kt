@@ -2,12 +2,15 @@ package com.himanshu_kumar.shoppingapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val Navy900 = Color(0xFF0A1628)
+val Navy800 = Color(0xFF0F2847)
+val Navy700 = Color(0xFF152B45)
+val NavyLight = Color(0xFFE8EEF4)
 
-val Blue = Color(0xFF6055D8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+// Legacy names mapped to brand palette
+val Blue = Navy900
+val PurpleGrey80 = NavyLight
+val Pink80 = Color(0xFFE8EEF4)
+val Purple40 = Navy800
+val PurpleGrey40 = Color(0xFF4A5A6B)
+val Pink40 = Color(0xFF5A6B7A)

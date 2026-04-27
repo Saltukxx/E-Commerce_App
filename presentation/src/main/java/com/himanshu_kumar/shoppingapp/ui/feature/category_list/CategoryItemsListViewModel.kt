@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.usecase.GetProductUseCase
+import com.himanshu_kumar.shoppingapp.navigation.ALL_PRODUCTS_CATEGORY_ID
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,30 +17,26 @@ class CategoryItemsListViewModel(
     private val _uiState = MutableStateFlow<CategoryItemsListUIEvents>(CategoryItemsListUIEvents.Loading)
     val uiState: StateFlow<CategoryItemsListUIEvents> = _uiState
 
-//    init {
-//        getProducts(null) // Load all products initially
-//    }
-
     fun getProductsWithCategory(category: Int) {
-        getProducts(category)
+        val apiCategory = if (category == ALL_PRODUCTS_CATEGORY_ID) {
+            null
+        } else {
+            category
+        }
+        getProducts(apiCategory)
     }
 
     private fun getProducts(category: Int?) {
         viewModelScope.launch {
             _uiState.value = CategoryItemsListUIEvents.Loading
-            val result = fetchProducts(category)
-            if (result.isEmpty()) {
-                _uiState.value = CategoryItemsListUIEvents.Error("Something went wrong")
-            } else {
-                _uiState.value = CategoryItemsListUIEvents.Success(result)
+            when (val result = useCase.execute(category)) {
+                is ResultWrapper.Success -> {
+                    _uiState.value = CategoryItemsListUIEvents.Success(result.value)
+                }
+                is ResultWrapper.Failure -> {
+                    _uiState.value = CategoryItemsListUIEvents.Error(result.message)
+                }
             }
-        }
-    }
-
-    private suspend fun fetchProducts(category: Int?): List<ProductListModel> {
-        return when (val result = useCase.execute(category)) {
-            is ResultWrapper.Success -> result.value
-            is ResultWrapper.Failure -> emptyList()
         }
     }
 }

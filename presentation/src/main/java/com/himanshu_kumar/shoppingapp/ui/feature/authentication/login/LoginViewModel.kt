@@ -1,6 +1,5 @@
 package com.himanshu_kumar.shoppingapp.ui.feature.authentication.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.himanshu_kumar.domain.network.ResultWrapper
@@ -22,16 +21,19 @@ class LoginViewModel(
 
 
     fun login(email:String,password:String){
+        appSession.clearAuthTokens()
         _loginState.value = LoginState.Loading
         viewModelScope.launch {
             when(val result = loginUseCase.execute(email, password)){
                 is ResultWrapper.Success -> {
-                    appSession.storeUser(result.value)
-                    Log.d("ProfileViewModel",result.value.toString())
+                    val lr = result.value
+                    appSession.setAccessToken(lr.accessToken)
+                    appSession.setRefreshToken(lr.refreshToken)
+                    appSession.storeUser(lr.user)
                     _loginState.value = LoginState.Success()
                 }
                 is ResultWrapper.Failure -> {
-                    _loginState.value = LoginState.Error((result as ResultWrapper.Failure).message?:"Something went wrong")
+                    _loginState.value = LoginState.Error(result.message)
                 }
             }
         }

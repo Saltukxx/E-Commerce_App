@@ -1,6 +1,5 @@
 package com.himanshu_kumar.shoppingapp.ui.feature.cart
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.himanshu_kumar.domain.model.CartItemModel
@@ -8,7 +7,7 @@ import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.usecase.DeleteProductUseCase
 import com.himanshu_kumar.domain.usecase.GetCartUseCase
 import com.himanshu_kumar.domain.usecase.UpdateQuantityUseCase
-import com.himanshu_kumar.shoppingapp.AppSession
+import com.himanshu_kumar.shoppingapp.UserSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -16,7 +15,7 @@ class CartViewModel(
     private val cartUseCase: GetCartUseCase,
     private val updateQuantityUseCase: UpdateQuantityUseCase,
     private val deleteItemUseCase: DeleteProductUseCase,
-    private val appSession: AppSession
+    private val appSession: UserSession
 ) : ViewModel()
 {
 
@@ -29,6 +28,10 @@ class CartViewModel(
         getCart()
     }
     fun getCart(){
+        if (userId == 0L) {
+            _uiState.value = CartEvent.Error("Please log in first")
+            return
+        }
         viewModelScope.launch {
             _uiState.value = CartEvent.Loading
             cartUseCase.execute(userId).let { result->
@@ -53,6 +56,10 @@ class CartViewModel(
        updateQuantity(cartItem.copy(quantity = cartItem.quantity-1))
     }
     private fun updateQuantity(cartItem: CartItemModel){
+        if (userId == 0L) {
+            _uiState.value = CartEvent.Error("Please log in first")
+            return
+        }
         viewModelScope.launch {
             _uiState.value = CartEvent.Loading
             when(val result = updateQuantityUseCase.execute(cartItem, userId)){
@@ -66,6 +73,10 @@ class CartViewModel(
         }
     }
     fun removeItem(cartItem: CartItemModel){
+        if (userId == 0L) {
+            _uiState.value = CartEvent.Error("Please log in first")
+            return
+        }
         viewModelScope.launch {
             _uiState.value = CartEvent.Loading
             when(val result = deleteItemUseCase.execute(cartItem.id, userId )){

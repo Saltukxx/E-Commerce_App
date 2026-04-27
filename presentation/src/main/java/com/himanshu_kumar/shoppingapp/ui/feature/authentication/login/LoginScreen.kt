@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.navigation.HomeScreen
+import com.himanshu_kumar.shoppingapp.navigation.LoginScreen as LoginRoute
 import com.himanshu_kumar.shoppingapp.navigation.RegisterScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -47,7 +48,9 @@ fun LoginScreen(
         when(val state = loginState.value){
             is LoginState.Success -> {
                 LaunchedEffect(loginState.value) {
-                    navController.navigate(HomeScreen)
+                    navController.navigate(HomeScreen) {
+                        popUpTo(LoginRoute) { inclusive = true }
+                    }
                 }
             }
             is LoginState.Error -> {

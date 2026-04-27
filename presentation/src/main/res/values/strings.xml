@@ -1,13 +1,103 @@
 <resources>
-    <string name="app_name">ShoppingApp</string>
-    <string name="loading">Loading…</string>
-    <string name="login">Login</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="already_have_account">Already have an account? Login</string>
-    <string name="register">Register</string>
+    <string name="app_name">DurmusBaba</string>
+    <string name="loading">Wird geladen…</string>
+    <string name="login">Anmelden</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Passwort</string>
+    <string name="already_have_account">Bereits ein Konto? Anmelden</string>
+    <string name="register">Registrieren</string>
     <string name="name">Name</string>
-    <string name="does_not_have_account">Don\'t have account? Register</string>
-    <string name="all_categories" translatable="false">All Items</string>
-    <string name="image_slider">Image Slider</string>
+    <string name="does_not_have_account">Noch kein Konto? Registrieren</string>
+    <string name="all_categories" translatable="false">Alle Artikel</string>
+    <string name="image_slider">Bilderslider</string>
+
+    <string name="nav_home">Start</string>
+    <string name="nav_orders">Bestellungen</string>
+    <string name="nav_profile">Profil</string>
+
+    <string name="hello">Hallo,</string>
+    <string name="user_fallback">Kunde</string>
+    <string name="search_products">Produkte suchen</string>
+    <string name="categories">Kategorien</string>
+    <string name="featured_products">Empfohlen</string>
+    <string name="recommended">Beliebt</string>
+    <string name="view_all">Alle anzeigen</string>
+
+    <string name="my_cart">Warenkorb</string>
+    <string name="total">Gesamt</string>
+    <string name="proceed_checkout">Zur Kasse</string>
+    <string name="cart_empty">Warenkorb ist leer</string>
+    <string name="cart_item_variant_default">HVAC · Standard</string>
+    <string name="error_generic">Etwas ist schiefgelaufen</string>
+    <string name="login_required">Bitte melde dich zuerst an</string>
+    <string name="no_products">Keine Produkte gefunden</string>
+
+    <string name="my_orders">Meine Bestellungen</string>
+    <string name="tab_all">Alle</string>
+    <string name="tab_pending">Ausstehend</string>
+    <string name="tab_completed">Abgeschlossen</string>
+    <string name="tab_cancelled">Storniert</string>
+    <string name="no_orders">Keine Bestellungen</string>
+    <string name="order_id">Bestell-Nr. %1$d</string>
+    <string name="quantity_label">Menge: %1$d</string>
+    <string name="order_total">Gesamt: %1$s</string>
+    <string name="order_detail_title">Bestelldetails</string>
+    <string name="order_items_header">Artikel</string>
+    <string name="details">Details</string>
+
+    <string name="profile_address">Adresse</string>
+    <string name="profile_wishlist">Merkliste</string>
+    <string name="profile_payment">Zahlart</string>
+    <string name="profile_logout">Abmelden</string>
+    <string name="profile_logging_out">Wird abgemeldet…</string>
+    <string name="profile_address_empty">Keine Adresse gespeichert</string>
+    <string name="profile_coming_soon">Demnächst verfügbar</string>
+    <string name="content_profile_picture">Profilbild</string>
+    <string name="content_settings">Einstellungen</string>
+    <string name="content_arrow">Weiter</string>
+
+    <string name="add_address">Adresse hinzufügen</string>
+    <string name="address_line">Straße, Nr.</string>
+    <string name="city">Stadt</string>
+    <string name="state">Bundesland</string>
+    <string name="postal_code">PLZ</string>
+    <string name="country">Land</string>
+    <string name="save_address">Adresse speichern</string>
+
+    <string name="cart_summary">Warenkorbübersicht</string>
+    <string name="order_summary_title">Bestellübersicht:</string>
+    <string name="subtotal">Zwischensumme</string>
+    <string name="tax">MwSt.</string>
+    <string name="shipping">Versand</string>
+    <string name="discount">Rabatt</string>
+    <string name="order_placed_success">Bestellung erfolgreich</string>
+    <string name="continue_shopping">Weiter einkaufen</string>
+    <string name="place_order">Bestellen</string>
+    <string name="shipping_address">Lieferadresse</string>
+    <string name="select_shipping_address">Lieferadresse auswählen</string>
+
+    <string name="category_fallback">Kategorie</string>
+    <string name="back">Zurück</string>
+    <string name="search">Suchen</string>
+
+    <string name="adding_to_cart">Wird in den Warenkorb gelegt…</string>
+    <string name="product_image">Produktbild</string>
+    <string name="favorite">Merkliste</string>
+    <string name="similar_products">Ähnliche Produkte</string>
+    <string name="reviews_count">%1$s Bewertungen</string>
+    <string name="description">Beschreibung</string>
+    <string name="size">Größe</string>
+    <string name="buy_now">Jetzt kaufen</string>
+    <string name="add_to_cart">In den Warenkorb</string>
+    <string name="rating">Bewertung</string>
+
+    <string name="wishlist_screen_title">Merkliste</string>
+    <string name="wishlist_empty">Noch keine Artikel gespeichert</string>
+
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_notifications_title">Benachrichtigungen</string>
+    <string name="settings_notifications_body">Push-Benachrichtigungen sind hier später konfigurierbar.</string>
+    <string name="settings_about_title">Über die App</string>
+    <string name="settings_about_body">DurmusBaba – HVAC-E-Commerce (Demo).</string>
+    <string name="settings_api_label">API-Basis-URL</string>
 </resources>

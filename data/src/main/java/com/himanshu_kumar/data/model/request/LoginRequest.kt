@@ -10,6 +10,6 @@ data class TokenRequest(
 )
 
 @Serializable
-data class LoginRequest(
-    val token:String
+data class RefreshTokenRequest(
+    val refresh_token:String
 )

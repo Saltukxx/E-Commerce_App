@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: durmus
+      POSTGRES_PASSWORD: durmus
+      POSTGRES_DB: durmus_baba
+    ports:
+      - "5435:5432"
+    volumes:
+      - durmus_pg_data:/var/lib/postgresql/data
+
+volumes:
+  durmus_pg_data:

@@ -34,19 +34,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.himanshu_kumar.domain.model.CartItemModel
 import com.himanshu_kumar.domain.model.CartSummary
-import com.himanshu_kumar.shoppingapp.BottomNavItem
 import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.model.UserAddress
 import com.himanshu_kumar.shoppingapp.navigation.HomeScreen
 import com.himanshu_kumar.shoppingapp.navigation.UserAddressRoute
 import com.himanshu_kumar.shoppingapp.navigation.UserAddressWrapper
 import com.himanshu_kumar.shoppingapp.ui.feature.cart.CartViewModel
-import com.himanshu_kumar.shoppingapp.ui.feature.home.HomeScreen
 import com.himanshu_kumar.shoppingapp.ui.feature.user_address.USER_ADDRESS_SCREEN
 import com.himanshu_kumar.shoppingapp.utils.CurrencyUtils
 import org.koin.androidx.compose.koinViewModel
@@ -54,9 +53,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun CartSummaryScreen(
     navController: NavController,
-    viewModel: CartSummaryViewModel = koinViewModel()
+    viewModel: CartSummaryViewModel = koinViewModel(),
 ){
-    val address = remember{ mutableStateOf<UserAddress?>(null) }
+    val address = remember{ mutableStateOf<UserAddress?>(viewModel.getSavedAddress()) }
 
     Column(
         modifier = Modifier
@@ -69,6 +68,7 @@ fun CartSummaryScreen(
             val savedState = navController.currentBackStackEntry?.savedStateHandle
             savedState?.getStateFlow(USER_ADDRESS_SCREEN, address.value)?.collect{ userAddress ->
                 address.value = userAddress
+                userAddress?.let(viewModel::saveAddress)
             }
         }
         if(uiState.value !is CartSummaryEvent.PlaceOrder)
@@ -79,7 +79,7 @@ fun CartSummaryScreen(
                     .height(60.dp)
             ){
                 Text(
-                    text = "Cart Summary",
+                    text = stringResource(R.string.cart_summary),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.align(
                         Alignment.Center
@@ -99,7 +99,10 @@ fun CartSummaryScreen(
                         modifier = Modifier.align(Alignment.Center)
                     ) {
                         CircularProgressIndicator()
-                        Text(text = "Loading...", style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = stringResource(R.string.loading),
+                            style = MaterialTheme.typography.titleMedium
+                        )
                     }
                 }
                 is CartSummaryEvent.Error ->{
@@ -126,7 +129,7 @@ fun CartSummaryScreen(
                             contentDescription = null
                         )
                         Text(
-                            text = "Order Placed Successfully",
+                            text = stringResource(R.string.order_placed_success),
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(Modifier.size(8.dp))
@@ -137,7 +140,7 @@ fun CartSummaryScreen(
                             )
                         }) {
                             Text(
-                                text = "Continue Shopping",
+                                text = stringResource(R.string.continue_shopping),
                                 style = MaterialTheme.typography.titleMedium,
                             )
                         }
@@ -148,13 +151,13 @@ fun CartSummaryScreen(
 
         if(uiState.value !is CartSummaryEvent.PlaceOrder){
             Button(onClick = {
-                viewModel.placeOrder(address.value!!)
+                address.value?.let(viewModel::placeOrder)
             },modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.button_color)),
                 enabled = address.value!=null
             ) {
                 Text(
-                    text = "Place Order",
+                    text = stringResource(R.string.place_order),
                     style = MaterialTheme.typography.titleMedium,
                 )
             }
@@ -173,7 +176,8 @@ fun CartSummaryScreenContent(cartSummary: CartSummary){
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ){
         item {
-            Text(text = "Order Summary:",
+            Text(
+                text = stringResource(R.string.order_summary_title),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
@@ -183,11 +187,11 @@ fun CartSummaryScreenContent(cartSummary: CartSummary){
         }
         item {
             Column {
-                AmountRow("Subtotal", cartSummary.data.subtotal)
-                AmountRow("Tax", cartSummary.data.tax)
-                AmountRow("Shipping", cartSummary.data.shipping)
-                AmountRow("Discount", cartSummary.data.discount)
-                AmountRow("Total", cartSummary.data.total)
+                AmountRow(stringResource(R.string.subtotal), cartSummary.data.subtotal)
+                AmountRow(stringResource(R.string.tax), cartSummary.data.tax)
+                AmountRow(stringResource(R.string.shipping), cartSummary.data.shipping)
+                AmountRow(stringResource(R.string.discount), cartSummary.data.discount)
+                AmountRow(stringResource(R.string.total), cartSummary.data.total)
             }
         }
     }
@@ -249,12 +253,12 @@ fun AddressBar(address:String, onClick:()->Unit){
         Spacer(modifier = Modifier.size(8.dp))
         Column {
             Text(
-                text = "Shipping Address",
+                text = stringResource(R.string.shipping_address),
                 style = MaterialTheme.typography.titleSmall,
                 fontSize = 16.sp
             )
             Text(
-                text = address,
+                text = address.ifBlank { stringResource(R.string.select_shipping_address) },
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = 14.sp,
                 color = Color.Gray

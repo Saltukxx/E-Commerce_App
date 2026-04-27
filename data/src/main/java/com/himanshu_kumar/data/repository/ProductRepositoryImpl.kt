@@ -6,7 +6,11 @@ import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.repository.ProductRepository
 
 class ProductRepositoryImpl(private val networkService: NetworkService) : ProductRepository {
-    override suspend fun getProducts(category:Int?): ResultWrapper<List<ProductListModel>> {
-        return networkService.getProducts(category)
+    override suspend fun getProducts(
+        category: Int?,
+        limit: Int?,
+        skip: Int?,
+    ): ResultWrapper<List<ProductListModel>> {
+        return networkService.getProducts(category, limit, skip)
     }
 }

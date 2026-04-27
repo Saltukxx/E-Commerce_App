@@ -12,43 +12,46 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import com.himanshu_kumar.domain.model.ProductCategory
-import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.model.UiProductModel
 import com.himanshu_kumar.shoppingapp.navigation.ProductDetails
+import com.himanshu_kumar.shoppingapp.ui.components.ProductListCard
 import org.koin.androidx.compose.koinViewModel
+
 @Composable
 fun CategoryItemsListScreen(
     navController: NavController,
     category: Int,
+    listTitle: String? = null,
     viewModel: CategoryItemsListViewModel = koinViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
+    var searchOpen by remember { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
 
-    // Fetch products when category changes
     LaunchedEffect(category) {
         viewModel.getProductsWithCategory(category)
     }
@@ -61,7 +64,8 @@ fun CategoryItemsListScreen(
             ) {
                 CircularProgressIndicator()
                 Spacer(Modifier.size(5.dp))
-                Text(text = "Loading...",
+                Text(
+                    text = stringResource(R.string.loading),
                     style = MaterialTheme.typography.headlineMedium
                 )
             }
@@ -75,32 +79,71 @@ fun CategoryItemsListScreen(
             }
         }
         is CategoryItemsListUIEvents.Success -> {
+            val resolvedTitle = listTitle
+                ?: state.data.firstOrNull()?.category?.name
+                ?: stringResource(R.string.category_fallback)
+            val filtered = remember(state.data, searchQuery) {
+                if (searchQuery.isBlank()) state.data
+                else state.data.filter {
+                    it.title.contains(searchQuery, ignoreCase = true)
+                }
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp, vertical = 16.dp)
             ) {
-                // Top Bar
                 CategoryTopBar(
-                    title = state.data.firstOrNull()?.category?.name ?: "Category",
+                    title = resolvedTitle,
                     onBackClick = { navController.popBackStack() },
                     onSearchClick = {
-
+                        searchOpen = !searchOpen
+                        if (!searchOpen) searchQuery = ""
                     }
                 )
+                if (searchOpen) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        placeholder = {
+                            Text(
+                                stringResource(R.string.search_products),
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        },
+                        singleLine = true,
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedContainerColor = Color.LightGray.copy(alpha = 0.25f),
+                            unfocusedContainerColor = Color.LightGray.copy(alpha = 0.25f),
+                        ),
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Product List
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(state.data) { item ->
-                        ProductItem(
-                            product = item,
-                            onProductClicked = {
-                                navController.navigate(ProductDetails(UiProductModel.fromProduct(item)))
-                            }
-                        )
+                if (filtered.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(text = stringResource(R.string.no_products))
+                    }
+                } else {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(filtered, key = { it.id }) { item ->
+                            ProductListCard(
+                                product = item,
+                                onClick = {
+                                    navController.navigate(ProductDetails(UiProductModel.fromProduct(item)))
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -122,7 +165,7 @@ fun CategoryTopBar(
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_back),
-            contentDescription = "Back",
+            contentDescription = stringResource(R.string.back),
             modifier = Modifier
                 .size(25.dp)
                 .clickable { onBackClick() }
@@ -138,65 +181,10 @@ fun CategoryTopBar(
         )
         Image(
             painter = painterResource(id = R.drawable.ic_search),
-            contentDescription = "Search",
+            contentDescription = stringResource(R.string.search),
             modifier = Modifier
                 .size(25.dp)
                 .clickable { onSearchClick() }
         )
     }
 }
-
-@Composable
-fun ProductItem(
-    product: ProductListModel,
-    onProductClicked: () -> Unit) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onProductClicked()
-            },
-        shape = RoundedCornerShape(8.dp),
-        tonalElevation = 4.dp,
-        color = MaterialTheme.colorScheme.surface
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AsyncImage(
-                model = product.images.firstOrNull(),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(125.dp)
-                    .padding(end = 8.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(4.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = product.title,
-                    style = MaterialTheme.typography.titleSmall
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = product.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Rs.${product.price}",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-    }
-}
-

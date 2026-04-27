@@ -6,7 +6,7 @@ import com.himanshu_kumar.domain.model.CartSummary
 import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.usecase.CartSummaryUseCase
 import com.himanshu_kumar.domain.usecase.PlaceOrderUseCase
-import com.himanshu_kumar.shoppingapp.AppSession
+import com.himanshu_kumar.shoppingapp.UserSession
 import com.himanshu_kumar.shoppingapp.model.UserAddress
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class CartSummaryViewModel(
     private val cartSummaryUseCase: CartSummaryUseCase,
     private val placeOrderUseCase: PlaceOrderUseCase,
-    private val appSession: AppSession
+    private val appSession: UserSession
     ):ViewModel() {
     private val _uiState = MutableStateFlow<CartSummaryEvent>(CartSummaryEvent.Loading)
     val uiState = _uiState
@@ -25,7 +25,18 @@ class CartSummaryViewModel(
     init {
         getCartSummary(userId)
     }
+
+    fun getSavedAddress(): UserAddress? = appSession.getSavedAddress()
+
+    fun saveAddress(userAddress: UserAddress) {
+        appSession.storeSavedAddress(userAddress)
+    }
+
     private fun getCartSummary(userId:Long){
+        if (userId == 0L) {
+            _uiState.value = CartSummaryEvent.Error("Please log in first")
+            return
+        }
         viewModelScope.launch {
             _uiState.value = CartSummaryEvent.Loading
             when(val summary = cartSummaryUseCase.execute(userId)){
@@ -33,13 +44,17 @@ class CartSummaryViewModel(
                     _uiState.value = CartSummaryEvent.Success(summary.value)
                 }
                 is ResultWrapper.Failure->{
-                    _uiState.value = CartSummaryEvent.Error("Something went wrong")
+                    _uiState.value = CartSummaryEvent.Error(summary.message)
                 }
             }
         }
     }
 
-    public fun placeOrder(userAddress:UserAddress){
+    fun placeOrder(userAddress:UserAddress){
+        if (userId == 0L) {
+            _uiState.value = CartSummaryEvent.Error("Please log in first")
+            return
+        }
         viewModelScope.launch {
             _uiState.value = CartSummaryEvent.Loading
             when(val orderId  = placeOrderUseCase.execute(userAddress.toDomainAddress(), userId)){
@@ -47,7 +62,7 @@ class CartSummaryViewModel(
                     _uiState.value = CartSummaryEvent.PlaceOrder(orderId.value)
                 }
                 is ResultWrapper.Failure-> {
-                    _uiState.value = CartSummaryEvent.Error("Something went wrong")
+                    _uiState.value = CartSummaryEvent.Error(orderId.message)
                 }
             }
         }

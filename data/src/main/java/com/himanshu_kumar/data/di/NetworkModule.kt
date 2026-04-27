@@ -1,14 +1,14 @@
 package com.himanshu_kumar.data.di
 
-import android.util.Log
+import com.himanshu_kumar.data.network.NetworkEnvironment
 import com.himanshu_kumar.data.network.NetworkServiceImpl
 import com.himanshu_kumar.domain.network.NetworkService
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.header
+import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
@@ -16,27 +16,27 @@ import org.koin.dsl.module
 
 // This module focuses on configuring and providing the network-related components of the application.
 val networkModule = module {
-    single {                                      // Koin declaration for a singleton instance
-        HttpClient(CIO) {                         // Creates an HttpClient with the CIO engine
-            install(ContentNegotiation) {         // Installs JSON content negotiation
-                json(Json {                       // Configures JSON serialization/deserialization
-                    prettyPrint = true            // Makes JSON output readable (for debugging)
-                    isLenient = true              // Allows parsing of lenient JSON formats
-                    ignoreUnknownKeys = true      // Ignores unknown JSON keys
-                })
-            }
-            install(Logging) {                    // Installs HTTP request/response logging
-                level = LogLevel.ALL              // Logs all HTTP traffic (for debugging)
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        Log.d("BackendResponse",message)          // Prints the log message to the console
-                    }
-
+    single {
+        val env: NetworkEnvironment = get()
+        HttpClient(CIO) {
+            defaultRequest {
+                val token = env.tokenProvider.getAccessToken()
+                if (!token.isNullOrEmpty()) {
+                    header(HttpHeaders.Authorization, "Bearer $token")
                 }
+            }
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    },
+                )
             }
         }
     }
     single<NetworkService> {
-        NetworkServiceImpl(get())
+        NetworkServiceImpl(get(), get())
     }
 }

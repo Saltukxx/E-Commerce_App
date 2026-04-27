@@ -33,15 +33,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.himanshu_kumar.domain.model.OrdersData
 import com.himanshu_kumar.shoppingapp.R
+import com.himanshu_kumar.shoppingapp.navigation.OrderDetailRoute
+import com.himanshu_kumar.shoppingapp.navigation.toNavOrderDetail
+import com.himanshu_kumar.shoppingapp.utils.CurrencyUtils
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OrdersScreen(
+    navController: NavController,
     viewModel: OrdersViewModel = koinViewModel()
 ){
     Column(
@@ -56,11 +62,16 @@ fun OrdersScreen(
         ){
             Image(
                 painter = painterResource(R.drawable.ic_back),
-                contentDescription = null,
-                modifier = Modifier.align(Alignment.CenterStart)
+                contentDescription = stringResource(R.string.back),
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .clickable { navController.popBackStack() }
             )
-            Text(text = "My Orders", style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Center))
+            Text(
+                text = stringResource(R.string.my_orders),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
 
 
@@ -68,7 +79,12 @@ fun OrdersScreen(
 
 
         // tab row
-        val tabs = listOf("All","Pending", "Completed", "Cancelled")
+        val tabs = listOf(
+            stringResource(R.string.tab_all),
+            stringResource(R.string.tab_pending),
+            stringResource(R.string.tab_completed),
+            stringResource(R.string.tab_cancelled)
+        )
         val selectedTab = remember { mutableIntStateOf(0) }
         TabRow(
             selectedTabIndex = selectedTab.intValue
@@ -96,23 +112,23 @@ fun OrdersScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     CircularProgressIndicator()
-                    Text(text = "Loading...")
+                    Text(text = stringResource(R.string.loading))
                 }
             }
             is OrderEvent.Success ->{
                 val orders = (uiState.value as OrderEvent.Success).data
                 when(selectedTab.intValue){
                     0 -> {
-                        OrderList(orders = orders)
+                        OrderList(orders = orders, navController = navController)
                     }
                     1 -> {
-                        OrderList(orders = viewModel.filterOrders(orders, "Pending"))
+                        OrderList(orders = viewModel.filterOrders(orders, "Pending"), navController = navController)
                     }
                     2 -> {
-                        OrderList(orders = viewModel.filterOrders(orders, "Delivered"))
+                        OrderList(orders = viewModel.filterOrders(orders, "Delivered"), navController = navController)
                     }
                     3 ->{
-                        OrderList(orders = viewModel.filterOrders(orders, "Cancelled"))
+                        OrderList(orders = viewModel.filterOrders(orders, "Cancelled"), navController = navController)
                     }
                 }
             }
@@ -131,7 +147,7 @@ fun OrdersScreen(
 }
 
 @Composable
-fun OrderList(orders:List<OrdersData>){
+fun OrderList(orders: List<OrdersData>, navController: NavController) {
    if(orders.isEmpty()){
        Column(
            modifier = Modifier
@@ -139,18 +155,18 @@ fun OrderList(orders:List<OrdersData>){
            horizontalAlignment = Alignment.CenterHorizontally,
            verticalArrangement = Arrangement.Center
        ) {
-           Text(text = "No Orders")
+           Text(text = stringResource(R.string.no_orders))
        }
    }else{
        LazyColumn {
            items(orders, key = {order -> order.id}){
-               OrderItem(it)
+               OrderItem(order = it, navController = navController)
            }
        }
    }
 }
 @Composable
-fun OrderItem(order:OrdersData)
+fun OrderItem(order: OrdersData, navController: NavController)
 {
     Column(
         modifier = Modifier
@@ -165,7 +181,7 @@ fun OrderItem(order:OrdersData)
                 .fillMaxWidth()
         ) {
             Text(
-                text = "Order Id: ${order.id}",
+                text = stringResource(R.string.order_id, order.id),
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                 modifier = Modifier
                     .align(Alignment.CenterStart)
@@ -183,13 +199,19 @@ fun OrderItem(order:OrdersData)
                 .padding(12.dp)
         ) {
             Text(
-                text = "Quantity: 2",
+                text = stringResource(
+                    R.string.quantity_label,
+                    order.items.sumOf { it.quantity }
+                ),
                 fontSize = 16.sp,
                 modifier = Modifier
                     .align(Alignment.CenterStart)
             )
             Text(
-                text = "Total: Rs.${order.totalAmount}",
+                text = stringResource(
+                    R.string.order_total,
+                    CurrencyUtils.formatPrice(order.totalAmount)
+                ),
                 fontSize = 16.sp,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
@@ -218,12 +240,12 @@ fun OrderItem(order:OrdersData)
                     .background(Color.LightGray.copy(alpha = 0.3f))
             ){
                 Text(
-                    text = "Details",
+                    text = stringResource(R.string.details),
                     fontSize = 16.sp,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .clickable {
-
+                            navController.navigate(OrderDetailRoute(order.toNavOrderDetail()))
                         }
                 )
             }

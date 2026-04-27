@@ -29,9 +29,6 @@ import androidx.navigation.NavController
 import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.navigation.HomeScreen
 import com.himanshu_kumar.shoppingapp.navigation.LoginScreen
-import com.himanshu_kumar.shoppingapp.navigation.RegisterScreen
-import com.himanshu_kumar.shoppingapp.ui.feature.authentication.login.LoginState
-import com.himanshu_kumar.shoppingapp.ui.feature.authentication.login.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -49,7 +46,9 @@ fun RegisterScreen(
         when(val state = registerState.value){
             is RegisterState.Success -> {
                 LaunchedEffect(registerState.value) {
-                    navController.navigate(HomeScreen)
+                    navController.navigate(HomeScreen) {
+                        popUpTo(LoginScreen) { inclusive = true }
+                    }
                 }
             }
             is RegisterState.Error -> {

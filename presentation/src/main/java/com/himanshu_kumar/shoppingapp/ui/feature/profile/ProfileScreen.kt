@@ -12,10 +12,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,12 +25,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import com.himanshu_kumar.domain.model.UserDomainModel
 import com.himanshu_kumar.shoppingapp.R
+import com.himanshu_kumar.shoppingapp.model.UserAddress
+import com.himanshu_kumar.shoppingapp.navigation.LoginScreen
+import com.himanshu_kumar.shoppingapp.navigation.SettingsScreen
+import com.himanshu_kumar.shoppingapp.navigation.UserAddressRoute
+import com.himanshu_kumar.shoppingapp.navigation.UserAddressWrapper
+import com.himanshu_kumar.shoppingapp.navigation.WishlistScreen
+import com.himanshu_kumar.shoppingapp.ui.feature.user_address.USER_ADDRESS_SCREEN
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -37,109 +48,171 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = koinViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
-    val isLoading = remember { mutableStateOf(true) }
-    val user = remember { mutableStateOf<UserDomainModel?>(null) }
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val backStackEntry = navController.currentBackStackEntryAsState().value
+
+    LaunchedEffect(Unit) {
+        viewModel.messages.collect { message ->
+            snackbarHostState.showSnackbar(message)
+        }
+    }
+
+    LaunchedEffect(backStackEntry) {
+        val savedStateHandle = backStackEntry?.savedStateHandle
+        val address = savedStateHandle?.get<UserAddress>(USER_ADDRESS_SCREEN)
+        if (address != null) {
+            viewModel.saveAddress(address)
+            savedStateHandle.remove<UserAddress>(USER_ADDRESS_SCREEN)
+        }
+    }
+
+    if (uiState.value is ProfileScreenEvent.LoggedOut) {
+        LaunchedEffect(Unit) {
+            navController.navigate(LoginScreen) {
+                popUpTo(0) { inclusive = true }
+            }
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
         when (val state = uiState.value) {
             is ProfileScreenEvent.Success -> {
-                user.value = state.userDetails
+                ProfileContent(
+                    user = state.userDetails,
+                    address = state.address,
+                    isLoggingOut = state.isLoggingOut,
+                    onAddressClick = {
+                        navController.navigate(UserAddressRoute(UserAddressWrapper(state.address)))
+                    },
+                    onWishlistClick = { navController.navigate(WishlistScreen) },
+                    onSettingsClick = { navController.navigate(SettingsScreen) },
+                    onLogoutClick = viewModel::logout,
+                )
             }
             is ProfileScreenEvent.Error -> {
-                Text(text = state.message)
+                Text(
+                    text = state.message,
+                    modifier = Modifier.align(Alignment.Center),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
             }
             is ProfileScreenEvent.Loading -> {
-                CircularProgressIndicator()
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
+            is ProfileScreenEvent.LoggedOut -> Unit
         }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
+        )
     }
-
-    if(user.value != null){
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(18.dp),
-        ) {
-            Spacer(Modifier.size(90.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                AsyncImage(
-                    model = user.value!!.avatar,
-                    contentDescription = "Profile Picture",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(75.dp)
-                        .clip(CircleShape)
-                )
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = user.value!!.name,
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text(
-                        text = user.value!!.email,
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                }
-
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_setting),
-                    contentDescription = "Settings",
-                    modifier = Modifier
-                        .size(30.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(50.dp))
-
-            // List Items
-            val detailsList = listOf(
-                DetailsListItem(
-                    icon = painterResource(id = R.drawable.ic_address),
-                    title = "Address"
-                ),
-                DetailsListItem(
-                    icon = painterResource(id = R.drawable.ic_wishlist),
-                    title = "My Wishlist"
-                ),
-                DetailsListItem(
-                    icon = painterResource(id = R.drawable.ic_payment),
-                    title = "Payment method"
-                ),
-                DetailsListItem(
-                    icon = painterResource(id = R.drawable.ic_logout),
-                    title = "Log out"
-                )
-            )
-
-            detailsList.forEach {
-                ProfileListItem(icon = it.icon, title = it.title)
-            }
-        }
-    }
-
 }
 
 @Composable
-fun ProfileListItem(icon: Painter, title: String) {
+private fun ProfileContent(
+    user: UserDomainModel,
+    address: UserAddress?,
+    isLoggingOut: Boolean,
+    onAddressClick: () -> Unit,
+    onWishlistClick: () -> Unit,
+    onSettingsClick: () -> Unit,
+    onLogoutClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(18.dp),
+    ) {
+        Spacer(Modifier.size(90.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            AsyncImage(
+                model = user.avatar,
+                contentDescription = stringResource(R.string.content_profile_picture),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(75.dp)
+                    .clip(CircleShape)
+            )
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = user.name,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = user.email,
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
+
+            Icon(
+                painter = painterResource(id = R.drawable.ic_setting),
+                contentDescription = stringResource(R.string.content_settings),
+                modifier = Modifier
+                    .size(30.dp)
+                    .clickable { onSettingsClick() }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(50.dp))
+
+        val detailsList = listOf(
+            DetailsListItem(
+                icon = painterResource(id = R.drawable.ic_address),
+                title = stringResource(R.string.profile_address),
+                subtitle = address?.toString() ?: stringResource(R.string.profile_address_empty),
+                onClick = onAddressClick,
+            ),
+            DetailsListItem(
+                icon = painterResource(id = R.drawable.ic_wishlist),
+                title = stringResource(R.string.profile_wishlist),
+                subtitle = null,
+                onClick = onWishlistClick,
+            ),
+            DetailsListItem(
+                icon = painterResource(id = R.drawable.ic_logout),
+                title = if (isLoggingOut) stringResource(R.string.profile_logging_out) else stringResource(R.string.profile_logout),
+                subtitle = null,
+                enabled = !isLoggingOut,
+                onClick = onLogoutClick,
+            )
+        )
+
+        detailsList.forEach {
+            ProfileListItem(
+                icon = it.icon,
+                title = it.title,
+                subtitle = it.subtitle,
+                enabled = it.enabled,
+                onClick = it.onClick,
+            )
+        }
+    }
+}
+
+@Composable
+fun ProfileListItem(
+    icon: Painter,
+    title: String,
+    subtitle: String? = null,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 12.dp)
-            .clickable { }
+            .clickable(enabled = enabled) { onClick() }
             .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -151,15 +224,25 @@ fun ProfileListItem(icon: Painter, title: String) {
                 modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.width(18.dp))
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge
-            )
+            Column {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                if (!subtitle.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(3.dp))
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.62f),
+                    )
+                }
+            }
         }
 
         Icon(
             painter = painterResource(id = R.drawable.ic_right_arrow),
-            contentDescription = "Arrow",
+            contentDescription = stringResource(R.string.content_arrow),
             modifier = Modifier.size(20.dp)
         )
     }
@@ -173,7 +256,10 @@ fun ProfileListItem(icon: Painter, title: String) {
 
 data class DetailsListItem(
     val icon: Painter,
-    val title: String
+    val title: String,
+    val subtitle: String?,
+    val enabled: Boolean = true,
+    val onClick: () -> Unit,
 )
 
 //@Preview(showBackground = true)

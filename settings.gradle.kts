@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ShoppingApp"
+rootProject.name = "DurmusBaba"
 include(":presentation")
 include(":data")
 include(":domain")

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,8 +39,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,6 +52,7 @@ import com.himanshu_kumar.domain.model.CartItemModel
 import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.navigation.CartScreen
 import com.himanshu_kumar.shoppingapp.navigation.CartSummaryScreen
+import com.himanshu_kumar.shoppingapp.utils.CurrencyUtils
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -64,6 +68,7 @@ fun CartScreen(
 
     val loading = remember { mutableStateOf(false) }
     val errorMsg = remember{ mutableStateOf<String?>(null) }
+    val context = LocalContext.current
     LaunchedEffect(uiState.value){
         when(uiState.value){
             is CartEvent.Loading->{
@@ -72,15 +77,17 @@ fun CartScreen(
             }
             is CartEvent.Error->{
                 loading.value = false
+                cartItems.value = emptyList()
                 errorMsg.value = (uiState.value as CartEvent.Error).message
             }
             is CartEvent.Success->{
                 loading.value = false
                 val data = (uiState.value as CartEvent.Success).data
+                cartItems.value = data
                 if(data.isEmpty()){
-                    errorMsg.value = "Cart is empty"
+                    errorMsg.value = context.getString(R.string.cart_empty)
                 }else{
-                    cartItems.value = data
+                    errorMsg.value = null
                 }
             }
         }
@@ -115,11 +122,16 @@ fun CartScreen(
                 ){
                     Image(
                         painter = painterResource(R.drawable.ic_back),
-                        contentDescription = null,
-                        modifier = Modifier.align(Alignment.CenterStart)
+                        contentDescription = stringResource(R.string.back),
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .clickable { navController.popBackStack() }
                     )
-                    Text(text = "My Cart", style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.align(Alignment.Center))
+                    Text(
+                        text = stringResource(R.string.my_cart),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 }
                 Spacer(modifier = Modifier.size(8.dp))
                 val shouldShowList = !loading.value && errorMsg.value == null
@@ -145,9 +157,17 @@ fun CartScreen(
                            .fillMaxWidth()
                            .padding(16.dp)
                    ){
-                       Text(text = "Total", style = MaterialTheme.typography.titleSmall, color = Color.LightGray)
+                       Text(
+                           text = stringResource(R.string.total),
+                           style = MaterialTheme.typography.titleSmall,
+                           color = Color.LightGray
+                       )
                        Spacer(Modifier.weight(1f))
-                       Text(text = "$${cartItems.value.sumOf { it.price * it.quantity }}",style = MaterialTheme.typography.titleSmall, color = Color.Black)
+                       Text(
+                           text = CurrencyUtils.formatPrice(cartItems.value.sumOf { it.price * it.quantity }),
+                           style = MaterialTheme.typography.titleSmall,
+                           color = Color.Black
+                       )
                    }
                 Spacer(Modifier.size(15.dp))
                 if(shouldShowList)
@@ -163,7 +183,7 @@ fun CartScreen(
                         colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.button_color))
                     ) {
                         Text(
-                            text = "Proceed to checkout",
+                            text = stringResource(R.string.proceed_checkout),
                             style = MaterialTheme.typography.titleMedium,
                         )
                     }
@@ -174,11 +194,14 @@ fun CartScreen(
                     modifier = Modifier.align(Alignment.Center)
                 ) {
                     CircularProgressIndicator(modifier = Modifier.size(48.dp))
-                    Text(text = "Loading...")
+                    Text(text = stringResource(R.string.loading))
                 }
             }
             if(errorMsg.value != null){
-                Text(text = errorMsg.value?:"Something went wrong",modifier = Modifier.align(Alignment.Center))
+                Text(
+                    text = errorMsg.value ?: stringResource(R.string.error_generic),
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
         }
     }
@@ -217,13 +240,13 @@ fun CartItem(
             )
             Spacer(modifier = Modifier.size(4.dp))
             Text(
-                text = "$ ${item.price}",
+                text = CurrencyUtils.formatPrice(item.price),
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
                 color = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.size(2.dp))
             Text(
-                text = "Size L | Color: Blue",
+                text = stringResource(R.string.cart_item_variant_default),
                 fontSize = 10.sp,
                 color = Color.Black
             )

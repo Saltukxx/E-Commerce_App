@@ -1,30 +1,27 @@
 package com.himanshu_kumar.data.network
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.util.Log
+import com.himanshu_kumar.data.model.request.AddToCartRequest
+import com.himanshu_kumar.data.model.request.AddWishlistRequest
 import com.himanshu_kumar.data.model.request.AddressOrderModel
-import com.himanshu_kumar.data.model.request.LoginRequest
+import com.himanshu_kumar.data.model.request.RefreshTokenRequest
 import com.himanshu_kumar.data.model.request.RegisterRequest
 import com.himanshu_kumar.data.model.request.TokenRequest
-import com.himanshu_kumar.data.model.response.CartItem
+import com.himanshu_kumar.data.model.response.CartResponse
 import com.himanshu_kumar.data.model.response.CartSummaryResponse
 import com.himanshu_kumar.data.model.response.CategoriesListResponse
-import com.himanshu_kumar.data.model.response.OrderListData
 import com.himanshu_kumar.data.model.response.OrdersListResponse
 import com.himanshu_kumar.data.model.response.PlaceOrderResponse
 import com.himanshu_kumar.data.model.response.ProductListResponse
 import com.himanshu_kumar.data.model.response.RegisterResponse
-import com.himanshu_kumar.data.model.response.Summary
 import com.himanshu_kumar.data.model.response.TokenResponse
 import com.himanshu_kumar.data.model.response.UserResponse
+import com.himanshu_kumar.data.model.response.WishlistResponse
 import com.himanshu_kumar.domain.model.AddressDomainModel
 import com.himanshu_kumar.domain.model.CartItemModel
 import com.himanshu_kumar.domain.model.CartModel
 import com.himanshu_kumar.domain.model.CartSummary
 import com.himanshu_kumar.domain.model.CategoriesListModel
-import com.himanshu_kumar.domain.model.OrderProductItem
-import com.himanshu_kumar.domain.model.OrdersData
+import com.himanshu_kumar.domain.model.LoginResult
 import com.himanshu_kumar.domain.model.OrdersListModel
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.model.UserDomainModel
@@ -40,423 +37,340 @@ import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
 import io.ktor.http.contentType
 import io.ktor.utils.io.errors.IOException
 
+class NetworkServiceImpl(
+    private val client: HttpClient,
+    private val env: NetworkEnvironment,
+) : NetworkService {
 
-// This class is a network service that fetches product data from an API ,transforms it, and handles network request errors.
+    private val baseUrl: String get() = env.baseUrl.trimEnd('/')
 
-class NetworkServiceImpl(private val client: HttpClient) : NetworkService {                                 // Implementation of NetworkService interface for fetching product data.
-
-    private val baseUrl = "https://api.escuelajs.co/api/v1"
-    override suspend fun getProducts(category:Int?): ResultWrapper<List<ProductListModel>> {              // Asynchronous function to retrieve a list of products.
-
-        val url = if (category != null) {
-            "$baseUrl/products/?categoryId=$category"                                                 // API endpoint for product data with category.
-        } else {
-            "$baseUrl/products"                                                                    // API endpoint for product data without category.
-        }
-        val data = makeWebRequest(
-            url = url,                                                                              // API endpoint for product data.
-            method = HttpMethod.Get,                                                                // HTTP GET method for retrieving data.
-            mapper = { dataModels:List<ProductListResponse> ->
-                dataModels.map { it.toProductList() }                                              // Maps the list of data models to a list of product models.
-            }
-        )
+    override suspend fun getProducts(
+        category: Int?,
+        limit: Int?,
+        skip: Int?,
+    ): ResultWrapper<List<ProductListModel>> {
+        val query = buildList {
+            if (category != null) add("categoryId=$category")
+            if (limit != null) add("limit=$limit")
+            if (skip != null) add("skip=$skip")
+        }.joinToString("&").let { if (it.isEmpty()) "" else "?$it" }
+        val url = "$baseUrl/products$query"
         return makeWebRequest(
-            url = url,                                                                              // API endpoint for product data.
-            method = HttpMethod.Get,                                                                // HTTP GET method for retrieving data.
-            mapper = { dataModels:List<ProductListResponse> ->
-                dataModels.map { it.toProductList() }                                              // Maps the list of data models to a list of product models.
-            }
+            url = url,
+            method = HttpMethod.Get,
+            mapper = { dataModels: List<ProductListResponse> ->
+                dataModels.map { it.toProductList() }
+            },
         )
     }
 
     override suspend fun getCategories(): ResultWrapper<List<CategoriesListModel>> {
         val url = "$baseUrl/categories"
-
-        return makeWebRequest<List<CategoriesListResponse>, List<CategoriesListModel>>(
+        return makeWebRequest(
             url = url,
             method = HttpMethod.Get,
             mapper = { categories: List<CategoriesListResponse> ->
                 categories.map { it.toCategoryListModel() }
-            }
+            },
         )
     }
 
-
-    // for testing purpose only
-    private var fakeCart = CartModel(
-        data = listOf(
-            CartItemModel(
-                id = 1,
-                productId = 37,
-                userId = 123,
-                name = "Tom Cruise",
-                price = 33,
-                imageUrl = "https://i.imgur.com/9qrmE1b.jpeg",
-                quantity = 2,
-                productName = "Chic Summer Denim Espadrille Sandals"
-            ),
-            CartItemModel(
-                id = 2,
-                productId = 7,
-                userId = 123,
-                name = "Tom Cruise",
-                price = 79,
-                imageUrl = "https://i.imgur.com/mp3rUty.jpeg",
-                quantity = 1,
-                productName = "Classic Comfort Drawstring Joggers"
-            )
-        ),
-        msg = "Product added to cart successfully"
-    )
-//    private var fakeCart:CartModel = CartModel(
-//        data = emptyList(),
-//        msg = "empty list"
-//    )
-    override suspend fun addProductToCart(request: AddCartRequestModel, userId:Long): ResultWrapper<CartModel> {
+    override suspend fun addProductToCart(
+        request: AddCartRequestModel,
+        userId: Long,
+    ): ResultWrapper<CartModel> {
         val url = "$baseUrl/cart/$userId"
-//        return makeWebRequest(
-//            url = url,
-//            method = HttpMethod.Post,
-//            body = AddToCartRequest.fromCartRequestModel(request),
-//            mapper = { cartItem:CartResponse->
-//                cartItem.toCartModel()
-//            }
-//        )
-//        fakeCart = fakeCart.copy(
-//            data = fakeCart.data.
-//        )
-        val newItem = CartItemModel(
-            id = fakeCart.data.size + 1,
-            productId = request.productId,
-            userId = request.userId,
-            name = "",
-            price = request.price,
-            imageUrl = null,
-            quantity =  request.quantity,
-            productName = request.productName,
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Post,
+            body = AddToCartRequest.fromCartRequestModel(request),
+            mapper = { res: CartResponse -> res.toCartModel() },
         )
-        val updatedData = fakeCart.data + newItem  // creates a new list with the new item
-        fakeCart = fakeCart.copy(
-            data = updatedData,
-            msg = "Product added to cart successfully"
-        )
-        return ResultWrapper.Success(fakeCart)
     }
 
-
-
-
-    override suspend fun getCart(userId:Long): ResultWrapper<CartModel> {
-//        val url = "$baseUrl/cart/$userId"
-//        return makeWebRequest(
-//            url = url,
-//            method = HttpMethod.Get,
-//            mapper = { cartItem:CartResponse->
-//                cartItem.toCartModel()
-//            }
-//        )
-        Log.d("fakeCart",fakeCart.toString())
-        return ResultWrapper.Success(fakeCart)
+    override suspend fun getCart(userId: Long): ResultWrapper<CartModel> {
+        val url = "$baseUrl/cart/$userId"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Get,
+            mapper = { res: CartResponse -> res.toCartModel() },
+        )
     }
 
-    override suspend fun updateQuantity(cartItemModel: CartItemModel, userId:Long): ResultWrapper<CartModel> {
-//        val url = "$baseUrl/cart/$userId/${cartItemModel.id}"
-//        return makeWebRequest(
-//            url = url,
-//            method = HttpMethod.Put,
-//            body = AddToCartRequest(
-//                productId = cartItemModel.productId,
-//                productName = cartItemModel.productName,
-//                price = cartItemModel.price,
-//                quantity = cartItemModel.quantity,
-//                userId = cartItemModel.userId
-//            ),
-//            mapper = { cartItem:CartResponse->
-//                cartItem.toCartModel()
-//            }
-//        )
-        fakeCart =   fakeCart.copy(
-            data = fakeCart.data.mapIndexed { _, item ->
-                if (item.id == cartItemModel.id) item.copy(quantity = cartItemModel.quantity)
-                else item
-            }
+    override suspend fun updateQuantity(
+        cartItemModel: CartItemModel,
+        userId: Long,
+    ): ResultWrapper<CartModel> {
+        val url = "$baseUrl/cart/$userId/${cartItemModel.id}"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Put,
+            body = AddToCartRequest(
+                productId = cartItemModel.productId,
+                productName = cartItemModel.productName,
+                price = cartItemModel.price,
+                quantity = cartItemModel.quantity,
+                userId = cartItemModel.userId,
+            ),
+            mapper = { res: CartResponse -> res.toCartModel() },
         )
-        return ResultWrapper.Success(fakeCart)
     }
 
     override suspend fun deleteItem(cartItemId: Int, userId: Long): ResultWrapper<CartModel> {
-//        val url = "$baseUrl/cart/$userId/$cartItemId"
-//        return makeWebRequest(
-//            url = url,
-//            method = HttpMethod.Delete,
-//            mapper = { cartItem:CartResponse->
-//                cartItem.toCartModel()
-//            }
-//        )
-        fakeCart =   fakeCart.copy(
-            data = fakeCart.data.filter { it.id != cartItemId }
+        val url = "$baseUrl/cart/$userId/$cartItemId"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Delete,
+            mapper = { res: CartResponse -> res.toCartModel() },
         )
-        return ResultWrapper.Success(fakeCart)
     }
 
     override suspend fun getCartSummary(userId: Long): ResultWrapper<CartSummary> {
-//        val url = "$baseUrl/cart/$userId/summary"
-//        return makeWebRequest(
-//            url = url,
-//            method = HttpMethod.Get,
-//            mapper = { cartSummary: CartSummaryResponse ->
-//                cartSummary.toCartSummary()
-//            }
-//        )
-        val fakeSummaryData = CartSummaryResponse(
-            data = Summary(
-                discount = 49.95,
-                items = testing(fakeCart.data).first,
-                shipping = 5.0,
-                subtotal = testing(fakeCart.data).second,
-                tax = 99.9,
-                total = testing(fakeCart.data).second+5.0+99.9-49.95
-            ),
-            msg = "Checkout Summary"
-        ).toCartSummary()
-        return ResultWrapper.Success(fakeSummaryData)
-    }
-
-    override suspend fun placeOrder(address: AddressDomainModel, userId: Long): ResultWrapper<Long> {
-//        val dataModel = AddressOrderModel.fromDomainAddress(address)
-//        val url = "$baseUrl/orders/$userId"
-//        return makeWebRequest(
-//            url = url,
-//            method = HttpMethod.Post,
-//            body = dataModel,
-//            mapper = { orderRes: PlaceOrderResponse ->
-//                orderRes.data.id
-//            }
-//        )
-        return ResultWrapper.Success(12345)
-    }
-
-    override suspend fun getOrderList(userId:Long): ResultWrapper<OrdersListModel> {
-//        val url = "$baseUrl/orders/$userId"
-//        return makeWebRequest(
-//            url = url,
-//            method = HttpMethod.Get,
-//            mapper = { orderResponse: OrdersListResponse ->
-//                orderResponse.toDomainResponse()
-//            }
-//        )
-        val data = OrdersListModel(
-            data = listOf(
-                OrdersData(
-                    id = 1,
-                    items = listOf(
-                        OrderProductItem(
-                            id = 1,
-                            orderId = 12,
-                            price = 59.0,
-                            productId = 37,
-                            productName = "Chic Summer Denim Espadrille Sandals",
-                            quantity = 2,
-                            userId = 123
-                        )
-                    ),
-                    orderDate = "2024-10-12",
-                    status = "Pending",
-                    totalAmount = 1200.0,
-                    userId = 123
-                ),
-                OrdersData(
-                    id = 2,
-                    items = listOf(
-                        OrderProductItem(
-                            id = 2,
-                            orderId = 13,
-                            price = 60.0,
-                            productId = 79,
-                            productName = "Classic Comfort Drawstring Joggers",
-                            quantity = 2,
-                            userId = 123
-                        )
-                    ),
-                    orderDate = "2024-10-15",
-                    status = "Pending",
-                    totalAmount = 1000.0,
-                    userId = 123
-                ),
-                OrdersData(
-                    id = 3,
-                    items = listOf(
-                        OrderProductItem(
-                            id = 2,
-                            orderId = 13,
-                            price = 60.0,
-                            productId = 79,
-                            productName = "Shoes",
-                            quantity = 2,
-                            userId = 123
-                        )
-                    ),
-                    orderDate = "2024-11-01",
-                    status = "Cancelled",
-                    totalAmount = 645.0,
-                    userId = 123
-                ),
-                OrdersData(
-                    id = 4,
-                    items = listOf(
-                        OrderProductItem(
-                            id = 2,
-                            orderId = 13,
-                            price = 60.0,
-                            productId = 79,
-                            productName = "T-Shirt",
-                            quantity = 2,
-                            userId = 123
-                        )
-                    ),
-                    orderDate = "2023-10-15",
-                    status = "Delivered",
-                    totalAmount = 896.0,
-                    userId = 123
-                )
-            ),
-            msg = "OrderList"
+        val url = "$baseUrl/cart/$userId/summary"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Get,
+            mapper = { res: CartSummaryResponse -> res.toCartSummary() },
         )
-        return ResultWrapper.Success(data)
     }
 
+    override suspend fun placeOrder(
+        address: AddressDomainModel,
+        userId: Long,
+    ): ResultWrapper<Long> {
+        val dataModel = AddressOrderModel.fromDomainAddress(address)
+        val url = "$baseUrl/orders/$userId"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Post,
+            body = dataModel,
+            mapper = { orderRes: PlaceOrderResponse -> orderRes.data.id },
+        )
+    }
 
+    override suspend fun getOrderList(userId: Long): ResultWrapper<OrdersListModel> {
+        val url = "$baseUrl/orders/$userId"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Get,
+            mapper = { orderResponse: OrdersListResponse ->
+                orderResponse.toDomainResponse()
+            },
+        )
+    }
 
-    override suspend fun login(email: String, password: String): ResultWrapper<UserDomainModel> {
+    override suspend fun login(
+        email: String,
+        password: String,
+    ): ResultWrapper<LoginResult> {
         val urlForToken = "$baseUrl/auth/login"
-        val accessTokenResult = makeWebRequest<TokenResponse, String>(
+        val tokenRes = makeWebRequest<TokenResponse, TokenResponse>(
             url = urlForToken,
             method = HttpMethod.Post,
             body = TokenRequest(email, password),
-            mapper = { tokenResponse -> tokenResponse.access_token }
+            allowTokenRefresh = false,
+            mapper = { it },
         )
-
-        if (accessTokenResult is ResultWrapper.Failure) {
-            return ResultWrapper.Failure(accessTokenResult.message)
+        if (tokenRes is ResultWrapper.Failure) {
+            return ResultWrapper.Failure(tokenRes.message)
         }
-
-        val accessToken = (accessTokenResult as? ResultWrapper.Success)?.value
-            ?: return ResultWrapper.Failure("Token retrieval failed")
+        val tokens = (tokenRes as ResultWrapper.Success).value
+        val accessToken = tokens.access_token
+        env.tokenProvider.setAccessToken(tokens.access_token)
+        env.tokenProvider.setRefreshToken(tokens.refresh_token)
 
         val urlForProfile = "$baseUrl/auth/profile"
-
-        return makeWebRequest<UserResponse, UserDomainModel>(
+        val userResult = makeWebRequest<UserResponse, UserDomainModel>(
             url = urlForProfile,
             method = HttpMethod.Get,
             headers = mapOf("Authorization" to "Bearer $accessToken"),
-            mapper = { userResponse -> userResponse.toUserDomainModel() }
+            allowTokenRefresh = false,
+            mapper = { userResponse -> userResponse.toUserDomainModel() },
+        )
+        if (userResult is ResultWrapper.Failure) {
+            env.tokenProvider.clearAuthTokens()
+            return ResultWrapper.Failure(userResult.message)
+        }
+        val user = (userResult as ResultWrapper.Success).value
+        return ResultWrapper.Success(
+            LoginResult(
+                user = user,
+                accessToken = accessToken,
+                refreshToken = tokens.refresh_token,
+            ),
         )
     }
-
 
     override suspend fun register(
         email: String,
         password: String,
-        name: String
+        name: String,
     ): ResultWrapper<UserDomainModel> {
-        val url = "$baseUrl/users/"
-        val requestBody = mapOf(
-            "email" to email,
-            "password" to password,
-            "name" to name,
-            "avatar" to ""
-        )
-        val data = makeWebRequest(
+        val url = "$baseUrl/users"
+        return makeWebRequest(
             url = url,
             method = HttpMethod.Post,
-            body = RegisterRequest(email, password, name),
+            body = RegisterRequest(name = name, email = email, password = password),
+            allowTokenRefresh = false,
             mapper = { registerResponse: RegisterResponse ->
                 registerResponse.toUserDomainModel()
-            }
+            },
         )
-        Log.d("register",data.toString())
-        return data
     }
 
-    private fun testing(item:List<CartItemModel>):Pair<List<CartItem>,Double>{
-        val list:List<CartItem> = item.map{
-            CartItem(
-                id = it.id,
-                productId = it.productId,
-                productName = it.productName,
-                price = it.price,
-                userId = it.userId,
-                name = it.name,
-                imageUrl = null,
-                quantity = it.quantity,
-            )
-        }
-        val total = item.sumOf { it.price * it.quantity }.toDouble()
-        return Pair(list,total)
+    override suspend fun getProfile(): ResultWrapper<UserDomainModel> {
+        val url = "$baseUrl/auth/profile"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Get,
+            mapper = { userResponse: UserResponse -> userResponse.toUserDomainModel() },
+        )
     }
 
+    override suspend fun logout(refreshToken: String): ResultWrapper<Unit> {
+        val url = "$baseUrl/auth/logout"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Post,
+            body = RefreshTokenRequest(refreshToken),
+            allowTokenRefresh = false,
+            mapper = { _: Map<String, String> -> Unit },
+        )
+    }
 
-    // Opt-in to use internal Ktor APIs (use with caution).
+    override suspend fun getWishlist(userId: Long): ResultWrapper<List<ProductListModel>> {
+        val url = "$baseUrl/wishlist/$userId"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Get,
+            mapper = { res: WishlistResponse -> res.toProducts() },
+        )
+    }
+
+    override suspend fun addToWishlist(userId: Long, productId: Int): ResultWrapper<List<ProductListModel>> {
+        val url = "$baseUrl/wishlist/$userId"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Post,
+            body = AddWishlistRequest(productId),
+            mapper = { res: WishlistResponse -> res.toProducts() },
+        )
+    }
+
+    override suspend fun removeFromWishlist(userId: Long, productId: Int): ResultWrapper<List<ProductListModel>> {
+        val url = "$baseUrl/wishlist/$userId/$productId"
+        return makeWebRequest(
+            url = url,
+            method = HttpMethod.Delete,
+            mapper = { res: WishlistResponse -> res.toProducts() },
+        )
+    }
+
     private suspend inline fun <reified T, R> makeWebRequest(
-        url: String,                                                                                // API endpoint URL.
-        method: HttpMethod,                                                                         // HTTP method (GET, POST, etc.).
-        body: Any? = null,                                                                          // Request body (for POST, PUT, etc.).
-        headers: Map<String, String>? = emptyMap(),                                                 // Request headers.
-        parameters: Map<String, String>? = emptyMap(),                                              // Query parameters.
-        noinline mapper: ((T) -> R)? = null                                                         // Mapper function to transform response data.
+        url: String,
+        method: HttpMethod,
+        body: Any? = null,
+        headers: Map<String, String>? = emptyMap(),
+        parameters: Map<String, String>? = emptyMap(),
+        allowTokenRefresh: Boolean = true,
+        noinline mapper: (T) -> R,
     ): ResultWrapper<R> {
-        // Generic function for making HTTP requests.
-        // Uses Ktor's HttpClient to send requests.
-        // Handles query parameters, headers, body, and content type.
-        // Applies mapper function if provided.
-        // Returns ResultWrapper to indicate success or failure.
-
         return try {
-            val response = client.request(url) {
-                // Configures the HTTP request.
-                this.method = method                                                                // Sets the HTTP method.
-
-                // Apply query parameters
-                url {
-                    this.parameters.appendAll(Parameters.build {
-                        parameters?.forEach { (key, value) ->
-                            append(key, value)                                                      // Adds query parameters to the URL.
-                        }
-                    })
-                }
-
-                // Apply headers
-                headers?.forEach { (key, value) ->
-                    header(key, value)                                                              // Adds headers to the request.
-                }
-
-                // set body for post, put etc.
-                if (body != null) {
-                    setBody(body)                                                              // Sets the request body.
-                }
-
-                // set content type
-                contentType(ContentType.Application.Json)                                           // Sets the content type to JSON.
-            }.body<T>()                                                                             // Retrieves the response body and converts it to type T.
-
-            val result: R = mapper?.invoke(response) ?: response as R                               // Applies mapper or casts the response.
-            ResultWrapper.Success(result)                                                           // Returns success with the result.
+            val response = executeRequest<T>(url, method, body, headers, parameters)
+            val result = mapper(response)
+            ResultWrapper.Success(result)
         } catch (e: ClientRequestException) {
-            // Handles client-side errors (e.g., 4xx errors).
+            if (e.response.status == HttpStatusCode.Unauthorized && allowTokenRefresh) {
+                val refreshed = refreshAccessToken()
+                if (refreshed) {
+                    return try {
+                        val response = executeRequest<T>(
+                            url,
+                            method,
+                            body,
+                            headers.withFreshAuthorization(),
+                            parameters,
+                        )
+                        val result = mapper(response)
+                        ResultWrapper.Success(result)
+                    } catch (retryError: Exception) {
+                        ResultWrapper.Failure(retryError.message ?: "Unknown error")
+                    }
+                }
+            }
             ResultWrapper.Failure(e.message)
         } catch (e: ServerResponseException) {
-            // Handles server-side errors (e.g., 5xx errors).
             ResultWrapper.Failure(e.message)
         } catch (e: IOException) {
-            // Handles network I/O errors.
             ResultWrapper.Failure(e.message ?: "Unknown error")
         } catch (e: Exception) {
-            // Handles other exceptions.
             ResultWrapper.Failure(e.message ?: "Unknown error")
+        }
+    }
+
+    private suspend inline fun <reified T> executeRequest(
+        url: String,
+        method: HttpMethod,
+        body: Any?,
+        headers: Map<String, String>?,
+        parameters: Map<String, String>?,
+    ): T {
+        return client.request(url) {
+            this.method = method
+            url {
+                this.parameters.appendAll(Parameters.build {
+                    parameters?.forEach { (key, value) ->
+                        append(key, value)
+                    }
+                })
+            }
+            headers?.forEach { (key, value) ->
+                header(key, value)
+            }
+            if (body != null) {
+                setBody(body)
+            }
+            contentType(ContentType.Application.Json)
+        }.body()
+    }
+
+    private suspend fun refreshAccessToken(): Boolean {
+        val refreshToken = env.tokenProvider.getRefreshToken()
+        if (refreshToken.isNullOrBlank()) {
+            env.tokenProvider.clearAuthTokens()
+            return false
+        }
+        return try {
+            val tokens = executeRequest<TokenResponse>(
+                url = "$baseUrl/auth/refresh",
+                method = HttpMethod.Post,
+                body = RefreshTokenRequest(refreshToken),
+                headers = emptyMap(),
+                parameters = emptyMap(),
+            )
+            env.tokenProvider.setAccessToken(tokens.access_token)
+            env.tokenProvider.setRefreshToken(tokens.refresh_token)
+            true
+        } catch (e: Exception) {
+            env.tokenProvider.clearAuthTokens()
+            false
+        }
+    }
+
+    private fun Map<String, String>?.withFreshAuthorization(): Map<String, String>? {
+        if (this == null) return null
+        val filtered = filterKeys { !it.equals(HttpHeaders.Authorization, ignoreCase = true) }
+        val accessToken = env.tokenProvider.getAccessToken()
+        return if (accessToken.isNullOrBlank()) {
+            filtered
+        } else {
+            filtered + (HttpHeaders.Authorization to "Bearer $accessToken")
         }
     }
 }

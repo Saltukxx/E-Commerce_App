@@ -29,6 +29,15 @@ object CartSummaryScreen
 object CategoryItemsScreen
 
 @Serializable
+data class OrderDetailRoute(val order: NavOrderDetail)
+
+@Serializable
+object WishlistScreen
+
+@Serializable
+object SettingsScreen
+
+@Serializable
 data class ProductDetails(val product:UiProductModel)
 
 @Serializable
