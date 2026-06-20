@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.usecase.GetWishlistUseCase
+import com.himanshu_kumar.domain.usecase.RemoveFromWishlistUseCase
 import com.himanshu_kumar.shoppingapp.UserSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,6 +13,7 @@ import kotlinx.coroutines.launch
 
 class WishlistViewModel(
     private val getWishlistUseCase: GetWishlistUseCase,
+    private val removeFromWishlistUseCase: RemoveFromWishlistUseCase,
     private val userSession: UserSession,
 ) : ViewModel() {
 
@@ -29,6 +31,21 @@ class WishlistViewModel(
         viewModelScope.launch {
             _state.value = WishlistUiState.Loading
             when (val r = getWishlistUseCase.execute(uid.toLong())) {
+                is ResultWrapper.Success -> {
+                    _state.value = WishlistUiState.Success(r.value)
+                }
+                is ResultWrapper.Failure -> {
+                    _state.value = WishlistUiState.Error(r.message)
+                }
+            }
+        }
+    }
+
+    fun remove(product: ProductListModel) {
+        val uid = userSession.getUser()
+        if (uid == 0) return
+        viewModelScope.launch {
+            when (val r = removeFromWishlistUseCase.execute(uid.toLong(), product.id)) {
                 is ResultWrapper.Success -> {
                     _state.value = WishlistUiState.Success(r.value)
                 }

@@ -27,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.himanshu_kumar.shoppingapp.BuildConfig
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,9 +63,19 @@ fun CartSummaryScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        val uiState = viewModel.uiState.collectAsState()
+    val uiState = viewModel.uiState.collectAsState()
+    val paymentsEnabled = viewModel.paymentsEnabled.collectAsState()
+    val paymentSession = viewModel.paymentSession.collectAsState()
+    val cardCheckoutEnabled = paymentsEnabled.value && BuildConfig.STRIPE_PAYMENTS_ENABLED
 
-        LaunchedEffect(navController) {
+    LaunchedEffect(paymentSession.value) {
+        val session = paymentSession.value ?: return@LaunchedEffect
+        if (!BuildConfig.STRIPE_PAYMENTS_ENABLED) {
+            viewModel.onPaymentSheetResult(completed = false, checkoutId = session.checkoutId)
+        }
+    }
+
+    LaunchedEffect(navController) {
             val savedState = navController.currentBackStackEntry?.savedStateHandle
             savedState?.getStateFlow(USER_ADDRESS_SCREEN, address.value)?.collect{ userAddress ->
                 address.value = userAddress
@@ -110,6 +121,14 @@ fun CartSummaryScreen(
                 }
                 is CartSummaryEvent.Success ->{
                     Column {
+                        if (!cardCheckoutEnabled) {
+                            Text(
+                                text = stringResource(R.string.checkout_b2b_notice),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(bottom = 8.dp),
+                            )
+                        }
                         AddressBar(address = address.value?.toString()?:"", onClick = {
                             navController.navigate(UserAddressRoute(UserAddressWrapper(address.value)))
                         })
@@ -120,29 +139,42 @@ fun CartSummaryScreen(
 
                 is CartSummaryEvent.PlaceOrder -> {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize().padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_success),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                         Text(
-                            text = stringResource(R.string.order_placed_success),
-                            style = MaterialTheme.typography.titleMedium
+                            text = stringResource(R.string.checkout_complete),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Text(
+                            text = stringResource(
+                                R.string.orders_placed_count,
+                                event.result.orders.size,
+                            ),
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                         Spacer(Modifier.size(8.dp))
-                        Button(onClick = {
-                            navController.popBackStack(
-                                HomeScreen,
-                                inclusive = false
-                            )
-                        }) {
+                        event.result.orders.forEach { order ->
                             Text(
-                                text = stringResource(R.string.continue_shopping),
-                                style = MaterialTheme.typography.titleMedium,
+                                text = stringResource(
+                                    R.string.vendor_order_line,
+                                    order.storeName,
+                                    order.orderId.toInt(),
+                                    order.status,
+                                ),
+                                style = MaterialTheme.typography.bodySmall,
                             )
+                        }
+                        Spacer(Modifier.size(8.dp))
+                        Button(onClick = {
+                            navController.popBackStack(HomeScreen, inclusive = false)
+                        }) {
+                            Text(text = stringResource(R.string.continue_shopping))
                         }
                     }
                 }
@@ -157,7 +189,9 @@ fun CartSummaryScreen(
                 enabled = address.value!=null
             ) {
                 Text(
-                    text = stringResource(R.string.place_order),
+                    text = stringResource(
+                        if (cardCheckoutEnabled) R.string.pay_now else R.string.place_order,
+                    ),
                     style = MaterialTheme.typography.titleMedium,
                 )
             }
@@ -166,33 +200,71 @@ fun CartSummaryScreen(
 }
 
 @Composable
-fun CartSummaryScreenContent(cartSummary: CartSummary){
+fun CartSummaryScreenContent(cartSummary: CartSummary) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(Color.LightGray.copy(alpha = 0.4f))
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-    ){
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+    ) {
         item {
             Text(
                 text = stringResource(R.string.order_summary_title),
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier.padding(vertical = 8.dp),
+            )
+            Text(
+                text = stringResource(R.string.shipping_per_seller_note),
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Gray,
+            )
+            cartSummary.data.warnings.forEach { warning ->
+                Text(
+                    text = warning,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Red,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+            }
+        }
+        val groups = cartSummary.data.groups.ifEmpty {
+            listOf(
+                com.himanshu_kumar.domain.model.VendorCartGroup(
+                    storeId = 0,
+                    storeName = "",
+                    items = cartSummary.data.items,
+                    subtotal = cartSummary.data.subtotal,
+                    shipping = cartSummary.data.shipping,
+                    tax = cartSummary.data.tax,
+                    total = cartSummary.data.total,
+                ),
             )
         }
-        items(cartSummary.data.items){ item->
-            ProductRow(cartItemModel = item)
+        groups.forEach { group ->
+            item {
+                if (group.storeName.isNotBlank()) {
+                    Text(
+                        text = group.storeName,
+                        style = MaterialTheme.typography.titleSmall,
+                        modifier = Modifier.padding(top = 8.dp),
+                    )
+                }
+            }
+            items(group.items) { item ->
+                ProductRow(cartItemModel = item)
+            }
+            item {
+                AmountRow(stringResource(R.string.subtotal), group.subtotal)
+                AmountRow(stringResource(R.string.tax), group.tax)
+                AmountRow(stringResource(R.string.shipping), group.shipping)
+                AmountRow(stringResource(R.string.total), group.total)
+            }
         }
         item {
-            Column {
-                AmountRow(stringResource(R.string.subtotal), cartSummary.data.subtotal)
-                AmountRow(stringResource(R.string.tax), cartSummary.data.tax)
-                AmountRow(stringResource(R.string.shipping), cartSummary.data.shipping)
-                AmountRow(stringResource(R.string.discount), cartSummary.data.discount)
-                AmountRow(stringResource(R.string.total), cartSummary.data.total)
-            }
+            Spacer(modifier = Modifier.size(8.dp))
+            AmountRow(stringResource(R.string.total), cartSummary.data.grandTotal)
         }
     }
 }
@@ -210,7 +282,10 @@ fun ProductRow(cartItemModel:CartItemModel){
             style = MaterialTheme.typography.bodyLarge,
             fontSize = 14.sp
         )
-        val price = CurrencyUtils.formatPrice(cartItemModel.price.toDouble())
+        val price = CurrencyUtils.formatProductPriceCentsForDisplay(
+            cartItemModel.price,
+            stringResource(R.string.price_on_request),
+        )
         Text(
             text = "$price x ${cartItemModel.quantity} ",
             style = MaterialTheme.typography.titleMedium,

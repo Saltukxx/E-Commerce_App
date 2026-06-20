@@ -58,8 +58,18 @@ class ProfileViewModel(
                     )
                 }
                 is ResultWrapper.Failure -> {
-                    appSession.clearUserSession()
-                    _uiState.value = ProfileScreenEvent.LoggedOut
+                    val currentUser = (_uiState.value as? ProfileScreenEvent.Success)?.userDetails
+                        ?: appSession.getUserDetails()
+                    if (currentUser.id == 0) {
+                        _uiState.value = ProfileScreenEvent.LoggedOut
+                    } else {
+                        _uiState.value = ProfileScreenEvent.Success(
+                            userDetails = currentUser,
+                            address = appSession.getAddress(),
+                            isLoggingOut = false,
+                        )
+                        _messages.emit(result.message)
+                    }
                 }
             }
         }

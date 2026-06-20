@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 160" fill="none" aria-hidden="true">
+  <path
+    d="M60 8C42 8 28 22 24 38c-4 16 2 32 12 44-8 10-12 22-10 36 2 14 10 26 22 32 12 6 26 6 38 0 12-6 20-18 22-32 2-14-2-26-10-36 10-12 16-28 12-44C92 22 78 8 60 8Z"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linejoin="round"
+    opacity="0.45"
+  />
+</svg>

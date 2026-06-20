@@ -18,7 +18,10 @@ if (localPropsFile.exists()) {
 // Use local.properties api.base.url only when API_BASE_URL is not set (e.g. local backend).
 val apiBaseUrl = (rootProject.findProperty("API_BASE_URL") as? String)
     ?: localProperties.getProperty("api.base.url")
-    ?: "http://167.172.168.81:3001/api/v1"
+    ?: "http://167.172.168.81/api/v1"
+val uploadsBaseUrl = (rootProject.findProperty("UPLOADS_BASE_URL") as? String)
+    ?: localProperties.getProperty("uploads.base.url")
+    ?: apiBaseUrl.removeSuffix("/api/v1").removeSuffix("/api/v1/")
 
 android {
     namespace = "com.himanshu_kumar.shoppingapp"
@@ -33,6 +36,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
+        buildConfigField("String", "UPLOADS_BASE", "\"$uploadsBaseUrl\"")
+        buildConfigField("boolean", "STRIPE_PAYMENTS_ENABLED", "false")
     }
 
     buildTypes {
@@ -118,6 +123,8 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-pager:0.28.0")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
+    // Stripe Payment Sheet — enable when STRIPE_PAYMENTS_ENABLED is true:
+    // implementation("com.stripe:stripe-android:20.48.6")
     implementation("androidx.profileinstaller:profileinstaller:1.3.1")
     "baselineProfile"(project(":baselineprofile"))
 }

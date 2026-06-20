@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,14 +22,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.model.UiProductModel
+import com.himanshu_kumar.shoppingapp.navigation.navigateToStoreProfile
 import com.himanshu_kumar.shoppingapp.navigation.ProductDetails
+import com.himanshu_kumar.shoppingapp.ui.components.ErrorState
 import com.himanshu_kumar.shoppingapp.ui.components.ProductListCard
 import org.koin.androidx.compose.koinViewModel
 
@@ -76,9 +78,7 @@ fun WishlistScreen(
                 }
             }
             is WishlistUiState.Error -> {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = s.message, color = Color.Red)
-                }
+                ErrorState(message = s.message, onRetry = viewModel::load)
             }
             is WishlistUiState.Success -> {
                 if (s.products.isEmpty()) {
@@ -91,12 +91,28 @@ fun WishlistScreen(
                 } else {
                     LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         items(s.products, key = { it.id }) { item ->
-                            ProductListCard(
-                                product = item,
-                                onClick = {
-                                    navController.navigate(ProductDetails(UiProductModel.fromProduct(item)))
-                                },
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                ProductListCard(
+                                    product = item,
+                                    modifier = Modifier.weight(1f),
+                                    onClick = {
+                                        navController.navigate(ProductDetails(UiProductModel.fromProduct(item)))
+                                    },
+                                    onStoreClick = { slug, name ->
+                                        navController.navigateToStoreProfile(slug, name)
+                                    },
+                                )
+                                IconButton(onClick = { viewModel.remove(item) }) {
+                                    Image(
+                                        painter = painterResource(R.drawable.ic_delete),
+                                        contentDescription = stringResource(R.string.wishlist_remove),
+                                        modifier = Modifier.size(22.dp),
+                                    )
+                                }
+                            }
                         }
                     }
                 }

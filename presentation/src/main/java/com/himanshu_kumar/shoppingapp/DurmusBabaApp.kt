@@ -9,12 +9,14 @@ import coil.memory.MemoryCache
 import com.himanshu_kumar.data.di.dataModule
 import com.himanshu_kumar.domain.di.domainModule
 import com.himanshu_kumar.shoppingapp.di.presentationModule
+import com.himanshu_kumar.shoppingapp.notifications.NotificationHelper
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class DurmusBabaApp : Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
+        NotificationHelper.ensureDefaultChannel(this)
         ProfileInstaller.writeProfile(this)
         startKoin {
             androidContext(this@DurmusBabaApp)

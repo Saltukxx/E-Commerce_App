@@ -1,0 +1,61 @@
+services:
+  api:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://durmus:${POSTGRES_PASSWORD}@db:5432/durmus_baba?schema=public
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      PORT: 3000
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      ALLOW_UNPAID_ORDERS: ${ALLOW_UNPAID_ORDERS:-true}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      STRIPE_ONBOARD_REFRESH_URL: ${STRIPE_ONBOARD_REFRESH_URL:-}
+      STRIPE_ONBOARD_RETURN_URL: ${STRIPE_ONBOARD_RETURN_URL:-}
+      PLATFORM_FEE_PERCENT: ${PLATFORM_FEE_PERCENT:-0}
+      STRIPE_MULTI_VENDOR: ${STRIPE_MULTI_VENDOR:-false}
+    volumes:
+      - product_images:/app/uploads
+    ports:
+      - "${API_PORT:-3001}:3000"
+
+  web:
+    build:
+      context: ./web
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost/api/v1}
+        NEXT_PUBLIC_UPLOADS_BASE: ${NEXT_PUBLIC_UPLOADS_BASE:-http://localhost}
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      PORT: 3000
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - web
+      - api
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: durmus
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: durmus_baba
+    volumes:
+      - durmus_pg_data:/var/lib/postgresql/data
+
+volumes:
+  durmus_pg_data:
+  product_images:

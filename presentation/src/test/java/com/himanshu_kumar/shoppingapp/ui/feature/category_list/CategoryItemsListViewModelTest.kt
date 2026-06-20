@@ -73,6 +73,8 @@ class CategoryItemsListViewModelTest {
             category: Int?,
             limit: Int?,
             skip: Int?,
+            query: String?,
+            storeSlug: String?,
         ): ResultWrapper<List<ProductListModel>> {
             requestedCategory = category
             requestedLimit = limit

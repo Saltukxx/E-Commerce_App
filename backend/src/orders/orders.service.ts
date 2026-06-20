@@ -1,87 +1,186 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+
 import { PrismaService } from '../prisma/prisma.service';
+
 import { AddressOrderDto } from './dto/address-order.dto';
+
+import { prepareCheckout } from '../common/checkout-cart';
+
+import { CheckoutService } from '../payments/checkout.service';
+import { StripeService } from '../payments/stripe.service';
+
+import { PAYMENT_STATUS } from '../payments/payments.constants';
 
 @Injectable()
 export class OrdersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private checkoutService: CheckoutService,
+    private stripeService: StripeService,
+    private config: ConfigService,
+  ) {}
 
   async placeOrder(userId: number, address: AddressOrderDto) {
-    const order = await this.prisma.$transaction(async (tx) => {
-      const lines = await tx.cartLine.findMany({
-        where: { userId },
-        orderBy: { id: 'asc' },
-      });
-      if (lines.length === 0) {
-        throw new BadRequestException('Cart is empty');
-      }
-      const lineIds = lines.map((line) => line.id);
-      const subtotal = lines.reduce((s, l) => s + l.price * l.quantity, 0);
-      const shipping = 5.0;
-      const tax = Math.round(subtotal * 0.19 * 100) / 100;
-      const totalAmount = subtotal + shipping + tax;
-      const o = await tx.order.create({
-        data: {
-          userId,
-          status: 'Pending',
-          totalAmount,
-          addressLine: address.addressLine,
-          city: address.city,
-          state: address.state,
-          postalCode: address.postalCode,
-          country: address.country,
-        },
-      });
-      for (const l of lines) {
-        await tx.orderLine.create({
-          data: {
-            orderId: o.id,
-            productId: l.productId,
-            productName: l.productName,
-            price: l.price,
-            quantity: l.quantity,
-            userId,
-          },
-        });
-      }
-      const deleted = await tx.cartLine.deleteMany({
-        where: { id: { in: lineIds }, userId },
-      });
-      if (deleted.count !== lines.length) {
-        throw new BadRequestException('Cart changed during checkout');
-      }
-      return o;
+    const allowUnpaid =
+      this.config.get<string>('ALLOW_UNPAID_ORDERS') !== 'false';
+    if (!allowUnpaid && this.stripeService.isConfigured()) {
+      throw new ForbiddenException(
+        'Unpaid checkout is disabled. Use card payment checkout instead.',
+      );
+    }
+
+    const prepared = await prepareCheckout(this.prisma, userId);
+
+    const orderGroup = await this.prisma.orderGroup.create({
+      data: {
+        userId,
+        grandTotal: prepared.grandTotal,
+        addressLine: address.addressLine,
+        city: address.city,
+        state: address.state,
+        postalCode: address.postalCode,
+        country: address.country,
+        paymentStatus: PAYMENT_STATUS.UNPAID,
+      },
     });
+
+    const createdOrders = await this.checkoutService.persistOrders({
+      userId,
+      orderGroupId: orderGroup.id,
+      address,
+      prepared,
+      paymentStatus: PAYMENT_STATUS.UNPAID,
+    });
+
     return {
-      data: { id: order.id },
+      data: {
+        orderGroupId: orderGroup.id,
+        orders: createdOrders,
+        grandTotal: prepared.grandTotal,
+      },
       msg: 'Order placed',
     };
   }
 
   async listOrders(userId: number) {
-    const orders = await this.prisma.order.findMany({
+    const groups = await this.prisma.orderGroup.findMany({
       where: { userId },
-      include: { lines: true },
+
+      include: {
+        orders: {
+          include: {
+            lines: true,
+
+            store: true,
+          },
+        },
+      },
+
       orderBy: { id: 'desc' },
     });
-    const data = orders.map((o) => ({
-      id: o.id,
-      orderDate: o.orderDate.toISOString().slice(0, 10),
-      status: o.status,
-      totalAmount: o.totalAmount,
-      userId: o.userId,
-      items: o.lines.map((line) => ({
-        id: line.id,
+
+    const groupedData = groups.map((g) => ({
+      orderGroupId: g.id,
+
+      orderDate: g.createdAt.toISOString().slice(0, 10),
+
+      grandTotal: g.grandTotal,
+
+      orders: g.orders.map((o) => ({
         orderId: o.id,
-        price: line.price,
-        productId: line.productId,
-        productName: line.productName,
-        quantity: line.quantity,
-        userId: line.userId,
+
+        storeId: o.storeId,
+
+        storeName: o.store.name,
+
+        status: o.status,
+
+        subtotal: o.subtotal,
+
+        shipping: o.shipping,
+
+        tax: o.tax,
+
+        totalAmount: o.totalAmount,
+
+        items: o.lines.map((line) => ({
+          id: line.id,
+
+          orderId: o.id,
+
+          price: line.price,
+
+          productId: line.productId,
+
+          productName: line.productName,
+
+          quantity: line.quantity,
+
+          userId: line.userId,
+        })),
       })),
     }));
+
+    const legacyOrders = await this.prisma.order.findMany({
+      where: { userId, orderGroupId: null },
+
+      include: { lines: true, store: true },
+
+      orderBy: { id: 'desc' },
+    });
+
+    const legacyGrouped = legacyOrders.map((o) => ({
+      orderGroupId: null as number | null,
+
+      orderDate: o.orderDate.toISOString().slice(0, 10),
+
+      grandTotal: o.totalAmount,
+
+      orders: [
+        {
+          orderId: o.id,
+
+          storeId: o.storeId,
+
+          storeName: o.store.name,
+
+          status: o.status,
+
+          subtotal: o.subtotal,
+
+          shipping: o.shipping,
+
+          tax: o.tax,
+
+          totalAmount: o.totalAmount,
+
+          items: o.lines.map((line) => ({
+            id: line.id,
+
+            orderId: o.id,
+
+            price: line.price,
+
+            productId: line.productId,
+
+            productName: line.productName,
+
+            quantity: line.quantity,
+
+            userId: line.userId,
+          })),
+        },
+      ],
+    }));
+
+    const data = [...groupedData, ...legacyGrouped].sort((a, b) =>
+      b.orderDate.localeCompare(a.orderDate),
+    );
+
     return {
       data,
+
       msg: 'OrderList',
     };
   }

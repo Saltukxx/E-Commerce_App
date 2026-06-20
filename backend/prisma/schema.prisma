@@ -8,18 +8,116 @@ datasource db {
 }
 
 model User {
-  id           Int        @id @default(autoincrement())
-  email        String     @unique
-  passwordHash String
-  name         String
-  role         String     @default("customer")
-  avatar       String     @default("")
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  cartLines    CartLine[]
-  orders       Order[]
-  refreshTokens RefreshToken[]
-  wishlistItems WishlistItem[]
+  id                    Int                @id @default(autoincrement())
+  email                 String             @unique
+  passwordHash          String
+  name                  String
+  role                  String             @default("customer")
+  avatar                String             @default("")
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  cartLines             CartLine[]
+  orders                Order[]
+  refreshTokens         RefreshToken[]
+  wishlistItems         WishlistItem[]
+  priceInquiries        PriceInquiry[]
+  ownedStore            Store?             @relation("StoreOwner")
+  storeApplications     StoreApplication[] @relation("ApplicantUser")
+  reviewedApplications  StoreApplication[] @relation("ReviewedByAdmin")
+  orderGroups           OrderGroup[]
+}
+
+model Store {
+  id                       Int                    @id @default(autoincrement())
+  name                     String
+  slug                     String                 @unique
+  logo                     String                 @default("")
+  banner                   String                 @default("")
+  description              String                 @default("")
+  deliveryArea             String                 @default("")
+  city                     String                 @default("")
+  website                  String                 @default("")
+  certifications           String[]               @default([])
+  status                   String                 @default("pending")
+  contactEmail             String                 @default("")
+  phone                    String                 @default("")
+  isFeatured               Boolean                @default(false)
+  stripeAccountId          String?
+  stripeOnboardingComplete Boolean                @default(false)
+  payoutsEnabled           Boolean                @default(false)
+  payoutBankIban           String                 @default("")
+  payoutBankHolder         String                 @default("")
+  ownerUserId              Int?                   @unique
+  owner                    User?                  @relation("StoreOwner", fields: [ownerUserId], references: [id], onDelete: SetNull)
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @updatedAt
+  products                 Product[]
+  cartLines                CartLine[]
+  orders                   Order[]
+  orderLines               OrderLine[]
+  priceInquiries           PriceInquiry[]
+  applications             StoreApplication[]     @relation("CreatedStore")
+  featuredProducts         StoreFeaturedProduct[]
+  ledgerEntries            VendorLedgerEntry[]
+  payoutRequests           PayoutRequest[]
+
+  @@index([status])
+  @@index([isFeatured])
+}
+
+model StoreFeaturedProduct {
+  id        Int     @id @default(autoincrement())
+  storeId   Int
+  productId Int
+  sortOrder Int     @default(0)
+  store     Store   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([storeId, productId])
+  @@index([storeId, sortOrder])
+}
+
+model StoreApplication {
+  id                Int       @id @default(autoincrement())
+  businessName      String
+  contactName       String
+  contactEmail      String
+  phone             String    @default("")
+  message           String    @default("")
+  status            String    @default("pending")
+  applicantUserId   Int?
+  reviewedByAdminId Int?
+  reviewedAt        DateTime?
+  rejectionReason   String    @default("")
+  createdStoreId    Int?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  applicant         User?     @relation("ApplicantUser", fields: [applicantUserId], references: [id], onDelete: SetNull)
+  reviewedBy        User?     @relation("ReviewedByAdmin", fields: [reviewedByAdminId], references: [id], onDelete: SetNull)
+  createdStore      Store?    @relation("CreatedStore", fields: [createdStoreId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([contactEmail])
+}
+
+model OrderGroup {
+  id                    Int       @id @default(autoincrement())
+  userId                Int
+  grandTotal            Float
+  addressLine           String
+  city                  String
+  state                 String
+  postalCode            String
+  country               String
+  paymentStatus         String    @default("unpaid")
+  stripePaymentIntentId String?   @unique
+  paidAt                DateTime?
+  createdAt             DateTime  @default(now())
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders                Order[]
+
+  @@index([userId])
+  @@index([paymentStatus])
 }
 
 model Category {
@@ -33,21 +131,31 @@ model Category {
 }
 
 model Product {
-  id          Int        @id @default(autoincrement())
-  title       String
-  slug        String
-  description String
-  price       Int
-  images      String[]
-  categoryId  Int
-  category    Category   @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  cartLines   CartLine[]
-  wishlistItems WishlistItem[]
+  id             Int            @id @default(autoincrement())
+  title          String
+  slug           String
+  description    String
+  /// Sale price in euro cents (e.g. 1999 = €19.99). Cart/order lines copy this unit.
+  price          Int
+  /// Null means stock is not tracked; 0 means out of stock when set.
+  stockQty       Int?
+  images         String[]
+  status         String         @default("active")
+  categoryId     Int
+  storeId        Int
+  category       Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  store          Store          @relation(fields: [storeId], references: [id], onDelete: Restrict)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  cartLines              CartLine[]
+  wishlistItems          WishlistItem[]
+  priceInquiries         PriceInquiry[]
+  storeFeaturedEntries   StoreFeaturedProduct[]
 
-  @@unique([slug])
+  @@unique([storeId, slug])
   @@index([categoryId])
+  @@index([storeId])
+  @@index([status])
 }
 
 model WishlistItem {
@@ -66,6 +174,8 @@ model CartLine {
   id          Int     @id @default(autoincrement())
   userId      Int
   productId   Int
+  storeId     Int
+  storeName   String  @default("")
   quantity    Int
   productName String
   price       Int
@@ -73,39 +183,55 @@ model CartLine {
   name        String  @default("")
   user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  store       Store   @relation(fields: [storeId], references: [id], onDelete: Restrict)
 
   @@index([userId])
   @@unique([userId, productId])
 }
 
 model Order {
-  id          Int         @id @default(autoincrement())
-  userId      Int
-  orderDate   DateTime    @default(now())
-  status      String
-  totalAmount Float
-  addressLine String
-  city        String
-  state       String
-  postalCode  String
-  country     String
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lines       OrderLine[]
+  id               Int         @id @default(autoincrement())
+  userId           Int
+  storeId          Int
+  orderGroupId     Int?
+  orderDate        DateTime    @default(now())
+  status           String
+  paymentStatus    String      @default("unpaid")
+  stripeTransferId String?
+  subtotal         Float       @default(0)
+  shipping         Float       @default(0)
+  tax              Float       @default(0)
+  totalAmount      Float
+  addressLine      String
+  city             String
+  state            String
+  postalCode       String
+  country          String
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  store        Store       @relation(fields: [storeId], references: [id], onDelete: Restrict)
+  orderGroup   OrderGroup? @relation(fields: [orderGroupId], references: [id], onDelete: SetNull)
+  lines        OrderLine[]
 
   @@index([userId])
+  @@index([storeId])
+  @@index([orderGroupId])
 }
 
 model OrderLine {
   id          Int   @id @default(autoincrement())
   orderId     Int
   productId   Int
+  storeId     Int
   productName String
-  price       Float
+  /// Unit price in euro cents (matches CartLine.price).
+  price       Int
   quantity    Int
   userId      Int
   order       Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  store       Store @relation(fields: [storeId], references: [id], onDelete: Restrict)
 
   @@index([orderId])
+  @@index([storeId])
 }
 
 model RefreshToken {
@@ -120,4 +246,61 @@ model RefreshToken {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+/// Customer asked for a quote on a product with no list price (price = 0 cents).
+model PriceInquiry {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  productId   Int
+  storeId     Int
+  productName String
+  userEmail   String   @default("")
+  status      String   @default("pending")
+  quoteCents  Int?
+  adminNote   String   @default("")
+  quotedAt    DateTime?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  store       Store    @relation(fields: [storeId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+  @@index([productId])
+  @@index([storeId])
+  @@index([createdAt])
+}
+
+model VendorLedgerEntry {
+  id              Int       @id @default(autoincrement())
+  storeId         Int
+  type            String
+  amountCents     Int
+  orderId         Int?
+  payoutRequestId Int?
+  note            String    @default("")
+  createdAt       DateTime  @default(now())
+  store           Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  payoutRequest   PayoutRequest? @relation(fields: [payoutRequestId], references: [id], onDelete: SetNull)
+
+  @@index([storeId])
+  @@index([createdAt])
+}
+
+model PayoutRequest {
+  id                 Int       @id @default(autoincrement())
+  storeId            Int
+  amountCents        Int
+  status             String    @default("pending")
+  bankIban           String    @default("")
+  bankHolder         String    @default("")
+  adminNote          String    @default("")
+  requestedAt        DateTime  @default(now())
+  processedAt        DateTime?
+  processedByAdminId Int?
+  store              Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  ledgerEntries      VendorLedgerEntry[]
+
+  @@index([storeId])
+  @@index([status])
 }

@@ -14,6 +14,9 @@ object RegisterScreen
 object HomeScreen
 
 @Serializable
+object MarketScreen
+
+@Serializable
 object CartScreen
 
 @Serializable
@@ -26,6 +29,9 @@ object ProfileScreen
 object CartSummaryScreen
 
 @Serializable
+object CatalogSearchScreen
+
+@Serializable
 object CategoryItemsScreen
 
 @Serializable
@@ -36,6 +42,18 @@ object WishlistScreen
 
 @Serializable
 object SettingsScreen
+
+@Serializable
+object VendorListScreen
+
+@Serializable
+object VendorHubScreen
+
+@Serializable
+object StoreApplicationScreen
+
+@Serializable
+data class VendorStorefrontRoute(val storeSlug: String, val storeName: String)
 
 @Serializable
 data class ProductDetails(val product:UiProductModel)

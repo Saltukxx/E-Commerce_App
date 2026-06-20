@@ -1,5 +1,6 @@
 package com.himanshu_kumar.data.model
 
+import com.himanshu_kumar.domain.catalog.CategoryDisplayNames
 import com.himanshu_kumar.domain.model.ProductCategory
 import kotlinx.serialization.Serializable
 
@@ -12,11 +13,11 @@ data class DataCategory(
     val slug: String,
     val updatedAt: String
 ){
-    fun toProductCategory() = ProductCategory(  // Mapping function
+    fun toProductCategory() = ProductCategory(
         creationAt = creationAt,
         id = id,
         image = image,
-        name = name,
+        name = CategoryDisplayNames.germanName(slug, name),
         slug = slug,
         updatedAt = updatedAt
     )

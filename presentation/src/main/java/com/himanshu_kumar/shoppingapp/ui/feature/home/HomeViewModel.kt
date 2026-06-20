@@ -6,19 +6,26 @@ import com.himanshu_kumar.domain.model.CategoriesListModel
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.model.UserDomainModel
 import com.himanshu_kumar.domain.network.ResultWrapper
+import com.himanshu_kumar.domain.model.StoreModel
 import com.himanshu_kumar.domain.usecase.GetCategoriesUserCase
+import com.himanshu_kumar.domain.usecase.GetStoresUseCase
 import com.himanshu_kumar.domain.usecase.GetProductUseCase
+import com.himanshu_kumar.domain.usecase.GetCartUseCase
 import com.himanshu_kumar.shoppingapp.AppSession
+import com.himanshu_kumar.shoppingapp.ui.feature.store.resolveShowcaseStores
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val getProductUseCase: GetProductUseCase,
     private val categoryUseCase: GetCategoriesUserCase,
     private val appSession: AppSession,
+    private val getStoresUseCase: GetStoresUseCase,
+    private val getCartUseCase: GetCartUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<HomeScreenUIEvents>(HomeScreenUIEvents.Loading)
@@ -27,15 +34,39 @@ class HomeViewModel(
     private val _userDetails = MutableStateFlow<UserDomainModel?>(null)
     val userDetails = _userDetails
 
+    private val _cartItemCount = MutableStateFlow(0)
+    val cartItemCount = _cartItemCount.asStateFlow()
+
     init {
-        loadHome()
+        refresh()
         getUserDetail()
+    }
+
+    fun refresh() {
+        loadHome()
+        refreshCartCount()
+    }
+
+    private fun refreshCartCount() {
+        val uid = appSession.getUser()
+        if (uid == 0) {
+            _cartItemCount.value = 0
+            return
+        }
+        viewModelScope.launch {
+            when (val result = getCartUseCase.execute(uid.toLong())) {
+                is ResultWrapper.Success -> {
+                    _cartItemCount.value = result.value.data.sumOf { it.quantity }
+                }
+                is ResultWrapper.Failure -> Unit
+            }
+        }
     }
 
     private fun loadHome() {
         viewModelScope.launch {
             _uiState.value = HomeScreenUIEvents.Loading
-            val (catalog, categories) = coroutineScope {
+            val (catalog, categories, stores) = coroutineScope {
                 val catalogJob = async {
                     fetchProducts(
                         category = null,
@@ -44,7 +75,8 @@ class HomeViewModel(
                     )
                 }
                 val categoriesJob = async { getCategories() }
-                catalogJob.await() to categoriesJob.await()
+                val storesJob = async { fetchFeaturedStores() }
+                Triple(catalogJob.await(), categoriesJob.await(), storesJob.await())
             }
 
             val featured = catalog.take(HOME_ROW_LIMIT)
@@ -59,6 +91,7 @@ class HomeViewModel(
                 featured = featured,
                 popularProducts = popularProducts,
                 categories = categories,
+                featuredStores = stores,
                 categoryPreviews = emptyList(),
                 embracoCategory = null,
                 embracoProducts = emptyList(),
@@ -102,6 +135,7 @@ class HomeViewModel(
                 featured = featured,
                 popularProducts = popularProducts,
                 categories = categories,
+                featuredStores = stores,
                 categoryPreviews = categoryPreviews,
                 embracoCategory = embracoCategory,
                 embracoProducts = embracoProducts,
@@ -124,6 +158,13 @@ class HomeViewModel(
             .filter { it.id !in featuredIds }
             .sortedByDescending { it.id }
             .take(HOME_ROW_LIMIT)
+    }
+
+    private suspend fun fetchFeaturedStores(): List<StoreModel> {
+        return when (val result = getStoresUseCase.execute()) {
+            is ResultWrapper.Success -> resolveShowcaseStores(result.value)
+            is ResultWrapper.Failure -> resolveShowcaseStores(emptyList())
+        }
     }
 
     private suspend fun getCategories(): List<CategoriesListModel> {
@@ -173,6 +214,7 @@ sealed class HomeScreenUIEvents {
         val featured: List<ProductListModel>,
         val popularProducts: List<ProductListModel>,
         val categories: List<CategoriesListModel>,
+        val featuredStores: List<StoreModel> = emptyList(),
         val categoryPreviews: List<CategoryPreview>,
         val embracoCategory: CategoriesListModel?,
         val embracoProducts: List<ProductListModel>,

@@ -1,5 +1,6 @@
 package com.himanshu_kumar.shoppingapp.ui.feature.category_list
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,19 +30,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.himanshu_kumar.domain.search.CatalogSearch
 import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.model.UiProductModel
 import com.himanshu_kumar.shoppingapp.navigation.ProductDetails
+import com.himanshu_kumar.shoppingapp.navigation.navigateToStoreProfile
 import com.himanshu_kumar.shoppingapp.ui.components.ProductListCard
 import org.koin.androidx.compose.koinViewModel
 
@@ -50,14 +55,21 @@ fun CategoryItemsListScreen(
     navController: NavController,
     category: Int,
     listTitle: String? = null,
+    storeSlug: String? = null,
     viewModel: CategoryItemsListViewModel = koinViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
     var searchOpen by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
+    var debouncedFilter by remember { mutableStateOf("") }
 
-    LaunchedEffect(category) {
-        viewModel.getProductsWithCategory(category)
+    LaunchedEffect(searchQuery) {
+        delay(280)
+        debouncedFilter = CatalogSearch.normalizeQuery(searchQuery)
+    }
+
+    LaunchedEffect(category, storeSlug) {
+        viewModel.getProductsWithCategory(category, storeSlug)
     }
 
     when (val state = uiState.value) {
@@ -87,11 +99,9 @@ fun CategoryItemsListScreen(
             val resolvedTitle = listTitle
                 ?: state.data.firstOrNull()?.category?.name
                 ?: stringResource(R.string.category_fallback)
-            val filtered = remember(state.data, searchQuery) {
-                if (searchQuery.isBlank()) state.data
-                else state.data.filter {
-                    it.title.contains(searchQuery, ignoreCase = true)
-                }
+            val filtered = remember(state.data, debouncedFilter) {
+                if (debouncedFilter.isEmpty()) state.data
+                else state.data.filter { CatalogSearch.productMatches(it, debouncedFilter) }
             }
             LaunchedEffect(searchQuery, listState, state.hasMore, state.isLoadingMore) {
                 if (searchQuery.isNotBlank()) return@LaunchedEffect
@@ -118,6 +128,7 @@ fun CategoryItemsListScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(colorResource(R.color.home_background))
                     .padding(horizontal = 16.dp, vertical = 16.dp)
             ) {
                 CategoryTopBar(
@@ -157,7 +168,12 @@ fun CategoryItemsListScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Text(text = stringResource(R.string.no_products))
+                        val emptyMsg = if (searchQuery.isNotBlank()) {
+                            stringResource(R.string.no_search_matches)
+                        } else {
+                            stringResource(R.string.no_products)
+                        }
+                        Text(text = emptyMsg)
                     }
                 } else {
                     LazyColumn(
@@ -169,7 +185,10 @@ fun CategoryItemsListScreen(
                                 product = item,
                                 onClick = {
                                     navController.navigate(ProductDetails(UiProductModel.fromProduct(item)))
-                                }
+                                },
+                                onStoreClick = { slug, name ->
+                                    navController.navigateToStoreProfile(slug, name)
+                                },
                             )
                         }
                         if (searchQuery.isBlank()) {
@@ -210,7 +229,8 @@ fun CategoryItemsListScreen(
 fun CategoryTopBar(
     title: String,
     onBackClick: () -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    showSearchAction: Boolean = true,
 ) {
     Row(
         modifier = Modifier
@@ -234,12 +254,16 @@ fun CategoryTopBar(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        Image(
-            painter = painterResource(id = R.drawable.ic_search),
-            contentDescription = stringResource(R.string.search),
-            modifier = Modifier
-                .size(25.dp)
-                .clickable { onSearchClick() }
-        )
+        if (showSearchAction) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_search),
+                contentDescription = stringResource(R.string.search),
+                modifier = Modifier
+                    .size(25.dp)
+                    .clickable { onSearchClick() }
+            )
+        } else {
+            Spacer(Modifier.size(25.dp))
+        }
     }
 }

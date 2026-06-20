@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { mapProduct } from '../common/mappers';
-import { Category, Product } from '@prisma/client';
+import { sellableProductWhere } from '../common/marketplace';
+import { Category, Product, Store } from '@prisma/client';
 
-type ProductWithCategory = Product & { category: Category };
+type ProductWithRelations = Product & { category: Category; store: Store };
 
 @Injectable()
 export class WishlistService {
@@ -11,22 +12,26 @@ export class WishlistService {
 
   async getWishlist(userId: number) {
     const items = await this.prisma.wishlistItem.findMany({
-      where: { userId },
-      include: { product: { include: { category: true } } },
+      where: {
+        userId,
+        product: sellableProductWhere,
+      },
+      include: { product: { include: { category: true, store: true } } },
       orderBy: { id: 'asc' },
     });
     return {
-      data: items.map((i) => mapProduct(i.product as ProductWithCategory)),
+      data: items.map((i) => mapProduct(i.product as ProductWithRelations)),
       msg: 'Wishlist',
     };
   }
 
   async add(userId: number, productId: number) {
-    const product = await this.prisma.product.findUnique({
-      where: { id: productId },
+    const product = await this.prisma.product.findFirst({
+      where: { id: productId, ...sellableProductWhere },
+      include: { category: true, store: true },
     });
     if (!product) {
-      throw new NotFoundException('Product not found');
+      throw new NotFoundException('Product not found or not available');
     }
     await this.prisma.wishlistItem.upsert({
       where: {

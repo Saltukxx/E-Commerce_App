@@ -1,0 +1,766 @@
+Loaded 250 products.
+======================================================================
+Loaded 250 products.
+======================================================================
+[  1/250] R-404A 10 KG Depozitolu Soğutucu Gaz
+        DE: R-404A 10 KG Depot-Kältemittel
+        >> cached
+[  2/250] Benmari (Sıcak Servis Tezgahı)
+        DE: Bain Marie (Heißservice-Theke)
+        >> cached
+[  3/250] Pasta Dolabı (Soğutmalı)
+        DE: Kuchenschrank (gekühlt)
+        >> cached
+[  4/250] 187,5 CM DAISY VG Dik Camlı Reyon
+        DE: 187,5 CM DAISY VG Vertikales Glasregal
+        >> cached
+[  5/250] 375 CM DAISY VG Dik Camlı Reyon
+        DE: 375 CM DAISY VG Vertikales Glasregal
+        >> cached
+[  6/250] 5×2,5 TTR Kablo (5 damarlı 2,5 mm²)
+        DE: 5×2,5 TTR-Kabel (5-adrig 2,5 mm²)
+        >> cached
+[  7/250] 3×1,5 TTR Kablo (3 damarlı 1,5 mm²)
+        DE: 3×1,5 TTR-Kabel (3-adrig 1,5 mm²)
+        >> cached
+[  8/250] 5×1,5 TTR Kablo (5 damarlı 1,5 mm²)
+        DE: 5×1,5 TTR-Kabel (5-adrig 1,5 mm²)
+        >> cached
+[  9/250] 19×28 mm İzoleli Bakır Boru (İç Ø19mm / Dış Ø28mm)
+        DE: 19×28 mm isoliertes Kupferrohr (Innen-Ø 19 mm / Außen-Ø 28 mm)
+        >> cached
+[ 10/250] 19×22 mm İzoleli Bakır Boru (İç Ø19mm / Dış Ø22mm)
+        DE: 19×22 mm isoliertes Kupferrohr (Innen-Ø 19 mm / Außen-Ø 22 mm)
+        >> cached
+[ 11/250] THERMETS/HSC.LP10020.ET04SE 2 HP Split Soğutma Grubu Dış Üni
+        DE: THERMETS/HSC.LP10020.ET04SE 2 HP Split Chiller Außengerät
+        >> cached
+[ 12/250] 1 HP (0/+5) 220V Tecumseh Komplu Soğutma Grubu
+        DE: 1 PS (0/+5) 220 V Tecumseh komplette Kühlgruppe
+        >> cached
+[ 13/250] Copeland Scroll Kompresör ZH21K4E-TFD-524
+        DE: Copeland Scroll-Kompressor ZH21K4E-TFD-524
+        >> cached
+[ 14/250] Copeland Scroll Kompresör ZH30K4E-TFD-524
+        DE: Copeland Scroll-Kompressor ZH30K4E-TFD-524
+    [download error] ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+        >> failed: https://thumb-lvlt.xhcdn.com/a/m0Igy8yq9HaOEGk2V0e1Yw/024/165/863/v2/2560x1440.2
+[ 15/250] IBS ICF-3CL11-NX17Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3CL11-NX17Z4 Mikrokanal-Kondensatoreinheit (Danfoss Scrol
+        >> ok: https://designcenter.danfoss.com/_next/image?url=https://assets.danfoss.com/draw
+[ 16/250] IBS ICF-3CL11-NX15Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3CL11-NX15Z4 Mikrokanal-Kondensatoreinheit (Danfoss Scrol
+        >> ok: https://www.danfoss.com/media/2409/h-series-danfoss.jpg
+[ 17/250] IBS ICF-3CL11-NX12Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3CL11-NX12Z4 Mikrokanal-Kondensatoreinheit (Danfoss Scrol
+        >> ok: https://us.totalparts.com/95459-large_default/danfoss-lnym0400uwl000q-condensing
+[ 18/250] IBS ICF-4CM12-NX17Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-4CM12-NX17Z4 Mikrokanal-Kondensatoreinheit (Danfoss Scrol
+        >> ok: https://5.imimg.com/data5/ANDROID/Default/2024/1/381092654/KQ/IJ/JS/184827963/pr
+[ 19/250] IBS ICF-4CM12-NX14Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-4CM12-NX14Z4 Mikrokanal-Kondensatoreinheit (Danfoss Scrol
+        >> ok: https://videochatru.com/images/og_image.png
+[ 20/250] IBS ICF-3CM11-NX12Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3CM11-NX12Z4 Mikrokanal-Kondensatoreinheit (Danfoss Scrol
+        >> ok: https://partestotales.com/17264-large_default/danfoss-condensing-unit-4hp-230v3p
+[ 21/250] IBS ICF-3CM11-N9.9Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3CM11-N9.9Z4 Mikrokanal-Kondensatoreinheit (Danfoss Scrol
+        >> ok: https://preview.redd.it/4xu23ksugfu81.png?width=1280&format=png&auto=webp&s=56d8
+[ 22/250] IBS ICF-3CM11-N8.0Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3CM11-N8.0Z4 Mikrokanal-Kondensatoreinheit (Danfoss Scrol
+        >> ok: https://ueeshop.ly200-cdn.com/u_file/UPBF/UPBF255/2506/01/products/204066PIC-4c5
+[ 23/250] IBS ICF-3CM11-N7.6Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3CM11-N7.6Z4 Mikrokanal-Kondensatoreinheit (Danfoss Scrol
+        >> ok: https://www.danfoss.com/media/2409/h-series-danfoss.jpg
+[ 24/250] IBS ICF-3CM11-N5.9Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3CM11-N5.9Z4 Mikrokanal-Kondensatoreinheit (Danfoss Scrol
+        >> ok: https://5.imimg.com/data5/SELLER/Default/2022/7/ZK/DS/VL/5337720/mlz-danfoss-scr
+[ 25/250] IBS ICF-3HL11-MX24Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3HL11-MX24Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://partestotales.com/20334-large_default/danfoss-op-hgz080d39q-condensing-u
+[ 26/250] IBS ICF-3HL11-MX18Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3HL11-MX18Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://plusfroid.pt/wp-content/uploads/2023/05/COMPRESSOR-DANFOSS-MANEUROP-1024
+[ 27/250] IBS ICF-3HL11-MX17Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3HL11-MX17Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://euro-sd.com/wp-content/uploads/2023/10/7-GPS-segments-Source-USGAO-696x6
+[ 28/250] IBS ICF-3HL11-MX12Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3HL11-MX12Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://www.skh-kaeltetechnik.de/media/image/product/1839/lg/verdichter-kompress
+[ 29/250] IBS ICF-0HL11-M8.0Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-0HL11-M8.0Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://partestotales.com/9-large_default/danfoss-op-hgz064d39q-condensing-unit-
+[ 30/250] IBS ICF-4HM12-MX21Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-4HM12-MX21Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://partestotales.com/20334-large_default/danfoss-op-hgz080d39q-condensing-u
+[ 31/250] IBS ICF-4HM12-MX19Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-4HM12-MX19Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://partestotales.com/9-large_default/danfoss-op-hgz064d39q-condensing-unit-
+[ 32/250] IBS ICF-4HM12-MX17Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-4HM12-MX17Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://partestotales.com/20334-large_default/danfoss-op-hgz080d39q-condensing-u
+[ 33/250] IBS ICF-3HM11-MX17Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3HM11-MX17Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://png.pngtree.com/png-vector/20240527/ourlarge/pngtree-black-logo-of-a-dra
+[ 34/250] IBS ICF-3HM11-MX15Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3HM11-MX15Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://partestotales.com/20334-large_default/danfoss-op-hgz080d39q-condensing-u
+[ 35/250] IBS ICF-3HM11-MX12Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3HM11-MX12Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://partestotales.com/20334-large_default/danfoss-op-hgz080d39q-condensing-u
+[ 36/250] IBS ICF-3HM11-MX11Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3HM11-MX11Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://partestotales.com/20334-large_default/danfoss-op-hgz080d39q-condensing-u
+[ 37/250] IBS ICF-3HM11-M8.0Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-3HM11-M8.0Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: https://partestotales.com/1614-large_default/danfoss-op-hgz100d39q-condensing-un
+[ 38/250] IBS ICF-0HM11-M6.0Z4 Microchannel Kondenser Ünitesi (Danfoss
+        DE: IBS ICF-0HM11-M6.0Z4 Mikrokanal-Kondensatoreinheit (Danfoss Maneu
+        >> ok: http://2.bp.blogspot.com/-2NR096jGvK4/T1wXVOA7eII/AAAAAAAAFks/2H3UQQwiBEo/s1600/
+[ 39/250] IBS ICF-3HL11-TX24Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-3HL11-TX24Z4 Mikrokanal-Kondensatoreinheit (Tecumseh TAG 
+        >> ok: https://images.tcdn.com.br/img/img_prod/720021/motor_compressor_5_0_hp_tecumseh_
+[ 40/250] IBS ICF-3HL11-TX20Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-3HL11-TX20Z4 Mikrokanal-Kondensatoreinheit (Tecumseh TAG 
+        >> failed: https://ideacdn.net/idea/jk/68/myassets/products/171/tecumseh-tag-2516-z-5-hp-ko
+[ 41/250] IBS ICF-3HL11-TX13Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-3HL11-TX13Z4 Mikrokanal-Kondensatoreinheit (Tecumseh FH 2
+        >> failed: https://ideacdn.net/idea/fd/26/myassets/products/343/kondenser-unitesi-tecumseh-
+[ 42/250] IBS ICF-1HL11-T9.4Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-1HL11-T9.4Z4 Mikrokanal-Kondensatoreinheit (Tecumseh FH 2
+        >> ok: https://images.tcdn.com.br/img/img_prod/720021/unidade_condensadora_2_hp_tecumse
+[ 43/250] IBS ICF-0HL11-T6.1Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-0HL11-T6.1Z4 Mikrokanal-Kondensatoreinheit (Tecumseh CAJ 
+        >> ok: https://images.tokopedia.net/img/cache/500-square/VqbcmM/2024/3/16/17978d8a-dda9
+[ 44/250] IBS ICF-0HL11-T4.6Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-0HL11-T4.6Z4 Mikrokanal-Kondensatoreinheit (Tecumseh CAJ 
+        >> failed: https://ideacdn.net/idea/jk/68/myassets/products/188/caj-2446-z.png?revision=169
+[ 45/250] IBS ICF-4HM12-TX24Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-4HM12-TX24Z4 Mikrokanal-Kondensatoreinheit (Tecumseh TAG 
+        >> ok: https://www.coolstore.pl/hpeciai/d4567d505f5bf13036dcfc1899df0a71/pol_pl_Agregat
+[ 46/250] IBS ICF-4HM12-TX22Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-4HM12-TX22Z4 Mikrokanal-Kondensatoreinheit (Tecumseh TAG 
+        >> failed: https://sklep-agro.pl/6779-large_default/agregat-chlodzacy-chlodniczy-tag-4568-z
+[ 47/250] IBS ICF-4HM12-TX20Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-4HM12-TX20Z4 Mikrokanal-Kondensatoreinheit (Tecumseh TAG 
+        >> ok: https://birolticaret.com/wp-content/uploads/2022/05/BRS1607000006.jpg
+[ 48/250] IBS ICF-3HM11-TX20Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-3HM11-TX20Z4 Mikrokanal-Kondensatoreinheit (Tecumseh TAG 
+        >> ok: https://birolticaret.com/wp-content/uploads/2022/05/BRS1607000006.jpg
+[ 49/250] IBS ICF-3HM11-TX18Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-3HM11-TX18Z4 Mikrokanal-Kondensatoreinheit (Tecumseh TAG 
+        >> failed: https://sklep-agro.pl/7579-large_default/agregat-chlodzacy-chlodniczy-tag-4553-z
+[ 50/250] IBS ICF-3HM11-TX16Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-3HM11-TX16Z4 Mikrokanal-Kondensatoreinheit (Tecumseh TAG 
+        >> ok: https://birolticaret.com/wp-content/uploads/2022/05/BRS1607000005.jpg
+[ 51/250] IBS ICF-3HM11-TX13Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-3HM11-TX13Z4 Mikrokanal-Kondensatoreinheit (Tecumseh FH 4
+        >> failed: https://tinquang.com/upload/images/may-nen-lanh-tecumseh-fh4531z-3hp+(1).jpg
+[ 52/250] IBS ICF-3HM11-TX10Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-3HM11-TX10Z4 Mikrokanal-Kondensatoreinheit (Tecumseh FH 4
+        >> ok: https://images.tcdn.com.br/img/img_prod/720021/unidade_condensadora_2_hp_tecumse
+[ 53/250] IBS ICF-1HM11-T7.7Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-1HM11-T7.7Z4 Mikrokanal-Kondensatoreinheit (Tecumseh FH 4
+        >> ok: https://images.tcdn.com.br/img/img_prod/720021/unidade_condensadora_2_hp_tecumse
+[ 54/250] IBS ICF-0HM11-T6.1Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-0HM11-T6.1Z4 Mikrokanal-Kondensatoreinheit (Tecumseh CAJ 
+        >> ok: http://www.telesila.ru/images/store/img/36799.jpg
+[ 55/250] IBS ICF-0HM11-T4.6Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-0HM11-T4.6Z4 Mikrokanal-Kondensatoreinheit (Tecumseh CAJ 
+        >> failed: https://ideacdn.net/idea/jk/68/myassets/products/166/tecumseh-taj-caj.jpg?revisi
+[ 56/250] IBS ICF-0HM11-T4.3Z4 Microchannel Kondenser Ünitesi (Tecumse
+        DE: IBS ICF-0HM11-T4.3Z4 Mikrokanal-Kondensatoreinheit (Tecumseh CAJ 
+        >> failed: https://ideacdn.net/idea/jk/68/myassets/products/165/tecumseh-taj-caj.jpg?revisi
+[ 57/250] Systemair VRF İç Ünite WALL 22 Q
+        DE: Systemair VRF Innengerät WALL 22 Q
+        >> ok: https://www.ddc-ksa.com/wp-content/uploads/2019/04/4dd87ea3-b5bb-4d3d-80bd-449d2
+[ 58/250] Elektrosan Dikey Tek Kapı Buzdolabı (-18°C / +2°C, DRC Dijit
+        DE: Vertikaler eintüriger Elektrosan-Kühlschrank (-18 °C / +2 °C, DRC
+        >> ok: https://images.videociety.de/CoverWide/70BC5DF4E76EB3662A9B5320F9E6FA22D56898A5_
+[ 59/250] Elektrosan Çift Kapı Pozitif Buzdolabı (+2/+8°C, TFT Ekran)
+        DE: Elektrosan Doppeltür-Positivkühlschrank (+2/+8°C, TFT-Bildschirm)
+        >> ok: https://media.nisbets.com/asset/core/prodimage/large_new/fb002_new23.jpg
+[ 60/250] Systemair VRF Dış Ünite SYSVRF3VOL28Q (Heat Pump)
+        DE: Systemair VRF Außengerät SYSVRF3VOL28Q (Wärmepumpe)
+        >> ok: https://i.pinimg.com/736x/3c/cc/af/3cccaf3369a89d7db3316c5498476ff6.jpg
+[ 61/250] Talos Ecutherm Çiftli 3/8" - 5/8" İzoleli Bakır Boru
+        DE: Talos Ecutherm Doppeltes 3/8" - 5/8" isoliertes Kupferrohr
+        >> ok: https://www.cremeguides.com/wp-content/uploads/2022/08/schickeria-542x542.166135
+[ 62/250] Talos Ecutherm Çiftli 1/4" - 3/8" İzoleli Bakır Boru
+        DE: Talos Ecutherm Doppeltes 1/4" - 3/8" isoliertes Kupferrohr
+        >> ok: https://www.climaebagno.gr/image/cache/catalog/products/5760-solinas-chalkou-1-4
+[ 63/250] M2M Evaporatör RSC-350-850+E2 SC
+        DE: M2M Verdampfer RSC-350-850+E2 SC
+        >> ok: https://oberflaeche.de/fileadmin/images/themen/2022/Verdampfer_unter_die_Lupe_ge
+[ 64/250] Soğutma Ünitesi Negatif Paket Grup HCS
+        DE: Negative Paketgruppe der Kühleinheit HCS
+        >> ok: https://climecool.zehnder-systems.de/wp-content/uploads/2024/04/ZEHNDER_CCC_Abbi
+[ 65/250] Sanhua EU-22 Microchannel Kondenser
+        DE: Sanhua EU-22 Mikrokanalkondensator
+        >> failed: https://media.licdn.com/dms/image/D4D22AQEE8umtjM2SCA/feedshare-shrink_2048_1536
+[ 66/250] Sanhua EU-21 Microchannel Kondenser
+        DE: Sanhua EU-21 Mikrokanalkondensator
+        >> ok: https://cdn.sanhuaeurope.co.uk/new_content/uploads/images/products/mche-fr-web-5
+[ 67/250] ThermETS HSC-MP10010-EM49S 1.0HP Split Hermetik Soğutma Grub
+        DE: ThermETS HSC-MP10010-EM49S 1,0 PS geteilter hermetischer Kühler (
+        >> ok: https://images.nexusapp.co/assets/cb/6c/8a/516647099.jpg
+[ 68/250] 5x5 Galvaniz L Köşebent
+        DE: 5x5 verzinkter L-Winkel
+        >> ok: https://www.draht-driller.de/media/88/5d/86/1732699824/l-winkel_breit_verzinkt56
+[ 69/250] ETS 5x13 Dış Köşe L Aksesuar
+        DE: ETS 5x13 L-Außeneckenzubehör
+        >> ok: https://img.freepik.com/fotos-premium/begehbarer-kuehlschrank-mit-gefrierfach-gr
+[ 70/250] ETS 8cm Poly-Poly Tavan Paneli Kilitsiz
+        DE: ETS 8 cm Poly-Poly-Deckenpaneel entriegelt
+        >> ok: https://polytechamerica.com/wp-content/uploads/2023/05/IMG_0011-1024x768.jpg
+[ 71/250] ThermETS HSC-LP10015-ET49S 1.5HP Donuk Depo Split Hermetik S
+        DE: ThermETS HSC-LP10015-ET49S 1,5 PS gefrorene Lagerung, geteilte he
+    [download error] ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+        >> failed: https://german.refrigeration-condensingunit.com/photo/ps18597915-copeland_semi_h
+[ 72/250] ThermETS HSC-MP10015-EM49S 1.5HP Split Hermetik Soğutma Grub
+        DE: ThermETS HSC-MP10015-EM49S 1,5 PS geteilter hermetischer Kühler (
+        >> ok: https://images.nexusapp.co/assets/cb/6c/8a/516647099.jpg
+[ 73/250] ETS 5x16 Dış Köşe L Aksesuar
+        DE: ETS 5x16 L-Außeneckenzubehör
+        >> ok: https://maskabel.com/cdn/shop/files/NYY-J5x16x5-25_1800x1800.jpg?v=1706087108
+[ 74/250] ETS 200x250 Sürgülü Tip 120mm Kapı (15cm Panele Montaj)
+        DE: ETS 200x250 Schiebetür, 120 mm (15 cm Plattenmontage)
+        >> ok: https://rauschenbach.de/Bilder/img35.jpg
+[ 75/250] ETS 15cm Poly-Poly Tavan Paneli Kilitli
+        DE: ETS 15 cm Poly-Poly-Deckenpaneel verriegelt
+        >> ok: https://polytechamerica.com/wp-content/uploads/2023/05/IMG_0011-1024x768.jpg
+[ 76/250] ETS 15cm Poly-Poly Lento Paneli Kilitli
+        DE: ETS 15 cm Poly-Poly-Sturzplatte verriegelt
+        >> ok: http://www.droneadventure.co.uk/wp-content/uploads/2023/02/DJI_0143-scaled.jpg
+[ 77/250] ETS 10cm Poly-Poly Tavan Paneli Kilitli
+        DE: ETS 10 cm Poly-Poly-Deckenpaneel verriegelt
+        >> ok: https://polytechamerica.com/wp-content/uploads/2023/05/IMG_0011-scaled.jpg
+[ 78/250] ETS 10cm Poly-Poly Lento Paneli Kilitli
+        DE: ETS 10 cm Poly-Poly-Sturzplatte verriegelt
+        >> ok: https://polytechamerica.com/wp-content/uploads/2023/05/IMG_0011-1024x768.jpg
+[ 79/250] Embraco NEU 6215 GK Kompresör
+        DE: Embraco NEU 6215 GK Kompressor
+        >> ok: https://www.dtngroup.ro/webroot/data-files/prod-images/269/NEU6215GK_slide.jpg
+[ 80/250] 3X1,5 TTR Kablo (metre)
+        DE: 3X1,5 TTR-Kabel (Meter)
+        >> ok: https://cdn.dsmcdn.com/ty1527/product/media/images/prod/QC/20240906/14/70ba244d-
+[ 81/250] Günay GNKF 1200 Orta-Tezgah Altı Kare Fanlı Soğutucu
+        DE: Günay GNKF 1200 Mittelgroßer quadratischer Untertisch-Lüfterkühle
+        >> ok: http://www.industrialrevolutionresearch.com/images/life-before-industrial-revolu
+[ 82/250] Günay GNKF 650 Yan Tezgah Altı Kare Fanlı Soğutucu
+        DE: Günay GNKF 650 Side Under Counter Square Fan Cooler
+        >> ok: http://gunaysogutma.com.tr/files/urunler/standarttip/gne4.jpg
+[ 83/250] Günay GNKF 650 Orta Tezgah Altı Kare Fanlı Soğutucu
+        DE: Günay GNKF 650 Mittlerer quadratischer Untertisch-Lüfterkühler
+        >> ok: http://gunaysogutma.com.tr/files/urunler/standarttip/gne4.jpg
+[ 84/250] Günay GKE 225 Ticari Yatık Tavan Tipi Evaporatör
+        DE: Günay GKE 225 Kommerzieller horizontaler Deckenverdampfer
+        >> ok: https://rivacold.de/wp-content/uploads/2024/03/rdf_verdampfer-1024x1024.png
+[ 85/250] Günay GKE 125 Ticari Yatık Tavan Tipi Evaporatör
+        DE: Günay GKE 125 Kommerzieller horizontaler Deckenverdampfer
+        >> ok: https://a.allegroimg.com/original/118aa4/65506d9642f9af5859f2509d13b5/WICHROWE-W
+[ 86/250] Günay GYE 230-6B Yatık Tavan Tipi Evaporatör
+        DE: Günay GYE 230-6B Horizontaler Deckenverdampfer
+        >> ok: https://rivacold.de/wp-content/uploads/2024/03/rdf_verdampfer-1024x1024.png
+[ 87/250] Günay GYE 130-6B Yatık Tavan Tipi Evaporatör
+        DE: Günay GYE 130-6B Horizontaler Deckenverdampfer
+        >> ok: https://rivacold.de/wp-content/uploads/2024/03/rdf_verdampfer-1024x1024.png
+[ 88/250] Günay GYE 130-6A Yatık Tavan Tipi Evaporatör
+        DE: Günay GYE 130-6A Horizontaler Deckenverdampfer
+        >> ok: https://rivacold.de/wp-content/uploads/2024/03/rdf_verdampfer-1024x1024.png
+[ 89/250] Errecom Endüstriyel POE 68 Yağ Bidonu 20L
+        DE: Errecom Industrial POE 68 Ölfass 20L
+        >> ok: https://www.generalgas.it/userfiles/2023/02/07/1675756580.jpg
+[ 90/250] Sibax NS88PU Poliuretan Köpük Tabancalı 850 g / 750 ml (dolg
+        DE: Sibax NS88PU mit Polyurethan-Schaumpistole 850 g / 750 ml (Füllun
+        >> ok: https://cdn.cimri.io/image/1200x1200/sibax-750-ml-tabancali-poliuretan-kopuk_800
+[ 91/250] Genel 13 CM Soğuk Oda U Profili
+        DE: Allgemeines 13 cm U-Profil für Kühlräume
+        >> ok: https://arpanel.de/wp-content/uploads/2022/12/obch1.png
+[ 92/250] Boru İzolasyon Köpüğü İç Çap 28 mm (13mm kalınlık)
+        DE: Rohrisolierungsschaum-Innendurchmesser 28 mm (13 mm Dicke)
+        >> ok: https://www.mwash.rs/wp-content/uploads/2023/12/PhotoRoom_019_20231221_150418.jp
+[ 93/250] Boru İzolasyon Köpüğü İç Çap 22 mm (13mm kalınlık)
+        DE: Rohrisolierschaum-Innendurchmesser 22 mm (13 mm Dicke)
+        >> ok: https://m.media-amazon.com/images/I/41dGd-dryBL._AC_.jpg
+[ 94/250] Boru İzolasyon Köpüğü İç Çap 42 mm (13mm kalınlık)
+        DE: Rohrisolierschaum-Innendurchmesser 42 mm (13 mm Dicke)
+        >> ok: https://m.media-amazon.com/images/I/71krJ4FejPL._AC_.jpg
+[ 95/250] Boru İzolasyon Köpüğü İç Çap 35 mm (13mm kalınlık)
+        DE: Rohrisolierschaum-Innendurchmesser 35 mm (13 mm Dicke)
+        >> ok: https://i.ytimg.com/vi/UgB6I25NFSA/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQM
+[ 96/250] Boru İzolasyon Köpüğü İç Çap 54 mm (13mm kalınlık)
+        DE: Rohrisolierschaum-Innendurchmesser 54 mm (13 mm Dicke)
+        >> failed: https://media.licdn.com/dms/image/D4E03AQEpSUa1WLqgyA/profile-displayphoto-shrin
+[ 97/250] Ottocool 1/4\" Vrf Kauçuk İzolasyonlu Bakır Boru
+        DE: Ottocool 1/4" Vrf Gummiisoliertes Kupferrohr
+        >> ok: https://www.kupferrohr.com/uploads/product/ottocool_ciftli_izolasyonlu_siyah_bak
+[ 98/250] Ottocool 5/8\" Vrf Kauçuk İzolasyonlu Bakır Boru
+        DE: Ottocool 5/8" Vrf Gummiisoliertes Kupferrohr
+        >> ok: https://www.kupferrohr.com/uploads/product/ottocool_pe_siyah_izolasyonlu_bakir_b
+[ 99/250] Ottocool 3/8\" Vrf Kauçuk İzolasyonlu Bakır Boru
+        DE: Ottocool 3/8" Vrf Gummiisoliertes Kupferrohr
+        >> ok: https://www.kupferrohr.com/uploads/product/ottocool_ciftli_izolasyonlu_siyah_bak
+[100/250] DRC DCB 100 Plus Kontrol Ünitesi
+        DE: DRC DCB 100 Plus Steuereinheit
+        >> ok: https://www.iklimyedekparca.com/idea/jk/68/myassets/products/469/dcb100-plus.png
+[101/250] Siccom Eco Line Kanal Tipi Drenaj Pompası
+        DE: Siccom Eco Line Kanalentwässerungspumpe
+        >> ok: https://siccom.com/wp-content/uploads/2021/12/ECO-LINE-2.png
+[102/250] GVN GMH 052F 1/4 Likit Filtre Dryer
+        DE: GVN GMH 052F 1/4 Flüssigkeitsfiltertrockner
+        >> failed: https://ideacdn.net/idea/fd/26/myassets/products/107/drayer-kopya.png?revision=1
+[103/250] GVN GMH 052F 3/8 Likit Filtre Dryer
+        DE: GVN GMH 052F 3/8 Flüssigkeitsfiltertrockner
+        >> ok: https://www.frigosystem.com/8810-large_default/4411-9a-ff-28-ods-filtertrockner-
+[104/250] Tecold Servis Valfi
+        DE: Tecold-Serviceventil
+        >> ok: https://auth-d7899116fa1d4ef6a38b8958fa81d7ef.storage.de.cloud.ovh.net/productio
+[105/250] Dunan 1/4\" Servis Valfi
+        DE: Dunan 1/4" Serviceventil
+        >> ok: https://eiscold.de/media/image/product/1742/lg/serviceventil-1-4-mit-schraderven
+[106/250] Dunan 3/8\" Servis Valfi
+        DE: Dunan 3/8" Serviceventil
+        >> ok: https://auth-d7899116fa1d4ef6a38b8958fa81d7ef.storage.de.cloud.ovh.net/productio
+[107/250] Sanhua SYJ06H11 Gözetleme Camı 1/4" Kaynaklı
+        DE: Sanhua SYJ06H11 Schauglas 1/4" geschweißt
+        >> failed: https://www.nieruf.de/media/bd/77/98/1692612403/durchfluss-schauglas-gs01-gs02-g
+[108/250] Weiguang YZF18-30 18/70W Fan Motoru
+        DE: Weiguang YZF18-30 18/70W Lüftermotor
+        >> failed: https://dura-solar.de/media/6e/a2/28/1748610535/410720_Anker-SOLIX-Solarbank-3-E
+[109/250] Günay G-BOX 15C1-135 Kondenser Kabini
+        DE: Günay G-BOX 15C1-135 Kondensatorschrank
+        >> ok: https://gunaysogutma.com.tr/files/urunler/konserderler/kabinli/gbox_10.jpg
+[110/250] Ets HSCMP 10050 TT49SE Kondenser Ünitesi
+        DE: Ets HSCMP 10050 TT49SE Verflüssigungssatz
+        >> ok: https://www.skh-kaeltetechnik.de/media/image/product/4166/lg/aussen-verfluessigu
+[111/250] Alkatherm Kondenser Bataryası 30 m²
+        DE: Alkatherm-Kondensatorschlange 30 m²
+        >> ok: https://www.bowe-webshop.com/images/product_images/popup_images/711590E_1.jpg
+[112/250] ThermETS VTE.40.6.214
+        DE: ThermETS VTE.40.6.214
+        >> ok: https://cdn.vapeshop-online.ch/media/c0/10/c0/1707843943/ripley-rdta-ambition-mo
+[113/250] Günay GNC 1500-1 Evaporatör (2.000W, 1×300 Fan)
+        DE: Günay GNC 1500-1 Verdampfer (2.000 W, 1×300 Lüfter)
+        >> ok: http://gunaysogutma.com.tr/files/urunler/standarttip/gne4.jpg
+[114/250] Buzyapsan TEA45 1168 Fansız Evaporatör (6.935W, 22.09m², R44
+        DE: Buzyapsan TEA45 1168 Lüfterloser Verdampfer (6,935 W, 22,09 m², R
+        >> ok: https://cdn.manomano.com/images/images_products/13634381/L/164823535_1.jpg
+[115/250] Systemair SYSVRF JOINT IN-02-2P Bransman Kiti
+        DE: Systemair SYSVRF JOINT IN-02-2P Verzweigungskit
+        >> ok: https://a.storyblok.com/f/108972/4eff90dffa/compact_four-way_cassette_20240303_1
+[116/250] Systemair SYSVRF JOINT IN-01-2P Bransman Kiti
+        DE: Systemair SYSVRF JOINT IN-01-2P Verzweigungskit
+        >> ok: https://images.webcamgalore.com/24724-current-webcam-Schwentinental.jpg
+[117/250] Systemair VRF İç Ünite WALL 28 Q
+        DE: Systemair VRF Innengerät WALL 28 Q
+        >> ok: https://www.ddc-ksa.com/wp-content/uploads/2019/04/4dd87ea3-b5bb-4d3d-80bd-449d2
+[118/250] Systemair VRF Dış Ünite SYSVRF3VOL45Q
+        DE: Systemair VRF-Außengerät SYSVRF3VOL45Q
+        >> ok: https://www.ddc-ksa.com/wp-content/uploads/2019/04/4dd87ea3-b5bb-4d3d-80bd-449d2
+[119/250] Systemair VRF İç Ünite WALL 56 Q
+        DE: Systemair VRF Innengerät WALL 56 Q
+        >> ok: https://m.media-amazon.com/images/I/71udfhqd++L.jpg
+[120/250] Systemair VRF İç Ünite WALL 71 Q
+        DE: Systemair VRF Innengerät WALL 71 Q
+        >> ok: https://www.ddc-ksa.com/wp-content/uploads/2019/04/4dd87ea3-b5bb-4d3d-80bd-449d2
+[121/250] Systemair VRF Dış Ünite SYSVRF2 260 AIR EVO
+        DE: Systemair VRF Außengerät SYSVRF2 260 AIR EVO
+        >> ok: https://a.storyblok.com/f/108972/3500x2525/675e924b72/microsoftteams-image__5__2
+[122/250] Systemair VRF Kumanda WGC86S
+        DE: Systemair VRF-Controller WGC86S
+        >> ok: https://www.ddc-ksa.com/wp-content/uploads/2019/04/4dd87ea3-b5bb-4d3d-80bd-449d2
+[123/250] Systemair VRF İç Ünite WALL 36 Q
+        DE: Systemair VRF Innengerät WALL 36 Q
+        >> ok: https://www.ddc-ksa.com/wp-content/uploads/2019/04/4dd87ea3-b5bb-4d3d-80bd-449d2
+[124/250] Genel Soğutucu Elektrik Panosu
+        DE: Allgemeine Kühler-Schalttafel
+        >> ok: https://cdn.ozone.bg/media/catalog/product/cache/1/image/a4e40ebdc3e371adff84507
+[125/250] GVN Yatay Likit Tankı HLR.GR.33B.05
+        DE: GVN Horizontaler Flüssigkeitstank HLR.GR.33B.05
+        >> ok: https://www.ecotechonline.it/wp-content/uploads/2024/04/CIFO-5-1-aspect-ratio-4-
+[126/250] GVN Dikey Likit Tankı VLR.A.33B.06
+        DE: GVN Vertikaler Flüssigkeitstank VLR.A.33B.06
+        >> ok: https://www.bilkarsogutma.com/idea/fd/26/myassets/products/845/gvn-sla-a-33b-105
+[127/250] Frigocraft M012 Açık Grup Kondenser Ünitesi 1 HP R290 (Motor
+        DE: Frigocraft M012 Kondensatoreinheit mit offener Gruppe, 1 PS, R290
+        >> ok: https://kamersogutma.com/image/cache/catalog/urunler/frigocraft_4fan-500x500.jpg
+[128/250] Copeland Scroll Kompresör
+        DE: Copeland Scroll-Kompressor
+        >> ok: https://http2.mlstatic.com/lp-roberto-leal-especial-ao-vivo-no-cassino-estoril--
+[129/250] Elektrosan Dikey Buzdolabı Tek Kapı Negatif (-22/-18C) Dijit
+        DE: Vertikaler Elektrosan-Kühlschrank mit einer Tür, negatives (-22/-
+        >> ok: https://kuecheneinbaugeraete.com/wp-content/uploads/2023/04/magazin-startseite-2
+[130/250] Elektrosan Dikey Buzdolabi Cift Kapı Negatif (-22/-18C) TFT 
+        DE: Vertikaler Elektrosan-Kühlschrank mit Doppeltür, negativer (-22/-
+        >> ok: https://img.archiexpo.de/images_ae/photo-g/68498-17670390.jpg
+[131/250] Buzyapsan BYS SH60 BOX Kondenser (23.780W, 64.17m², 2×450 Fa
+        DE: Buzyapsan BYS SH60 BOX Kondensator (23,780 W, 64,17 m², 2×450 Lüf
+        >> ok: https://raskrasil.com/wp-content/uploads/Raskrasil.com-Ausmalbilder-Die-Drei-Log
+[132/250] Buzyapsan BYS SH35 BOX Kondenser (12.337W, 35.62m², 1×450 Fa
+        DE: Buzyapsan BYS SH35 BOX Kondensator (12,337 W, 35,62 m², 1×450 Lüf
+        >> ok: https://www.byssogutma.com/include/resize.php?path=images/urunler/bys-box-tek-fa
+[133/250] Buzyapsan BYS SH30 BOX Kondenser (11.600W, 32.58m², 1×450 Fa
+        DE: Buzyapsan BYS SH30 BOX Kondensator (11.600 W, 32,58 m², 1×450 Lüf
+        >> ok: https://www.byssogutma.com/images/urunler/bys-box-iki-fanli-kabinli-kondenser.jp
+[134/250] Buzyapsan BYS SH20 BOX Kondenser (8.343W, 22.22m², 1×400 Fan
+        DE: Buzyapsan BYS SH20 BOX Kondensator (8,343 W, 22,22 m², 1×400 Lüft
+        >> ok: https://i.ytimg.com/vi/Z8hYZpviN24/maxresdefault.jpg
+[135/250] ÇİFT KAPI ENDÜSTİRYEL BUZDOLABI (-18 / 20)
+        DE: DOPPELTÜRIGER INDUSTRIEKÜHLSCHRANK (-18/20)
+        >> ok: http://modulix.ru/netcat_files/userfiles/sprav/znaki/ul.jpg
+[136/250] ÇİFT KAPI ENDÜSTİRYEL BUZDOLABI (+2 +8)
+        DE: DOPPELTÜRIGER INDUSTRIEKÜHLSCHRANK (+2 +8)
+        >> ok: https://cdn.xxlhoreca.online/media/d5/52/e2/1754685141/56e88fdc1673425ba7365d726
+[137/250] TEK KAPI ENDÜSTİRYEL BUZDOLABI (-18 / 20)
+        DE: EINTÜRIGER INDUSTRIEKÜHLSCHRANK (-18/20)
+        >> ok: https://m.media-amazon.com/images/I/71AYMs3eQ-L.__AC_SX300_SY300_QL70_ML2_.jpg
+[138/250] TEK KAPI ENDÜSTİRYEL BUZDOLABI (+2 +8)
+        DE: EINTÜRIGER INDUSTRIEKÜHLSCHRANK (+2 +8)
+        >> ok: https://www.eren.to/img/0d/20a/0d20ac58-2902-4d3f-ba7b-6f88781795cf-bildschirm-f
+[139/250] SOĞUK HAVA DEPO KAPISI
+        DE: Kühlraumtür
+        >> ok: https://schuetz-kuehlraumtueren.de/wp-content/uploads/2018/07/KTS3-1.jpg
+[140/250] 3/8 GÖZETLEME CAMI
+        DE: 3/8 SCHAUGLAS
+        >> ok: https://www.frigosystem.com/533576-large_default/3910-33-mm-3-8-sae-schauglas-mi
+[141/250] MÜŞİR 13-16
+        DE: MUSIR 13-16
+        >> ok: https://img.freepik.com/fotos-premium/begehbarer-kuehlschrank-mit-gefrierfach-gr
+[142/250] İZOLASYONLU BAKIR BORU (1/4 3/8)
+        DE: ISOLIERTES KUPFERROHR (1/4 3/8)
+        >> ok: https://www.frigotechnik.de/out/pictures/generated/product/67/6702/6702600/700_7
+[143/250] KLİMA VANASI
+        DE: KLIMAANLAGEVENTIL
+        >> ok: https://aslasanne.com/public/2721/upload/images/articles/121/dsc-0066.jpg
+[144/250] 1/2 GÖZETLEME CAMI KAYNAKLI
+        DE: 1/2 SCHAUGLAS GESCHWEIßT
+        >> ok: https://www.techsupply24.de/media/image/4c/5e/76/DINSchauglas1AY84uhAVJAT0w_600x
+[145/250] GÜVEN 6LT DEPO 1/2 VANALI
+        DE: GÜVEN 6LT TANK MIT 1/2 VENTIL
+        >> failed: https://www.frigoven.com.tr/Dosyalar/product/untitled2+(6).png
+[146/250] 2HP SOĞUTMA ÜNİTESİ DIŞ
+        DE: 2HP-KÜHLEINHEIT AUSSEN
+        >> ok: https://img.nauticexpo.de/images_ne/photo-g/4597455-20550013.jpg
+[147/250] 2HP SOĞUTMA ÜNİTESİ İÇ
+        DE: 2HP KÜHLEINHEIT INNENRAUM
+        >> ok: https://img.nauticexpo.de/images_ne/photo-g/4597455-20550013.jpg
+[148/250] 6HP İÇ SOĞUTMA ÜNİTESİ
+        DE: 6 PS INTERNE KÜHLEINHEIT
+        >> ok: https://sw6.prod.selfio.de/media/c7/98/47/1744830501/zentrale-lueftungsanlagenzu
+[149/250] 100x18 SIRA PASTA SOĞ
+        DE: 100x18-REIHIGER KÜHLKUCHEN
+        >> ok: https://m.media-amazon.com/images/I/81N-Nt2p98L._AC_SX569_.jpg
+[150/250] SOĞUTUCU ELEKTRİK PANOSU
+        DE: KÜHLER ELEKTRISCHES PANEL
+        >> ok: https://kuehler-rath.de/wp-content/uploads/2015/10/Verdampfer.jpg
+[151/250] Lubreeze POE 68 Yag 5L Teneke
+        DE: Lubreeze POE 68 Öl 5L Dose
+        >> ok: https://www.sogutmamarketim.com/wp-content/uploads/Lubreeze-POE-68-Yag-5-LT-1.jp
+[152/250] Lubreeze NXT-32 POE 32 Kompresör Yağı 5 Lt Teneke
+        DE: Lubreeze NXT-32 POE 32 Kompressoröl 5 Lt Dose
+        >> ok: https://percdn.com/f/492574/cG96YWFtNG0vcUp3ZUdGckg4OG5icmdQYmNFPQ/p/lubreeze-nx
+[153/250] MENTEŞELİ SOĞUK HAVA DEPO KAPISI (100MM POLY POLY)
+        DE: SCHARNIERTE KÜHLLAGERTÜR (100 MM POLY POLY)
+        >> ok: https://www.kleinanzeige.net/pictures/a91efde41baa3f546cde513cc72df.jpeg
+[154/250] 2 hp Soğutma Grubu Takım
+        DE: 2-PS-Kühler-Set
+        >> ok: https://www.yachtbatterie.de/media/images/org/indel_42507db100000.jpg
+[155/250] Günay GKE 220 Ticari Yatık Tavan Tipi Evaporatör
+        DE: Günay GKE 220 Kommerzieller horizontaler Deckenverdampfer
+        >> ok: http://coolpak.shop/cdn/shop/files/GKE220.png?v=1698747007
+[156/250] Günay GNKY 750 Plastik Yatık Tavan Tipi Soğutucu
+        DE: Günay GNKY 750 Horizontaler Deckenkühler aus Kunststoff
+        >> ok: http://gunaysogutma.com.tr/files/urunler/plastiktavantip/gunayheatexchangersgnk7
+[157/250] Bakır Boru 22.00*1.00 (Boy)
+        DE: Kupferrohr 22,00*1,00 (Länge)
+        >> ok: https://www.uci.com.tr/themes/uci/assets/img/deposit-photo.jpg
+[158/250] Bakır Boru 28.00*1.00 (Boy)
+        DE: Kupferrohr 28,00*1,00 (Länge)
+        >> ok: https://www.uci.com.tr/themes/uci/assets/img/deposit-photo.jpg
+[159/250] İzolasyon Hortumu 09*22mm
+        DE: Isolierschlauch 09*22mm
+        >> ok: https://shop.kabelknecht.de/storage/images/image?remote=https://shop.kabelknecht
+[160/250] İzolasyon Hortumu 9*28 28mm
+        DE: Isolierschlauch 9*28 28mm
+        >> ok: https://media.cdn.kaufland.de/product-images/1024x1024/39e40897aeebd3c71a0c3c53d
+[161/250] DRENAJ HORTUMU 5/8
+        DE: ABFLUSSSCHLAUCH 5/8
+        >> ok: https://64.media.tumblr.com/aa248ac01e1014e0539e1bcf5f2187c5/tumblr_inline_pa9vh
+[162/250] HISENSE İNVERTER 48.000 BTU SALON TİPİ KLİMA DIŞ ÜNİTE AUW-4
+        DE: HISENSE INVERTER 48.000 BTU HALLEN-KLIMAANLAGE AUSSENGERÄT AUW-48
+        >> ok: https://gimli.freetls.fastly.net/tavolla/Products/Images/238062/o_hisense-avt71u
+[163/250] HISENSE İNVERTER 48.000 BTU SALON TİPİ KLİMA İÇ ÜNİTE AUF-48
+        DE: HISENSE INVERTER 48.000 BTU HALLEN-KLIMAANLAGE INNENGERÄT AUF-48U
+        >> ok: http://hisensemyanmar.com/cdn/shop/files/InverterExpert1_cf3cf07e-1771-47e2-aca1
+[164/250] Buzyapsan TEA40 126 6 Soğutucu
+        DE: Buzyapsan TEA40 126 6 Kühlmittel
+        >> ok: https://www.hoffmann-speedster.com/media/6b/a4/dd/1752772400/530-6326.jpg
+[165/250] SO 260 15056 V2 Fransız Soğutucu (8.889W, 1×500)
+        DE: SO 260 15056 V2 Französischer Kühler (8,889 W, 1×500)
+        >> ok: http://shop.kuehler-rath.de/images/product_images/popup_images/13890_0.jpg
+[166/250] KÜÇÜK ŞASE
+        DE: KLEINES FAHRGESTELL
+        >> ok: https://thumbs.dreamstime.com/z/deva-city-landscape-landscape-deva-city-hunedoar
+[167/250] Embraco NEU6220GK (R404A)
+        DE: Embraco NEU6220GK (R404A)
+        >> ok: https://i.pinimg.com/736x/03/93/0a/03930ad1240c8abbac16d5f7fed2f9c8.jpg
+[168/250] Embraco NEU6215GK (R404A)
+        DE: Embraco NEU6215GK (R404A)
+        >> ok: https://www.dtngroup.ro/webroot/data-files/prod-images/269/NEU6215GK_slide.jpg
+[169/250] DCB31
+        DE: DCB31
+        >> ok: https://b2b.penguensogutma.com/include/resize.php?path=images/urunler/drc-dcb31-
+[170/250] TEA50 146 8 SOĞUTUCU T2
+        DE: TEA50 146 8 KÜHLER T2
+        >> ok: https://a-static.besthdwallpaper.com/digital-art-dark-red-black-backgrounds-wall
+[171/250] TEA50 126 8 T2 SOĞUTUCU
+        DE: TEA50 126 8 T2 KÜHLER
+    [download error] ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+        >> failed: https://thumb-nss.xhcdn.com/a/LaVu4f3vjb-Pa-6Vsshe3Q/022/854/322/1280x720.c.jpg.
+[172/250] TEA 45 126 8 SOĞUTUCU
+        DE: TEE 45 126 8 KÜHLER
+        >> ok: https://www.ligadoemviagem.com.br/wp-content/uploads/2015/11/boca-do-inferno10.j
+[173/250] TEA50 124 8 SOĞUTUCU
+        DE: TEA50 124 8 KÜHLER
+        >> ok: https://kuehler-rath.de/wp-content/uploads/2015/10/Verdampfer.jpg
+[174/250] TEA45 124 8 SOĞUTUCU
+        DE: TEA45 124 8 KÜHLER
+        >> ok: https://media1.tenor.com/m/go4btLiPWngAAAAC/gute-nacht-nacht.gif
+[175/250] Buzyapsan TEA50 145 8 Soğutucu
+        DE: Buzyapsan TEA50 145 8 Kühler
+        >> ok: https://kuehler-rath.de/wp-content/uploads/2015/10/Verdampfer.jpg
+[176/250] Buzyapsan TEA50 136 8 Soğutucu
+        DE: Buzyapsan TEA50 136 8 Kühler
+        >> ok: https://kuehler-rath.de/wp-content/uploads/2015/10/Verdampfer.jpg
+[177/250] Buzyapsan TEA50 134 8 Soğutucu
+        DE: Buzyapsan TEA50 134 8 Kühler
+        >> ok: https://kuehler-rath.de/wp-content/uploads/2015/10/Verdampfer.jpg
+[178/250] Buzyapsan TEA50 126 6 Soğutucu
+        DE: Buzyapsan TEA50 126 6 Kühler
+        >> ok: http://kuehler-rath.de/wp-content/uploads/2015/10/Verdampfer.jpg
+[179/250] Buzyapsan TEA45 126 6 Soğutucu
+        DE: Buzyapsan TEA45 126 6 Kühler
+        >> ok: http://shop.kuehler-rath.de/images/product_images/popup_images/7016_0.jpg
+[180/250] Buzyapsan BYS45 124 6 Soğutucu
+        DE: Buzyapsan BYS45 124 6 Kühler
+        >> ok: http://shop.kuehler-rath.de/images/product_images/popup_images/7016_0.jpg
+[181/250] TEA45 116 8 SOĞUTUCU
+        DE: TEA45 116 8 KÜHLER
+        >> ok: https://i.pinimg.com/736x/ae/ee/af/aeeeaf71da29af71e98f4072de4428b9--capricorn-a
+[182/250] AEY 506 14566 6825W 1*450 FANSIZ SOĞUTUCU
+        DE: AEY 506 14566 6825W 1*450 LÜFTERLOSER KÜHLER
+        >> ok: https://www.pollin.de/media/ef/bb/68/1732176486/704989-1-arctic-kuehler-freezer-
+[183/250] AEY 505 14556 6046W 1*450 FANSIZ SOĞUTUCU
+        DE: AEY 505 14556 6046W 1*450 LÜFTERLOSER KÜHLER
+        >> ok: https://img.kleinanzeigen.de/api/v1/prod-ads/images/8b/8bd2d389-92f0-4d9d-a963-f
+[184/250] Buzyapsan AEY 504 14546 Fansız Soğutucu (5.100W, 1×450)
+        DE: Buzyapsan AEY 504 14546 Lüfterloser Kühler (5.100 W, 1×450)
+        >> ok: https://media.pkwteile.de/360_photos/15288588/preview.jpg
+[185/250] Buzyapsan MSA35 111 Soğutucu
+        DE: Buzyapsan MSA35 111 Kühlmittel
+        >> ok: https://www.byssogutma.com/images/urunler/buzcelik-msa-mss-mss-standart-oda-sogu
+[186/250] Buzyapsan AEY 130 48 Evaporatör (AEY 8mm, 5,66m, 40×35 1/2)
+        DE: Buzyapsan AEY 130 48 Verdampfer (AEY 8mm, 5,66m, 40×35 1/2)
+        >> ok: https://www.fahrmitgas.de/wp-content/uploads/2014/06/p-3300-1213_1-768x1024.jpg
+[187/250] 8HP (0/-18) 380V TECUMSEH KOMP SOĞUTMA GRUBU DIŞ ÜNİTE
+        DE: 8 PS (0/-18) 380 V TECUMSEH COMP CHILLER-AUßENGERÄT
+        >> ok: https://i.pinimg.com/originals/33/d2/77/33d27701a6ed4f95e722e988feca1669.jpg
+[188/250] 7HP (0/-18) 380V TECUMSEH KOMP SOĞUTMA GRUBU DIŞ ÜNİTE
+        DE: 7 PS (0/-18) 380 V TECUMSEH COMP CHILLER-AUßENGERÄT
+        >> ok: https://www.kaelte-berlin.com/images/product_images/popup_images/LF-3070244.jpg
+[189/250] 3HP (0/-18) 380V TECUMSEH KOMP SOĞUTMA GRUBU DIŞ ÜNİTE
+        DE: 3 PS (0/-18) 380 V TECUMSEH COMP CHILLER-AUßENGERÄT
+        >> ok: https://www.kaelte-berlin.com/images/product_images/popup_images/LF-3070253.jpg
+[190/250] 2HP (0/-18) 380V TECUMSEH KOMP SOĞUTMA GRUBU DIŞ ÜNİTE
+        DE: 2 PS (0/-18) 380 V TECUMSEH COMP CHILLER-AUßENGERÄT
+        >> ok: https://www.kaelte-berlin.com/images/product_images/popup_images/LF-3070244.jpg
+[191/250] 3HP (0+5) 380V TECUMSEH KOMP SOĞUTMA GRUBU DIŞ ÜNİTE
+        DE: 3 PS (0+5) 380 V TECUMSEH COMP CHILLER-AUßENGERÄT
+        >> ok: https://www.kaelte-berlin.com/images/product_images/popup_images/LF-3070244.jpg
+[192/250] 2,5HP (0/+5) 380V TECUMSEH KOMP SOĞUTMA GRUBU DIŞ ÜNİTE
+        DE: 2,5 PS (0/+5) 380 V TECUMSEH COMP CHILLER-AUßENGERÄT
+        >> ok: https://www.kaelte-berlin.com/images/product_images/popup_images/LF-3070244.jpg
+[193/250] 1,5HP (0/+5) 220V EMBRACO KOMP SOĞUTMA GRUBU DIŞ ÜNİTE
+        DE: 1,5 PS (0/+5) 220 V EMBRACO COMP CHILLER-AUßENGERÄT
+        >> ok: http://acdn.mitiendanube.com/stores/002/250/498/products/imagens-site-501-49deee
+[194/250] 250CM PLUG-IN GEBOGENES GLAS
+        DE: 250CM STECKER GEBOGENES GLAS
+        >> failed: https://logos-world.net/wp-content/uploads/2020/06/West-Ham-Logo.png
+[195/250] GND 2.500-1 EVAPORATÖR 1X450D
+        DE: GND 2.500-1 VERDAMPFER 1X450D
+        >> ok: https://shop.frontgas.de/wp-content/uploads/2023/07/Frontgas-Autogas-LPG-Ersatzt
+[196/250] 120X120X38 MM KARE FAN
+        DE: 120X120X38 MM QUADRATISCHER LÜFTER
+        >> ok: https://aquatuning.shop-cdn.com/media/image/a4/b7/69/1027268_01.png
+[197/250] SENTEZ KAYNAK TELİ
+        DE: Synthese-Schweißdraht
+        >> ok: https://www.kaynakmalzemesi.com/images/urunler/308-Paslanmaz-Mig-Kaynak-Teli-0-8
+[198/250] WEIGUANG FAN MOTORU YWF4E 500S-137/35G 1380 RPM SC
+        DE: WEIGUANG LÜFTERMOTOR YWF4E 500S-137/35G 1380 U/min SC
+        >> ok: https://lead.com.vn/wp-content/uploads/2023/05/WEIGUANG-YWF4E-500S_03-600x450.jp
+[199/250] WEIGUANG FAN MOTORU YWF4E 450S-102/60G 1370 RPM SC
+        DE: WEIGUANG LÜFTERMOTOR YWF4E 450S-102/60G 1370 U/min SC
+        >> ok: https://www.sktech.ru/images/fans/axial/4d-450b.jpg
+[200/250] WEIGUANG FAN MOTORU YWF4E 400S-102/47G 1380 RPM SC
+        DE: WEIGUANG LÜFTERMOTOR YWF4E 400S-102/47G 1380 U/min SC
+        >> ok: https://lead.com.vn/wp-content/uploads/2023/05/WEIGUANG-YWF4E-400S-102_03.jpg
+[201/250] WEIGUANG FAN MOTORU YWF4E 350S-102/34G 1400 RPM SC
+        DE: WEIGUANG LÜFTERMOTOR YWF4E 350S-102/34G 1400 U/min SC
+        >> ok: https://htsweets.co.uk/image/cache/catalog/ywf4e-350s-102-34-t---1000x1000w.PNG
+[202/250] WEIGUANG FAN MOTORU YWF4E 300S-92/25G 1380 RPM SC
+        DE: WEIGUANG LÜFTERMOTOR YWF4E 300S-92/25G 1380 U/min SC
+        >> ok: https://www.elecspares.com/uploads/2025/05/2906932453.webp
+[203/250] WEIGUANG FAN MOTORU YWF4E 250S-92/25G 1380 RPM SC
+        DE: WEIGUANG LÜFTERMOTOR YWF4E 250S-92/25G 1380 U/min SC
+        >> ok: https://www.sktech.ru/images/fans/axial/fan-ywf4e-250s-92-25-g-7.jpg
+[204/250] 60X40 YAPIŞKANLI KABLO KANALI
+        DE: 60X40 KLEBEKABELKANAL
+        >> ok: http://kabelkanal-kaufen.de/cdn/shop/products/60x40-g.jpg?v=1645860461
+[205/250] 5X2,5 TTR KABLO
+        DE: 5X2,5 TTR-KABEL
+        >> ok: https://www.escape-stories.de/wp-content/uploads/Auot2-2-1-scaled.jpg
+[206/250] Genel 3X1.5 Kablo
+        DE: Allgemeines 3X1,5-Kabel
+        >> ok: https://ema-elektro.sk/images/products/2348.jpg
+[207/250] Genel 5X1.5 Ttr Kablo
+        DE: Allgemeines 5X1,5 Ttr-Kabel
+        >> ok: https://i.pinimg.com/736x/af/d0/f4/afd0f4a5ce0f34ef1205716fb8e5767e.jpg
+[208/250] ACSETS/PVC70 Hijyenik PVC İç Aksesuar (70 mm)
+        DE: ACSETS/PVC70 Hygienisches PVC-Innenzubehör (70 mm)
+        >> ok: https://www.pvc-store24.de/wp-content/uploads/pvc-streifenvorhang-polar-150-mm-1
+[209/250] ACSETS/PD120 Poly İç Köşe Aksesuar (50×50)
+        DE: ACSETS/PD120 Poly-Inneneckenzubehör (50×50)
+        >> ok: https://cdn11.bigcommerce.com/s-v6vtyp71ox/images/stencil/1280w/products/1614/37
+[210/250] ACSETS/PD120 Poly Dış Köşe Aksesuar (50×160)
+        DE: ACSETS/PD120 Poly-Außeneckenzubehör (50×160)
+        >> ok: https://www.pollin.de/thumbnail/4e/d3/61/1700594115/460471-2-pollin-polycarbonat
+[211/250] ACSETS/PD120 POLY ZEMİN ''U'' AKSESUAR (80*140)
+        DE: ACSETS/PD120 POLY-ERDUNGS-U-ZUBEHÖR (80*140)
+        >> failed: https://www.voltking.de/media/image/product/131629/lg/dehn-745901-erdungs-u-kurz
+[212/250] ACSETS/PD080 Poly Dış Köşe Aksesuar (50×120)
+        DE: ACSETS/PD080 Poly-Außeneckenzubehör (50×120)
+        >> ok: https://www.kjknpo.com/html_j/bukai/seibutu/img/syasin/033_01.jpg
+[213/250] ACSETS/PZ120 Poly Zemin U Aksesuar (50×120×50)
+        DE: ACSETS/PZ120 Poly Ground U-Zubehör (50×120×50)
+        >> ok: https://www.klimaanlagen-handel.de/thumbnail/77/6b/38/1672774735/Foto-Kit_1920x1
+[214/250] ACSETS/PZ100 Poly Zemin U Aksesuar (50×100×50)
+        DE: ACSETS/PZ100 Poly Ground U-Zubehör (50×100×50)
+        >> ok: https://www.aquasabi.de/media/image/product/35938/lg/oase-ersatz-zubehoer-set-fi
+[215/250] ACSETS/PZ080 Poly Zemin U Aksesuar (50×80×50)
+        DE: ACSETS/PZ080 Poly Ground U-Zubehör (50×80×50)
+        >> ok: https://www.klimaanlagen-handel.de/thumbnail/77/6b/38/1672774735/Foto-Kit_1920x1
+[216/250] AHŞAP EKMEK STANDI
+        DE: BROTSTÄNDER AUS HOLZ
+        >> ok: https://m.media-amazon.com/images/I/71i5JbunoDL._AC_.jpg
+[217/250] MERMER TABLALI ÇALIŞMA TEZGAHI
+        DE: ARBEITSTISCH MIT MARMORPLATTE
+        >> ok: https://backservice-milbrandt.de/media/b7/19/a8/1704862548/konditortisch-jpg_624
+[218/250] BENMARİ
+        DE: BAINMARIE
+        >> failed: https://mkt-gastro.ch/wp-content/uploads/2023/05/BGB0315H.jpg
+[219/250] SOĞUK KAHVALTI DOLABI
+        DE: KALTER FRÜHSTÜCKSCHRANK
+        >> ok: https://shop.ideal-ake.at/thumbnail/c4/19/69/1731062634/individualisierung-kuehl
+[220/250] MERMER TABLALI BÖREKLİK
+        DE: GEBÄCKFORM MIT MARMORTISCH
+        >> ok: https://cdn01.trendmoebel24.de/item/images/99918771/full/99918771-Couchtisch-100
+[221/250] KASA BANKOSU
+        DE: KASSE
+        >> ok: https://assets.office-discount.de/img/21/30/Cat_i756414.png
+[222/250] PASTA DOLABI
+        DE: KUCHENSCHRANK
+        >> ok: https://www.eren.to/img/27/1cd/271cd874-a767-5ea2-a402-70b65c4ca05b_4606082_dia.
+[223/250] CEPHE TİPİ PASTA DOLABI
+        DE: FASSADENARTIGER KUCHENSCHRANK
+        >> ok: https://res.litfad.net/site/img/item/2025/07/28/18267350/1200x1200.jpg
+[224/250] 187,5 CM DAISY VG DİK CAMLI REYON
+        DE: 187,5 CM DAISY VG VERTIKALES GLASREGAL
+        >> ok: https://www.rauschenbach.de/images/pv700.jpg
+[225/250] 375 CM DAISY VG DİK CAMLI REYON
+        DE: 375 CM DAISY VG VERTIKALES GLASREGAL
+        >> ok: https://cdn.manomano.com/images/images_products/35919724/P/140325472_1.jpg
+[226/250] 250 CM DAISY VG DİK CAMLI REYON
+        DE: 250 CM DAISY VG VERTIKALES GLASREGAL
+        >> ok: https://www.dexerto.com/cdn-image/wp-content/uploads/2025/10/15/Pokemon-Legends-
+[227/250] Hazir Kumanda Panosu
+        DE: Bereites Bedienfeld
+        >> ok: https://www.cnc-steuerung.com/media/21/78/f9/1693807264/Bedienfeld_(1).jpg?ts=17
+[228/250] R290 Propan Soğutucu Gazı 6 KG (Hidrokarbon, Yanıcı)
+        DE: R290 Propan-Kältemittelgas 6 kg (Kohlenwasserstoff, brennbar)
+        >> ok: https://www.refrigerantboys.com/wp-content/uploads/2017/10/r290-1kg-300x723.png
+[229/250] Errecom Endustriyel POE 68 Yag Bidonu
+        DE: Errecom Industrial POE 68 Ölfass
+        >> ok: https://refrigeracionbarbosa.com/wp-content/uploads/2022/11/Aceite-Mineral-POE-6
+[230/250] Errecom POE 170 Yagi 1 Lt
+        DE: Errecom POE 170 Öl 1 Lt
+        >> ok: https://www.generalgas.it/userfiles/2019/08/20/1566305961.jpg
+[231/250] Errecom POE 170 Yagi 4 Lt
+        DE: Errecom POE 170 Öl 4 Lt
+        >> ok: https://www.himanshuindustries.com/images/sub-products/refrigerant-oil/errecom-r
+[232/250] Errecom POE 68 Yagi 4 Lt
+        DE: Errecom POE 68 Öl 4 Lt
+        >> ok: https://5.imimg.com/data5/SELLER/Default/2022/8/MN/SO/QX/1479441/poe-46-oil-1l--
+[233/250] Lubreeze POE 68 Yagi 5 Lt
+        DE: Lubreeze POE 68 Öl 5 Lt
+        >> ok: https://www.byssogutma.com/images/urunler/lubreeze-poe-68-5lt.jpg
+[234/250] ACT Tavan Tipi Evaporatör ZL940-DF210 (1.800W, 3 Fanlı, Rezi
+        DE: ACT Deckenverdampfer ZL940-DF210 (1.800 W, 3 Lüfter, Widerstand)
+        >> ok: https://coolpak.shop/cdn/shop/files/verdampfer_1410_wattKopie.png?v=1689162782&w
+[235/250] GVN Dikey Likit Tanki VLR.A.30B.01
+        DE: GVN Vertikaler Flüssigkeitstank VLR.A.30B.01
+        >> failed: https://ideacdn.net/idea/fd/26/myassets/products/587/gvn-vlr-a-33b-21-b5-c4-f4-d
+[236/250] Systemair VRF İç Ünite SYSVRF3 WALL 36 Q
+        DE: Systemair VRF Innengerät SYSVRF3 WALL 36 Q
+        >> ok: https://a.storyblok.com/f/108972/88559012ec/t2_right_20240313_093205984.jpg/m/19
+[237/250] Thermet WTE.40.6.214 6.905 Watt
+        DE: Thermet WTE.40.6.214 6.905 Watt
+        >> ok: https://tz-images.gumlet.io/lot/john-deere-214-w-tiller-mower-24e5970e-2810-40f4
+[238/250] Damla Soğutma GMC-SD14 Kondenser (21.695W Motorsuz, 1x500 Fa
+        DE: Tropfkühlung GMC-SD14 Kondensator (21,695 W ohne Motor, 1 x 500 L
+        >> failed: https://mrdavidmath.com/wp-content/gallery/iq-test-easy/shutterstock_1980240134.
+[239/250] ETS Kondenser HSC.MP10050 / LP10050
+        DE: ETS-Kondensator HSC.MP10050 / LP10050
+        >> ok: https://osterlenspoolcenter.se/wp-content/uploads/2025/01/Kondensator-12µF-FloPr
+[240/250] Copeland Scroll ZMT-453 (380V 3 Faz)
+        DE: Copeland Scroll ZMT-453 (380 V, 3 Phasen)
+        >> ok: https://www.risto-shop.de/media/image/product/1173/lg/copeland-scroll-kompressor
+[241/250] Embraco EME6210K-C
+        DE: Embraco EME6210K-C
+        >> ok: https://www.erba-kaelte.de/images/Scroll-2-p-3200.jpeg
+[242/250] Embraco NJX2219GS (R404A, 3 Faz)
+        DE: Embraco NJX2219GS (R404A, 3 Phasen)
+        >> failed: https://kruff.se/images/zoom/njx2219gs-kompressorembraconjx2219gsr404a50-60hz38c
+[243/250] Embraco FF 8.5 HBK (R134a)
+        DE: Embraco FF 8.5 HBK (R134a)
+        >> ok: https://yedepa.com/image/cache/catalog/Yeniler/embraco-buzdolabi-motoru-ff-8-5-h
+[244/250] Zingfa Scroll Kompresör 3.5 HP 380V R404A
+        DE: Zingfa Scroll-Kompressor 3,5 PS 380 V R404A
+        >> ok: https://s.alicdn.com/@sc04/kf/H37ef3ef9dc6d4fe7b988509a1c6ca194F.png_960x960q80.
+[245/250] Scroll Kompresör 6 HP
+        DE: Scrollkompressor 6 PS
+        >> failed: https://areacooling.com/areacademy/wp-content/uploads/2024/05/scroll-compressor-
+[246/250] DRC Rezistanslı Çarpma Soğuk Oda Kapısı 180×80 cm (Isıtıcılı
+        DE: DRC-Widerstands-Schlag-Kühlraumtür 180×80 cm (mit Heizung + Schwe
+        >> ok: https://schuetz-kuehlraumtueren.de/wp-content/uploads/2018/07/KTS3-1.jpg
+[247/250] DRC Rezistanslı Çarpma Soğuk Oda Kapısı 190×90 cm (Isıtıcılı
+        DE: DRC-beständige, schlagfeste Kühlraumtür 190×90 cm (mit Heizung + 
+        >> ok: https://schuetz-kuehlraumtueren.de/wp-content/uploads/2018/07/KTS3-1.jpg
+[248/250] Sandviç Panel 100mm 1×4 Metre (Birinci Kalite, Beyaz)
+        DE: Sandwichplatte 100 mm 1×4 Meter (erste Qualität, weiß)
+        >> ok: https://api.sig.biz/media/oo4j4f5d/packaging-plant-extrusion-line.jpg?width=437&
+[249/250] Elektrosan Çift Kapı Buzdolabı (-18°C / +2°C, DRC Dijital Ek
+        DE: Elektrosan Doppeltür-Kühlschrank (-18 °C / +2 °C, DRC-Digitalanze
+        >> ok: https://www.gastprodo.de/media/catalog/product/cache/b18b43b9993d8c4bca5ef7fc42e
+[250/250] Elektrosan Dikey Tek Kapı Pozitif Buzdolabı (+2/+8°C, TFT Ek
+        DE: Elektrosan Vertikaler eintüriger positiver Kühlschrank (+2/+8°C, 
+        >> ok: https://www.speakerty.com/wp-content/uploads/2020/05/le-loup-et-l-agneau-jean-de
+
+Writing Excel output...
+
+======================================================================
+  Images downloaded : 226
+  Failed/not found  : 24
+  Excel saved       : C:\Users\satog\OneDrive\Desktop\ecommercefork\export\urunler_mit_bildern_DE.xlsx
+  Images folder     : C:\Users\satog\OneDrive\Desktop\ecommercefork\export\product-images
+DONE.

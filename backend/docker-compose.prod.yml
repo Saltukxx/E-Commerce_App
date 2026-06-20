@@ -9,8 +9,20 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
       PORT: 3000
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      ALLOW_UNPAID_ORDERS: ${ALLOW_UNPAID_ORDERS:-true}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      STRIPE_ONBOARD_REFRESH_URL: ${STRIPE_ONBOARD_REFRESH_URL:-}
+      STRIPE_ONBOARD_RETURN_URL: ${STRIPE_ONBOARD_RETURN_URL:-}
+      PLATFORM_FEE_PERCENT: ${PLATFORM_FEE_PERCENT:-0}
+      STRIPE_MULTI_VENDOR: ${STRIPE_MULTI_VENDOR:-false}
+      DEPLOY_CONTAINER: ${DEPLOY_CONTAINER:-ecommerce-backend}
     ports:
       - "${API_PORT:-3001}:3000"
+    volumes:
+      - product_images:/app/uploads
 
   db:
     image: postgres:16-alpine
@@ -24,3 +36,4 @@ services:
 
 volumes:
   durmus_pg_data:
+  product_images:

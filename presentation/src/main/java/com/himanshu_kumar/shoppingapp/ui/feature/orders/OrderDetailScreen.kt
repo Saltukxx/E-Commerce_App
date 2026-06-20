@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.navigation.NavOrderDetail
 import com.himanshu_kumar.shoppingapp.utils.CurrencyUtils
+import com.himanshu_kumar.shoppingapp.utils.OrderStatusLabels
 
 @Composable
 fun OrderDetailScreen(
@@ -66,6 +67,13 @@ fun OrderDetailScreen(
             text = stringResource(R.string.order_id, order.id),
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
         )
+        if (order.storeName.isNotBlank()) {
+            Text(
+                text = stringResource(R.string.sold_by, order.storeName),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
         Text(
             text = order.orderDate,
             style = MaterialTheme.typography.bodyMedium,
@@ -73,7 +81,7 @@ fun OrderDetailScreen(
         )
         Spacer(Modifier.size(8.dp))
         Text(
-            text = order.status,
+            text = OrderStatusLabels.label(order.status),
             color = when (order.status) {
                 "Delivered" -> Color(0xFF2E7D32)
                 "Pending" -> colorResource(R.color.orange_color)
@@ -118,7 +126,7 @@ fun OrderDetailScreen(
                         )
                     }
                     Text(
-                        text = CurrencyUtils.formatPrice(line.price * line.quantity),
+                        text = CurrencyUtils.formatEuroCentsFromTotal(line.price * line.quantity),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }

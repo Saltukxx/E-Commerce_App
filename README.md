@@ -1,92 +1,98 @@
-<h1 align="center">📱 E-Commerce Android Application</h1>
+# DurmusBaba — HVAC Marketplace
 
-<h3>🛠 Built With:</h3>
-<ul>
-  <li><img src="https://img.icons8.com/color/48/000000/kotlin.png" width="24"/> <b>Kotlin</b></li>
-  <li><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjC97Z8BResg5dlPqczsRCFhP6zewWX0X0e7fVPG-G7PuUZwwZVsi9OPoqJYkgqT2h0FI95SsmWzVEgpt8b8HAqFiIxZ98TFtY4lE0b8UrtVJ2HrJebRwl6C9DslsQDl9KnBIrdHS6LtkY/s1600/jetpack+compose+icon_RGB.png" width="24"/> <b>Jetpack Compose</b> (Modern UI Toolkit)</li>
-  <li><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/Ktor_icon.png" width="24"/> <b>Ktor</b> (HTTP Client)</li>
-  <li><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxhaNVZNWM1OA0gXGeuw6vj41qVpmZjY6Utw&s" width="24"/> <b>Koin</b> (Dependency Injection Framework)</li>
-  <li><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE8luHMhZ2AFhykjAgeP9SUJNJn5MvUeqlzg&s" width="24"/> <b>Clean Architecture</b> (with abstraction layers)</li>
-</ul>
+German-language Android marketplace for HVAC products (compressors, refrigeration, accessories) with a NestJS + PostgreSQL backend.
 
-<hr>
+## Repository layout
 
-<h3>📖 Project Overview:</h3>
-<p>
-This E-commerce Android application provides a seamless shopping experience. 
-Users can sign up or log in, browse a variety of products categorized into different sections, 
-add products to their cart, review past orders, and manage their profile. 
-The app uses modern development techniques such as Clean Architecture, 
-Kotlin programming language, Jetpack Compose for UI, Ktor for network communication, and Koin for dependency injection.
-Backend data is fetched using the <a href="https://api.escuelajs.co" target="_blank">Platzi Fake Store API</a>.
-</p>
+| Path | Purpose |
+|------|---------|
+| `presentation/` | Android app (Jetpack Compose, Koin, Coil) |
+| `domain/` | Use cases and interfaces |
+| `data/` | Ktor HTTP client and repositories |
+| `backend/` | NestJS API, Prisma, Docker deploy |
+| `web/` | Next.js web storefront, admin panel, vendor portal |
+| `nginx/` | Production reverse proxy config |
+| `docker-compose.prod.yml` | Full stack: API + web + nginx + PostgreSQL |
+| `docs/OPS_RUNBOOK.md` | Deploy, migrations, smoke tests |
+| `docs/ADMIN_OPS.md` | Admin HTTP workflows |
+| `docs/IMAGE_PIPELINE.md` | Product image audit/fix/deploy |
 
-<h3>⭐ Features:</h3>
-<ul>
-  <li>User Authentication (Login/SignUp)</li>
-  <li>Browse Products by Categories</li>
-  <li>View Detailed Product Information</li>
-  <li>Manage Cart and Checkout Process</li>
-  <li>Track Previous and Recent Orders</li>
-  <li>Update and Manage User Profile</li>
-</ul>
+## Quick start (Android)
 
-<h3>🛠 Project Setup:</h3>
-<ul>
-  <li>Minimum SDK: 21</li>
-  <li>Target SDK: 34</li>
-  <li>Gradle Version: 8.0+</li>
-  <li>Built with Android Studio Giraffe or newer</li>
-</ul>
+1. Open the project in Android Studio (Giraffe+).
+2. API base URL defaults in `gradle.properties`:
 
-<hr>
+   `API_BASE_URL=http://167.172.168.81:3001/api/v1`
 
-<h3>📸 Screenshots:</h3>
+3. Build debug APK:
 
-<table>
-<tr>
-  <th>Login Screen</th>
-  <th>Signup Screen</th>
-  <th>Home Screen</th>
-  <th>Order Screen</th>
-</tr>
-<tr>
-  <td><img src="screenshots/login_screen.png" alt="Login Screen" width="200"/></td>
-  <td><img src="screenshots/signup_screen.png" alt="Signup Screen" width="200"/></td>
-  <td><img src="screenshots/home_screen.png" alt="Home Screen" width="200"/></td>
-  <td><img src="screenshots/orders_screen.png" alt="Orders Screen" width="200"/></td>
-</tr>
-</table>
+   ```bash
+   ./gradlew :presentation:assembleDebug
+   ```
 
-<br/>
+4. Unit tests:
 
-<table>
-<tr>
-  <th>Profile Screen</th>
-  <th>Product Detail Screen</th>
-  <th>Cart Screen</th>
-</tr>
-<tr>
-  <td><img src="screenshots/profile_screen.png" alt="Profile Screen" width="200"/></td>
-  <td><img src="screenshots/product_details_screen.png" alt="Product Details Screen" width="200"/></td>
-  <td><img src="screenshots/cart_screen.png" alt="Cart Screen" width="200"/></td>
-</tr>
-</table>
+   ```bash
+   ./gradlew :presentation:testDebugUnitTest
+   ```
 
-<hr>
+## Quick start (backend)
 
-<h3>🎯 Learning Outcomes:</h3>
-<ul>
-  <li>Learned how <b>HTTP Requests</b> work using Ktor.</li>
-  <li>Understood <b>API Integration</b> with Android UI (Jetpack Compose).</li>
-  <li>Applied <b>Dependency Injection</b> using Koin.</li>
-  <li>Followed <b>Clean Architecture</b> principles with abstraction layers.</li>
-  <li>Abstracted business logic away from UI for better maintainability and scalability.</li>
-</ul>
+```bash
+cd backend
+cp .env.production.example .env
+npm install
+npx prisma migrate deploy
+npm run start:dev
+```
 
+See [backend/README.md](backend/README.md) for production Docker deployment.
 
-<h3>▶️ Demo Video :</h3>
-<p><a href="https://ik.imagekit.io/zgqm2s7uc/e-commerce_app_demo.mp4?updatedAt=1745834559963" target="_blank"><b>Watch Demo Video</b></a></p>
+## Quick start (web)
 
-<hr>
+```bash
+cd web
+cp .env.local.example .env.local
+npm install
+npm run dev
+```
 
+Open [http://localhost:3000](http://localhost:3000). Set `NEXT_PUBLIC_API_URL` to your NestJS API (default `http://localhost:3000/api/v1` when using backend on port 3000).
+
+### Web roles
+
+| Role | Login | Area |
+|------|-------|------|
+| Customer | any registered user | Storefront (`/`, `/katalog`, cart, orders) |
+| Admin | `admin@durmusbaba.com` (seed) | `/admin/*` |
+| Vendor | approved seller account | `/vendor/*` |
+
+## Full stack deploy (Docker)
+
+From repo root:
+
+```bash
+cp backend/.env.production.example .env
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+Nginx serves the web app on port 80, proxies `/api/v1` and `/uploads` to the API.
+
+## Checkout modes
+
+- **B2B (default):** `ALLOW_UNPAID_ORDERS=true` — Android places unpaid orders (`STRIPE_PAYMENTS_ENABLED=false`).
+- **Stripe:** Set Stripe env vars, `ALLOW_UNPAID_ORDERS=false`, enable Stripe SDK in `presentation/build.gradle.kts`, set `STRIPE_PAYMENTS_ENABLED=true`.
+
+## CI
+
+GitHub Actions runs backend unit tests, web lint/build, and Android presentation unit tests on push/PR (`.github/workflows/ci.yml`).
+
+## Production server
+
+- API: `http://167.172.168.81:3001/api/v1`
+- Static uploads: `/uploads/products/{Lagercode}.jpg`
+- Preferred Docker container: `ecommerce-backend` (see ops runbook)
+
+## License
+
+Private / internal project.

@@ -12,6 +12,7 @@ data class NavOrderDetail(
     val status: String,
     val totalAmount: Double,
     val userId: Int,
+    val storeName: String = "",
 )
 
 @Serializable
@@ -33,6 +34,7 @@ fun OrdersData.toNavOrderDetail(): NavOrderDetail =
         status = status,
         totalAmount = totalAmount,
         userId = userId,
+        storeName = storeName,
     )
 
 fun OrderProductItem.toNavLine(): NavOrderLine =

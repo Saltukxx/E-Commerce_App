@@ -38,6 +38,7 @@ import com.himanshu_kumar.shoppingapp.navigation.LoginScreen
 import com.himanshu_kumar.shoppingapp.navigation.SettingsScreen
 import com.himanshu_kumar.shoppingapp.navigation.UserAddressRoute
 import com.himanshu_kumar.shoppingapp.navigation.UserAddressWrapper
+import com.himanshu_kumar.shoppingapp.navigation.VendorHubScreen
 import com.himanshu_kumar.shoppingapp.navigation.WishlistScreen
 import com.himanshu_kumar.shoppingapp.ui.feature.user_address.USER_ADDRESS_SCREEN
 import org.koin.androidx.compose.koinViewModel
@@ -85,6 +86,7 @@ fun ProfileScreen(
                         navController.navigate(UserAddressRoute(UserAddressWrapper(state.address)))
                     },
                     onWishlistClick = { navController.navigate(WishlistScreen) },
+                    onVendorHubClick = { navController.navigate(VendorHubScreen) },
                     onSettingsClick = { navController.navigate(SettingsScreen) },
                     onLogoutClick = viewModel::logout,
                 )
@@ -115,6 +117,7 @@ private fun ProfileContent(
     isLoggingOut: Boolean,
     onAddressClick: () -> Unit,
     onWishlistClick: () -> Unit,
+    onVendorHubClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onLogoutClick: () -> Unit,
 ) {
@@ -172,6 +175,12 @@ private fun ProfileContent(
                 title = stringResource(R.string.profile_address),
                 subtitle = address?.toString() ?: stringResource(R.string.profile_address_empty),
                 onClick = onAddressClick,
+            ),
+            DetailsListItem(
+                icon = painterResource(id = R.drawable.ic_market),
+                title = stringResource(R.string.vendor_hub_title),
+                subtitle = stringResource(R.string.vendor_hub_profile_subtitle),
+                onClick = onVendorHubClick,
             ),
             DetailsListItem(
                 icon = painterResource(id = R.drawable.ic_wishlist),

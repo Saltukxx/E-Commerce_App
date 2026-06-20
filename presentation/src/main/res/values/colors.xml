@@ -1,21 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
+
     <color name="navy_900">#FF0A1628</color>
+
     <color name="navy_800">#FF0F2847</color>
+
     <color name="navy_700">#FF152B45</color>
+
     <color name="navy_light">#FFE8EEF4</color>
+
     <color name="black">#FF000000</color>
+
     <color name="white">#FFFFFFFF</color>
-    <color name="button_color">#0A1628</color>
+
+    <color name="button_color">#001529</color>
+
+    <color name="stitch_primary">#001529</color>
+
     <color name="orange_color">#2D4A6E</color>
+
+    <color name="home_background">#FFF9F9F9</color>
+
     <color name="splash_background">#FFFFFFFF</color>
 
+
+
+    <!-- Stitch Industrial Trust tokens -->
+
+    <color name="secondary_container">#FFD6E4EF</color>
+
+    <color name="on_secondary_container">#FF59666F</color>
+
+    <color name="surface_container_low">#FFF3F3F3</color>
+
+    <color name="surface_container">#FFEEEEEE</color>
+
+    <color name="surface_container_high">#FFE8E8E8</color>
+
+    <color name="on_surface_variant">#FF43474D</color>
+
+    <color name="outline">#FF74777D</color>
+
+    <color name="outline_variant">#FFC4C6CD</color>
+
+
+
     <!-- Home category row: light tints, stable rotation by id -->
+
     <color name="category_tile_0">#FFE8EEF4</color>
+
     <color name="category_tile_1">#FFDBE4EE</color>
+
     <color name="category_tile_2">#FFD0DCE8</color>
+
     <color name="category_tile_3">#FFF0F3F6</color>
+
     <color name="category_tile_4">#FFE2EBF2</color>
+
     <color name="category_tile_5">#FFD6E0EA</color>
-    <color name="category_tile_on">#FF0A1628</color>
+
+    <color name="category_tile_on">#FF001529</color>
+
 </resources>
+

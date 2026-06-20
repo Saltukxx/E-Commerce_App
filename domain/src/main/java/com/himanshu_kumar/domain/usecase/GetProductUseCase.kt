@@ -7,5 +7,7 @@ class GetProductUseCase(private val repository: ProductRepository) {
         category: Int?,
         limit: Int? = null,
         skip: Int? = null,
-    ) = repository.getProducts(category, limit, skip)
+        query: String? = null,
+        storeSlug: String? = null,
+    ) = repository.getProducts(category, limit, skip, query, storeSlug)
 }

@@ -11,27 +11,25 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CategoryItemsListViewModel(
-    private val useCase: GetProductUseCase
+    private val useCase: GetProductUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<CategoryItemsListUIEvents>(CategoryItemsListUIEvents.Loading)
     val uiState: StateFlow<CategoryItemsListUIEvents> = _uiState
 
     private var apiCategory: Int? = null
+    private var storeSlug: String? = null
     private var nextSkip = 0
     private val loaded = ArrayList<ProductListModel>()
 
-    fun getProductsWithCategory(category: Int) {
+    fun getProductsWithCategory(category: Int, storeSlug: String? = null) {
         apiCategory = if (category == ALL_PRODUCTS_CATEGORY_ID) null else category
+        this.storeSlug = storeSlug?.takeIf { it.isNotBlank() }
         nextSkip = 0
         loaded.clear()
         loadPage(isFirstPage = true)
     }
 
-    /**
-     * Loads the next [PAGE_SIZE] products (append). No-op if not in success state, no more pages, or already loading.
-     * Search/filter UIs should only call this when the search field is empty so paging matches server order.
-     */
     fun loadNextPage() {
         val current = _uiState.value
         if (current !is CategoryItemsListUIEvents.Success) return
@@ -49,7 +47,15 @@ class CategoryItemsListViewModel(
                     _uiState.value = s.copy(isLoadingMore = true, loadMoreError = null)
                 }
             }
-            when (val result = useCase.execute(apiCategory, PAGE_SIZE, nextSkip)) {
+            when (
+                val result = useCase.execute(
+                    apiCategory,
+                    PAGE_SIZE,
+                    nextSkip,
+                    query = null,
+                    storeSlug = storeSlug,
+                )
+            ) {
                 is ResultWrapper.Success -> {
                     val page = result.value
                     if (isFirstPage) {

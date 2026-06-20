@@ -16,3 +16,6 @@
 .cxx
 local.properties
 .codex/
+test_write.tmp
+.~lock.*
+backend/uploads/

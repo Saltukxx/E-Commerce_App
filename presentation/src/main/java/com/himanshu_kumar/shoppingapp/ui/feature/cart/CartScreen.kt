@@ -140,13 +140,26 @@ fun CartScreen(
                     enter = fadeIn()
                 ) {
                     LazyColumn {
-                        items(cartItems.value){item->
-                            CartItem(
-                                item,
-                                onIncrement = { viewModel.incrementQuantity(it) },
-                                onDecrement = { viewModel.decrementQuantity(it) },
-                                onRemove = { viewModel.removeItem(it) }
-                            )
+                        val grouped = cartItems.value.groupBy { it.storeId }
+                        grouped.forEach { (_, items) ->
+                            val storeName = items.firstOrNull()?.storeName.orEmpty()
+                            if (storeName.isNotBlank()) {
+                                item {
+                                    Text(
+                                        text = storeName,
+                                        style = MaterialTheme.typography.titleSmall,
+                                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp),
+                                    )
+                                }
+                            }
+                            items(items) { item ->
+                                CartItem(
+                                    item,
+                                    onIncrement = { viewModel.incrementQuantity(it) },
+                                    onDecrement = { viewModel.decrementQuantity(it) },
+                                    onRemove = { viewModel.removeItem(it) },
+                                )
+                            }
                         }
                     }
                 }
@@ -158,17 +171,25 @@ fun CartScreen(
                            .padding(16.dp)
                    ){
                        Text(
-                           text = stringResource(R.string.total),
+                           text = stringResource(R.string.subtotal),
                            style = MaterialTheme.typography.titleSmall,
                            color = Color.LightGray
                        )
                        Spacer(Modifier.weight(1f))
                        Text(
-                           text = CurrencyUtils.formatPrice(cartItems.value.sumOf { it.price * it.quantity }),
+                           text = CurrencyUtils.formatEuroCentsFromTotal(
+                               cartItems.value.sumOf { it.price.toDouble() * it.quantity },
+                           ),
                            style = MaterialTheme.typography.titleSmall,
                            color = Color.Black
                        )
                    }
+                   Text(
+                       text = stringResource(R.string.shipping_per_seller_note),
+                       style = MaterialTheme.typography.bodySmall,
+                       color = Color.Gray,
+                       modifier = Modifier.padding(horizontal = 16.dp),
+                   )
                 Spacer(Modifier.size(15.dp))
                 if(shouldShowList)
                 {
@@ -240,7 +261,10 @@ fun CartItem(
             )
             Spacer(modifier = Modifier.size(4.dp))
             Text(
-                text = CurrencyUtils.formatPrice(item.price),
+                text = CurrencyUtils.formatProductPriceCentsForDisplay(
+                    item.price,
+                    stringResource(R.string.price_on_request),
+                ),
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
                 color = MaterialTheme.colorScheme.primary
             )

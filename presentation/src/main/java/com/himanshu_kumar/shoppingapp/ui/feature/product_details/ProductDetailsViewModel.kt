@@ -10,6 +10,7 @@ import com.himanshu_kumar.domain.usecase.AddToWishlistUseCase
 import com.himanshu_kumar.domain.usecase.GetProductUseCase
 import com.himanshu_kumar.domain.usecase.GetWishlistUseCase
 import com.himanshu_kumar.domain.usecase.RemoveFromWishlistUseCase
+import com.himanshu_kumar.domain.usecase.SubmitPriceInquiryUseCase
 import com.himanshu_kumar.shoppingapp.UserSession
 import com.himanshu_kumar.shoppingapp.model.UiProductModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,7 @@ class ProductDetailsViewModel(
     private val getWishlistUseCase: GetWishlistUseCase,
     private val addToWishlistUseCase: AddToWishlistUseCase,
     private val removeFromWishlistUseCase: RemoveFromWishlistUseCase,
+    private val submitPriceInquiryUseCase: SubmitPriceInquiryUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow<ProductDetailsState>(ProductDetailsState.Nothing)
     val state = _state
@@ -38,6 +40,24 @@ class ProductDetailsViewModel(
 
     fun acknowledgeState() {
         _state.value = ProductDetailsState.Nothing
+    }
+
+    fun submitPriceInquiry(productId: Int) {
+        if (userId == 0) {
+            _state.value = ProductDetailsState.Error("Please log in first")
+            return
+        }
+        viewModelScope.launch {
+            _state.value = ProductDetailsState.Loading
+            when (val result = submitPriceInquiryUseCase.execute(productId)) {
+                is ResultWrapper.Success -> {
+                    _state.value = ProductDetailsState.InquirySent(result.value)
+                }
+                is ResultWrapper.Failure -> {
+                    _state.value = ProductDetailsState.Error(result.message)
+                }
+            }
+        }
     }
 
     fun addProductToCart(product: UiProductModel, navigateToCheckout: Boolean) {
@@ -142,5 +162,7 @@ sealed class ProductDetailsState {
     data object Loading : ProductDetailsState()
     data object Nothing : ProductDetailsState()
     data class Success(val message: String, val navigateToCheckout: Boolean = false) : ProductDetailsState()
+    /** Price inquiry recorded; [message] from API. */
+    data class InquirySent(val message: String) : ProductDetailsState()
     data class Error(val message: String) : ProductDetailsState()
 }

@@ -5,13 +5,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class OrdersListResponse(
-    val data :List<OrderListData>,
-    val msg:String
-){
-    fun toDomainResponse():OrdersListModel{
+    val data: List<OrderGroupListData> = emptyList(),
+    val msg: String = "",
+) {
+    fun toDomainResponse(): OrdersListModel {
         return OrdersListModel(
-            data = data.map{it.toDomainResponse()},
-            msg = msg
+            data = data.map { it.toDomain() },
+            msg = msg,
         )
     }
 }

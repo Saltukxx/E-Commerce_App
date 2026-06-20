@@ -39,13 +39,14 @@ fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel()
 ){
     val loginState = viewModel.loginState.collectAsState()
+    val errorMessage = (loginState.value as? LoginState.Error)?.message
     Column(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        when(val state = loginState.value){
+        when(loginState.value){
             is LoginState.Success -> {
                 LaunchedEffect(loginState.value) {
                     navController.navigate(HomeScreen) {
@@ -53,15 +54,13 @@ fun LoginScreen(
                     }
                 }
             }
-            is LoginState.Error -> {
-                Text(text = state.message)
-            }
             is LoginState.Loading -> {
                 CircularProgressIndicator()
                 Text(text = stringResource(R.string.loading))
             }
             else ->{
                 LoginContent(
+                    errorMessage = errorMessage,
                     onSignInClick = { email, password ->
                         viewModel.login(email, password)
                     },
@@ -76,6 +75,7 @@ fun LoginScreen(
 
 @Composable
 fun LoginContent(
+    errorMessage: String? = null,
     onSignInClick:(String, String) -> Unit,
     onRegisterClick:()->Unit
 ){
@@ -116,6 +116,16 @@ fun LoginContent(
             singleLine = true,
             visualTransformation = PasswordVisualTransformation()
         )
+        if (!errorMessage.isNullOrBlank()) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            )
+        }
         Button(
             onClick = {
                 onSignInClick(email.value, password.value)

@@ -37,13 +37,14 @@ fun RegisterScreen(
     viewModel: RegisterViewModel = koinViewModel()
 ){
     val registerState = viewModel.registerState.collectAsState()
+    val errorMessage = (registerState.value as? RegisterState.Error)?.message
     Column(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        when(val state = registerState.value){
+        when(registerState.value){
             is RegisterState.Success -> {
                 LaunchedEffect(registerState.value) {
                     navController.navigate(HomeScreen) {
@@ -51,15 +52,13 @@ fun RegisterScreen(
                     }
                 }
             }
-            is RegisterState.Error -> {
-                Text(text = state.message)
-            }
             is RegisterState.Loading -> {
                 CircularProgressIndicator()
                 Text(text = stringResource(R.string.loading))
             }
             else ->{
                 RegisterContent(
+                    errorMessage = errorMessage,
                     onRegisterClick = { email, password, name ->
                         viewModel.register(email, password, name)
                     },
@@ -74,6 +73,7 @@ fun RegisterScreen(
 
 @Composable
 fun RegisterContent(
+    errorMessage: String? = null,
     onRegisterClick:(String, String, String) -> Unit,
     onLoginClick:()->Unit
 ){
@@ -125,6 +125,16 @@ fun RegisterContent(
                 .padding(vertical = 8.dp),
             singleLine = true
         )
+        if (!errorMessage.isNullOrBlank()) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            )
+        }
         Button(
             onClick = {
                 onRegisterClick(email.value, password.value, name.value)

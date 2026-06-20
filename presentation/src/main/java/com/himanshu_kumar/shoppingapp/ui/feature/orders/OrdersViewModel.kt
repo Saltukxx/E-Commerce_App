@@ -2,7 +2,7 @@ package com.himanshu_kumar.shoppingapp.ui.feature.orders
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.himanshu_kumar.domain.model.OrdersData
+import com.himanshu_kumar.domain.model.OrderGroupModel
 import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.usecase.OrderListUseCase
 import com.himanshu_kumar.shoppingapp.AppSession
@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class OrdersViewModel(
-   private val orderListUseCase: OrderListUseCase,
-    private val appSession: AppSession
-):ViewModel() {
+    private val orderListUseCase: OrderListUseCase,
+    private val appSession: AppSession,
+) : ViewModel() {
 
     private val _orderState = MutableStateFlow<OrderEvent>(OrderEvent.Loading)
     val orderState = _orderState
@@ -20,32 +20,36 @@ class OrdersViewModel(
     val userId = appSession.getUser().toLong()
 
     init {
-        getOrderList()
+        loadOrders(showFullscreenLoading = true)
     }
 
-    fun filterOrders(list:List<OrdersData>,status:String):List<OrdersData>{
-        val filteredList = list.filter { it.status == status }
-        return filteredList
+    fun refresh() {
+        loadOrders(showFullscreenLoading = false)
     }
 
+    fun retry() {
+        loadOrders(showFullscreenLoading = true)
+    }
 
-    private fun getOrderList() {
+    private fun loadOrders(showFullscreenLoading: Boolean) {
         viewModelScope.launch {
-            when(val result = orderListUseCase.execute(userId)){
-                is ResultWrapper.Success ->{
-                    val data = result.value
-                    _orderState.value = OrderEvent.Success(data.data)
+            if (showFullscreenLoading) {
+                _orderState.value = OrderEvent.Loading
+            }
+            when (val result = orderListUseCase.execute(userId)) {
+                is ResultWrapper.Success -> {
+                    _orderState.value = OrderEvent.Success(result.value.data)
                 }
-                is ResultWrapper.Failure ->{
-                    _orderState.value = OrderEvent.Error(result.message)
+                is ResultWrapper.Failure -> {
+                    _orderState.value = OrderEvent.Error(result.message ?: "")
                 }
             }
         }
     }
 }
 
-sealed class OrderEvent{
-    data object Loading:OrderEvent()
-    data class Success(val data:List<OrdersData>):OrderEvent()
-    data class Error(val errorMsg:String):OrderEvent()
+sealed class OrderEvent {
+    data object Loading : OrderEvent()
+    data class Success(val data: List<OrderGroupModel>) : OrderEvent()
+    data class Error(val errorMsg: String) : OrderEvent()
 }

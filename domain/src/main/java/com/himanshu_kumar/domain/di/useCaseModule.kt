@@ -13,9 +13,17 @@ import com.himanshu_kumar.domain.usecase.LoginUseCase
 import com.himanshu_kumar.domain.usecase.LogoutUseCase
 import com.himanshu_kumar.domain.usecase.OrderListUseCase
 import com.himanshu_kumar.domain.usecase.PlaceOrderUseCase
+import com.himanshu_kumar.domain.usecase.CreateCheckoutSessionUseCase
+import com.himanshu_kumar.domain.usecase.GetCheckoutConfigUseCase
+import com.himanshu_kumar.domain.usecase.PollCheckoutStatusUseCase
 import com.himanshu_kumar.domain.usecase.RegisterUseCase
 import com.himanshu_kumar.domain.usecase.RemoveFromWishlistUseCase
+import com.himanshu_kumar.domain.usecase.SubmitPriceInquiryUseCase
+import com.himanshu_kumar.domain.usecase.GetStoreBySlugUseCase
+import com.himanshu_kumar.domain.usecase.GetStoresUseCase
+import com.himanshu_kumar.domain.usecase.SubmitStoreApplicationUseCase
 import com.himanshu_kumar.domain.usecase.UpdateQuantityUseCase
+import com.himanshu_kumar.domain.usecase.ValidateSessionUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {                   // a container where we define what classes can be injected
@@ -27,6 +35,9 @@ val useCaseModule = module {                   // a container where we define wh
     factory { DeleteProductUseCase(get()) }
     factory { CartSummaryUseCase(get()) }
     factory { PlaceOrderUseCase(get()) }
+    factory { GetCheckoutConfigUseCase(get()) }
+    factory { CreateCheckoutSessionUseCase(get()) }
+    factory { PollCheckoutStatusUseCase(get()) }
     factory { OrderListUseCase(get()) }
     factory { LoginUseCase(get()) }
     factory { RegisterUseCase(get()) }
@@ -35,4 +46,9 @@ val useCaseModule = module {                   // a container where we define wh
     factory { GetWishlistUseCase(get()) }
     factory { AddToWishlistUseCase(get()) }
     factory { RemoveFromWishlistUseCase(get()) }
+    factory { SubmitPriceInquiryUseCase(get()) }
+    factory { GetStoresUseCase(get()) }
+    factory { GetStoreBySlugUseCase(get()) }
+    factory { SubmitStoreApplicationUseCase(get()) }
+    factory { ValidateSessionUseCase(get()) }
 }

@@ -12,6 +12,10 @@ import com.himanshu_kumar.domain.repository.OrderRepository
 import com.himanshu_kumar.domain.repository.ProductRepository
 import com.himanshu_kumar.domain.repository.UserRepository
 import com.himanshu_kumar.domain.repository.WishlistRepository
+import com.himanshu_kumar.data.repository.CheckoutRepositoryImpl
+import com.himanshu_kumar.data.repository.StoreRepositoryImpl
+import com.himanshu_kumar.domain.repository.CheckoutRepository
+import com.himanshu_kumar.domain.repository.StoreRepository
 import org.koin.dsl.module
 
 
@@ -23,4 +27,6 @@ val repositoryModule = module {                             // where repositorie
     single<OrderRepository> { OrderRepositoryImpl(get()) }
     single<UserRepository> { UserRepositoryImpl(get()) }
     single<WishlistRepository> { WishlistRepositoryImpl(get()) }
+    single<StoreRepository> { StoreRepositoryImpl(get()) }
+    single<CheckoutRepository> { CheckoutRepositoryImpl(get()) }
 }

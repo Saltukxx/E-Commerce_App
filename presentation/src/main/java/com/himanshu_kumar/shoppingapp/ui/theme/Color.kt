@@ -2,7 +2,7 @@ package com.himanshu_kumar.shoppingapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Navy900 = Color(0xFF0A1628)
+val Navy900 = Color(0xFF001529)
 val Navy800 = Color(0xFF0F2847)
 val Navy700 = Color(0xFF152B45)
 val NavyLight = Color(0xFFE8EEF4)

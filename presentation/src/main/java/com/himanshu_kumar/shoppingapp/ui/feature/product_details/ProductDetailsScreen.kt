@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,6 +32,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -62,7 +64,9 @@ import com.himanshu_kumar.shoppingapp.navigation.CartSummaryScreen
 import com.himanshu_kumar.shoppingapp.navigation.CategoryItemsScreen
 import com.himanshu_kumar.shoppingapp.navigation.CategoryNavArgs
 import com.himanshu_kumar.shoppingapp.navigation.ProductDetails
+import com.himanshu_kumar.shoppingapp.navigation.navigateToStoreProfile
 import com.himanshu_kumar.shoppingapp.utils.CurrencyUtils
+import com.himanshu_kumar.shoppingapp.utils.ImageUrlUtils
 import com.himanshu_kumar.shoppingapp.ui.components.CompactProductCard
 import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalPagerApi::class)
@@ -74,6 +78,7 @@ fun ProductDetailsScreen(
 ) {
     val uiState = viewModel.state.collectAsState()
     val loading = remember { mutableStateOf(false) }
+    val showInquiryDialog = remember { mutableStateOf(false) }
     val context = LocalContext.current
     LaunchedEffect(product.categoryId, product.id) {
         viewModel.getSimilarProducts(product.categoryId, product.id)
@@ -117,7 +122,7 @@ fun ProductDetailsScreen(
                             modifier = Modifier.fillMaxSize()
                         ) { page ->
                             AsyncImage(
-                                model = product.images[page],
+                                model = ImageUrlUtils.cacheBust(product.images[page]),
                                 contentDescription = stringResource(R.string.product_image),
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier.fillMaxSize()
@@ -176,7 +181,27 @@ fun ProductDetailsScreen(
 
             item {
                 // 📝 Product Details
-                ProductDetailsContent(product = product, viewModel = viewModel)
+                ProductDetailsContent(
+                    product = product,
+                    viewModel = viewModel,
+                    onStoreClick = { slug, name ->
+                        navController.navigateToStoreProfile(slug, name)
+                    },
+                    onBuyNow = {
+                        if (product.price == 0) {
+                            showInquiryDialog.value = true
+                        } else {
+                            viewModel.addProductToCart(product, navigateToCheckout = true)
+                        }
+                    },
+                    onAddToCart = {
+                        if (product.price == 0) {
+                            showInquiryDialog.value = true
+                        } else {
+                            viewModel.addProductToCart(product, navigateToCheckout = false)
+                        }
+                    },
+                )
             }
 
             item {
@@ -216,6 +241,28 @@ fun ProductDetailsScreen(
                 }
             }
         }
+        if (showInquiryDialog.value) {
+            AlertDialog(
+                onDismissRequest = { showInquiryDialog.value = false },
+                title = { Text(stringResource(R.string.price_inquiry_title)) },
+                text = { Text(stringResource(R.string.price_inquiry_message)) },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            showInquiryDialog.value = false
+                            viewModel.submitPriceInquiry(product.id)
+                        },
+                    ) {
+                        Text(stringResource(R.string.price_inquiry_confirm))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showInquiryDialog.value = false }) {
+                        Text(stringResource(R.string.price_inquiry_cancel))
+                    }
+                },
+            )
+        }
     }
 
     // EFFECT for API Result
@@ -228,6 +275,16 @@ fun ProductDetailsScreen(
                 } else {
                     Toast.makeText(context, s.message, Toast.LENGTH_SHORT).show()
                 }
+                viewModel.acknowledgeState()
+            }
+
+            is ProductDetailsState.InquirySent -> {
+                loading.value = false
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.price_inquiry_sent),
+                    Toast.LENGTH_LONG,
+                ).show()
                 viewModel.acknowledgeState()
             }
 
@@ -289,7 +346,13 @@ fun SimilarProducts(
     }
 }
 @Composable
-fun ProductDetailsContent(product: UiProductModel, viewModel: ProductDetailsViewModel) {
+fun ProductDetailsContent(
+    product: UiProductModel,
+    viewModel: ProductDetailsViewModel,
+    onStoreClick: ((slug: String, name: String) -> Unit)? = null,
+    onBuyNow: () -> Unit,
+    onAddToCart: () -> Unit,
+) {
     Column(modifier = Modifier.padding(16.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -301,9 +364,25 @@ fun ProductDetailsContent(product: UiProductModel, viewModel: ProductDetailsView
                 modifier = Modifier.weight(1f)
             )
             Text(
-                text = CurrencyUtils.formatPrice(product.price),
+                text = CurrencyUtils.formatProductPriceCentsForDisplay(
+                    product.price,
+                    stringResource(R.string.price_on_request),
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
+            )
+        }
+        if (product.storeName.isNotBlank()) {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.sold_by, product.storeName),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = if (onStoreClick != null && product.storeSlug.isNotBlank()) {
+                    Modifier.clickable { onStoreClick(product.storeSlug, product.storeName) }
+                } else {
+                    Modifier
+                },
             )
         }
         Spacer(Modifier.height(16.dp))
@@ -316,17 +395,25 @@ fun ProductDetailsContent(product: UiProductModel, viewModel: ProductDetailsView
             modifier = Modifier.fillMaxWidth()
         ) {
             Button(
-                onClick = { viewModel.addProductToCart(product, navigateToCheckout = true) },
+                onClick = onBuyNow,
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(8.dp)),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.button_color))
             ) {
-                Text(stringResource(R.string.buy_now))
+                Text(
+                    stringResource(
+                        if (product.price == 0) {
+                            R.string.price_inquiry_title
+                        } else {
+                            R.string.buy_now
+                        },
+                    ),
+                )
             }
             Spacer(Modifier.width(8.dp))
             IconButton(
-                onClick = { viewModel.addProductToCart(product, navigateToCheckout = false) },
+                onClick = onAddToCart,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_order),

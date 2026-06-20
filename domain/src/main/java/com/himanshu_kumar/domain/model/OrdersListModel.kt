@@ -1,6 +1,6 @@
 package com.himanshu_kumar.domain.model
 
 data class OrdersListModel(
-    val data:List<OrdersData>,
-    val msg:String
+    val data: List<OrderGroupModel>,
+    val msg: String,
 )

@@ -15,4 +15,9 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run prisma:seed && npm run seed:catalogue && npm run start:prod"]
+# Create uploads directory for static product images
+RUN mkdir -p /app/uploads/products
+
+# Do not run seed:catalogue on every boot — it upserts products and used to reset every price to 0.
+# Catalogue: run once when bootstrapping (`npm run seed:catalogue`) or after rebuild, not on each restart.
+CMD ["sh", "-c", "npm run db:migrate:deploy && npm run start:prod"]

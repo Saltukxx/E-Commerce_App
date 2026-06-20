@@ -1,14 +1,13 @@
 package com.himanshu_kumar.shoppingapp.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,13 +27,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.himanshu_kumar.domain.model.ProductListModel
+import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.utils.CurrencyUtils
+import com.himanshu_kumar.shoppingapp.utils.ImageUrlUtils
 
 private const val COMPACT_THUMB_MAX_PX = 384
 private const val LIST_THUMB_MAX_PX = 336
@@ -44,11 +48,12 @@ fun CompactProductCard(
     product: ProductListModel,
     onClick: (ProductListModel) -> Unit,
     modifier: Modifier = Modifier,
+    onStoreClick: ((slug: String, name: String) -> Unit)? = null,
 ) {
     Card(
         modifier = modifier
             .width(152.dp)
-            .height(208.dp)
+            .height(216.dp)
             .clickable { onClick(product) },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -75,6 +80,22 @@ fun CompactProductCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
+                if (product.storeName.isNotBlank()) {
+                    Text(
+                        text = stringResource(R.string.sold_by, product.storeName),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.85f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = if (onStoreClick != null && product.storeSlug.isNotBlank()) {
+                            Modifier.clickable {
+                                onStoreClick(product.storeSlug, product.storeName)
+                            }
+                        } else {
+                            Modifier
+                        },
+                    )
+                }
                 Text(
                     text = product.title,
                     style = MaterialTheme.typography.bodyMedium,
@@ -85,11 +106,16 @@ fun CompactProductCard(
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = CurrencyUtils.formatPrice(product.price),
+                    text = CurrencyUtils.formatProductPriceCentsForDisplay(
+                        product.price,
+                        stringResource(R.string.price_on_request),
+                    ),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(top = 4.dp),
                 )
             }
         }
@@ -101,11 +127,16 @@ fun ProductListCard(
     product: ProductListModel,
     onClick: (ProductListModel) -> Unit,
     modifier: Modifier = Modifier,
+    onStoreClick: ((slug: String, name: String) -> Unit)? = null,
+    showSoldBy: Boolean = true,
 ) {
+    val priceLabel = CurrencyUtils.formatProductPriceCentsForDisplay(
+        product.price,
+        stringResource(R.string.price_on_request),
+    )
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(142.dp)
             .clickable { onClick(product) },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -114,21 +145,20 @@ fun ProductListCard(
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.Top,
         ) {
             ProductImage(
                 product = product,
                 modifier = Modifier
-                    .size(112.dp)
+                    .size(104.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 maxEdgePx = LIST_THUMB_MAX_PX,
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = product.category.name,
@@ -137,29 +167,48 @@ fun ProductListCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
+                if (showSoldBy && product.storeName.isNotBlank()) {
+                    Text(
+                        text = stringResource(R.string.sold_by, product.storeName),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = if (onStoreClick != null && product.storeSlug.isNotBlank()) {
+                            Modifier.clickable {
+                                onStoreClick(product.storeSlug, product.storeName)
+                            }
+                        } else {
+                            Modifier
+                        },
+                    )
+                }
                 Text(
                     text = product.title,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(top = 2.dp),
-                )
-                Text(
-                    text = product.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.66f),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(top = 4.dp),
                 )
-                Spacer(modifier = Modifier.weight(1f))
+                if (product.description.isNotBlank()) {
+                    Text(
+                        text = product.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = CurrencyUtils.formatPrice(product.price),
-                    style = MaterialTheme.typography.titleSmall,
+                    text = priceLabel,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Bold,
                     maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -172,7 +221,7 @@ private fun ProductImage(
     modifier: Modifier = Modifier,
     maxEdgePx: Int = 512,
 ) {
-    val imageUrl = product.images.firstOrNull()
+    val imageUrl = ImageUrlUtils.cacheBust(product.images.firstOrNull())
     val context = LocalContext.current
     val model = remember(imageUrl, maxEdgePx) {
         if (imageUrl.isNullOrBlank()) {
@@ -197,11 +246,28 @@ private fun ProductImage(
                 fontWeight = FontWeight.SemiBold,
             )
         } else {
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = model,
                 contentDescription = product.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
+                loading = {
+                    Text(
+                        text = "…",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                    )
+                },
+                error = {
+                    Image(
+                        painter = painterResource(R.drawable.ic_product_placeholder),
+                        contentDescription = product.title,
+                        contentScale = ContentScale.Inside,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(12.dp),
+                    )
+                },
             )
         }
     }

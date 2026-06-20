@@ -10,7 +10,9 @@ class ProductRepositoryImpl(private val networkService: NetworkService) : Produc
         category: Int?,
         limit: Int?,
         skip: Int?,
+        query: String?,
+        storeSlug: String?,
     ): ResultWrapper<List<ProductListModel>> {
-        return networkService.getProducts(category, limit, skip)
+        return networkService.getProducts(category, limit, skip, query, storeSlug)
     }
 }
